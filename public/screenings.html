@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Screenings List</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 12px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+    th {
+      background-color: #f4f4f4;
+    }
+
+    /* Highlight first 4 rows in blue */
+    
+    /*
+    tr:nth-child(-n+4) {
+      background-color: #ADD8E6;  Light blue 
+    } 
+    */
+  </style>
+</head>
+<body>
+  <h1>Screenings List</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Screening ID</th>
+        <th>Movie ID</th>
+        <th>Cinema ID</th>
+        <th>Room ID</th>
+        <th>Start Date</th>
+        <th>Start Time</th>
+        <th>End Time</th>
+      </tr>
+    </thead>
+    <tbody id="screenings-body"></tbody>
+  </table>
+
+  <script>
+    async function loadScreenings() {
+      try {
+        const response = await fetch('/database/screenings'); // Assuming your server serves this endpoint
+        const screenings = await response.json();
+
+        const tbody = document.getElementById('screenings-body');
+        tbody.innerHTML = ''; // Clear any existing rows
+
+        screenings.forEach(screening => {
+          const row = document.createElement('tr');
+
+          // Format start_date into a more readable date format
+          const formattedDate = new Date(screening.start_date).toLocaleDateString();
+
+          row.innerHTML = `
+            <td>${screening.screening_id}</td>
+            <td>${screening.movie_id}</td>
+            <td>${screening.cinema_id}</td>
+            <td>${screening.room_id}</td>
+            <td>${formattedDate}</td>
+            <td>${screening.start_time}</td>
+            <td>${screening.end_time}</td>
+          `;
+          tbody.appendChild(row);
+        });
+      } catch (err) {
+        console.error('Failed to fetch screenings:', err);
+      }
+    }
+
+    loadScreenings();
+  </script>
+</body>
+</html>
