@@ -91,6 +91,7 @@ CREATE TABLE rooms (
     room_id INT PRIMARY KEY AUTO_INCREMENT,
     room_name VARCHAR(255) ,
     room_capacity VARCHAR(255) NOT NULL,
+    isDeleted BOOl DEFAULT FALSE,
 	cinema_id INT,
     FOREIGN KEY (cinema_id) REFERENCES cinemas(cinema_id)
 );
@@ -116,6 +117,7 @@ CREATE TABLE seats (
     seat_number INT NOT NULL,
 	isReserved BOOL DEFAULT FALSE,
     isAccesible BOOL DEFAULT FALSE,
+    isDeleted BOOl DEFAULT FALSE,
     room_id INT,
     UNIQUE(seat_number,room_id),
     FOREIGN KEY (room_id) REFERENCES rooms(room_id)

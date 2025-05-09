@@ -1,9 +1,10 @@
 import express from "express"
 import { getMovies ,getScreenings} from "./database.js";
-
+import cors from "cors"
 const app = express();
 const PORT = 3000;
 
+app.use(cors());
 // app.use(express.static("public"));
 
 app.get("/",(req,res) => {
