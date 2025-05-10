@@ -13,50 +13,48 @@ const pool = mysql.createPool({
 // testConnection();
 
 const allowedTables = [
-"movies","genres","movie_genres"
-,"cinemas","rooms","seats"
-,"screenings","qualities","screening_qualities"
-,"roles","users","tickets"
-]
+"movies","genres","movie_genres",                 "cinemas","rooms","seats",
+"screenings","qualities","screening_qualities",   "roles","users","tickets"]
+
 async function dbTableLogger(table_name,array){
     const [columns] = await pool.query(`
-        SELECT column_name
+		SELECT column_name
         FROM information_schema.columns
-        WHERE table_name = ?
-        ORDER BY ordinal_position
-        LIMIT 5;
-    `,table_name);
-    const colNames = columns.map(col => col.column_name);
-    console.log(colNames)
-    const logArray = array.map (a => Object.entries(a).filter( ([key]) => colNames.includes(key) ))
-    // const logArray = array.map(a => Object.entries(a))
+        WHERE table_name = ? AND DATA_TYPE !='text'
+        ORDER BY ordinal_position;
+    `,[table_name]);
+    // removes columns that have long texts.
+    const colToDisplay = columns.map(col => col.COLUMN_NAME); // has keys i want to display
+    const logArray = array.map((obj) => {
+        return Object.fromEntries(colToDisplay.map( (key) => [key,obj[key]] ))
+    })
+    console.table(logArray)
 
-    console.table(logArray);
-    console.log("\n   -------  \n")
-    console.log(logArray)
 }
 export async function getTable(table_name){
     if (!allowedTables.includes(table_name)) { 
         throw new Error("Unauthorized table access.");
     }
-    const result = await pool.query(`SELECT * FROM ${table_name}`);
-    // console.log(table + " :",Object.values(result[0]));
-    // console.log(result[0])
-    dbTableLogger(table_name,result[0])
+    const [result] = await pool.query(`SELECT * FROM ${table_name}`);
 
-    return result[0]
+    dbTableLogger(table_name,result)
+    return result
 }
 
-export async function getMovies(){
-    return await getTable("movies")
-}
+export const getMovies = async () => getTable("movies");
+export const getGenres = async () => getTable("genres");
+export const getMovieGenres = async () => getTable("movie_genres");
+export const getCinemas = async () => getTable("cinemas");
+export const getRooms = async () => getTable("rooms");
+export const getSeats = async () => getTable("seats");
+export const getScreenings = async () => getTable("screenings");
+export const getQualities = async () => getTable("qualities");
+export const getScreeningQualities = async () => getTable("screening_qualities");
+export const getRoles = async () => getTable("roles");
+export const getUsers = async () => getTable("users");
+export const getTickets = async () => getTable("tickets");
 
-export async function getScreenings(){
-    const result = await pool.query("SELECT * FROM screenings");
-    console.log("Data sent for these Movies", result[0].map(a=>a.title))
 
-    return result[0]
-}
 export async function getClearScreenings(){
     const result = await pool.query("SELECT * FROM screenings");
     console.log(result[0])
