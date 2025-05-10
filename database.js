@@ -6,7 +6,7 @@ const pool = mysql.createPool({
     host : process.env.MYSQL_HOST,
     user : process.env.MYSQL_USER,
     password : process.env.MYSQL_PASSWORD,
-    database : process.env.MYSQL_DATABASE ,
+    database : process.env.MYSQL_DATABASE,
 }).promise()
 
 // async function testConnection() {    try {        const connection = await pool.getConnection();        console.log("Connected to MySQL!");        connection.release();     } catch (error) {        console.error("Connection failed:", error);    }}
@@ -20,9 +20,9 @@ async function dbTableLogger(table_name,array){
     const [columns] = await pool.query(`
 		SELECT column_name
         FROM information_schema.columns
-        WHERE table_name = ? AND DATA_TYPE !='text'
+        WHERE table_name = ? AND DATA_TYPE !='text' AND TABLE_SCHEMA = ?
         ORDER BY ordinal_position;
-    `,[table_name]);
+    `,[table_name,process.env.MYSQL_DATABASE]);
     // removes columns that have long texts.
     const colToDisplay = columns.map(col => col.COLUMN_NAME); // has keys i want to display
     const logArray = array.map((obj) => {
@@ -35,10 +35,10 @@ export async function getTable(table_name){
     if (!allowedTables.includes(table_name)) { 
         throw new Error("Unauthorized table access.");
     }
-    const [result] = await pool.query(`SELECT * FROM ${table_name}`);
+    const [result_rows] = await pool.query(`SELECT * FROM ${table_name}`);
 
-    dbTableLogger(table_name,result)
-    return result
+    dbTableLogger(table_name,result_rows)
+    return result_rows
 }
 
 export const getMovies = async () => getTable("movies");
@@ -56,9 +56,10 @@ export const getTickets = async () => getTable("tickets");
 
 
 export async function getClearScreenings(){
-    const result = await pool.query("SELECT * FROM screenings");
-    console.log(result[0])
-    return result[0]
+    const [result_rows] = await pool.query("SELECT * FROM screenings");
+    console.log(result_rows)
+    // need to add more stuff
+    return result_rows
 }
 
 // await pool.end()

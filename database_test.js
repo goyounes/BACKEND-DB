@@ -1,4 +1,14 @@
-import { getMovies ,getScreenings} from "./database.js";
+import * as db from "./database.js";
 
-await getMovies()
-await getScreenings()
+db.getMovies();
+db.getGenres();
+db.getMovieGenres();
+db.getCinemas();
+db.getRooms();
+db.getSeats();
+db.getScreenings();
+db.getQualities();
+db.getScreeningQualities();
+db.getRoles();
+db.getUsers();
+db.getTickets();

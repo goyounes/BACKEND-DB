@@ -27,7 +27,7 @@ SELECT COLUMN_NAME, DATA_TYPE, IS_NULLABLE, COLUMN_DEFAULT
   FROM INFORMATION_SCHEMA.COLUMNS
   WHERE table_name = 'movies';
   
-          SELECT column_name
+		SELECT column_name
         FROM information_schema.columns
-        WHERE table_name = "movies" AND DATA_TYPE !='text'
-        ORDER BY ordinal_position
+        WHERE table_name = "users" AND DATA_TYPE !='text'
+        ORDER BY ordinal_position;
