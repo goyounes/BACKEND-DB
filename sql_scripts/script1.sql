@@ -1,20 +1,22 @@
 USE cinephoria;
-
 SHOW TABLES;
 
-
-SELECT * FROM movie_genres;
 SELECT * FROM genres;
 SELECT * FROM movies;
+SELECT * FROM movie_genres;
 
-SELECT * FROM quality;
+SELECT * FROM cinemas;
+SELECT * FROM rooms;
+SELECT * FROM seats;
+
+SELECT * FROM screenings;
+SELECT * FROM qualities;
+SELECT * FROM screening_qualities;
 
 SELECT * FROM users;
 SELECT * FROM roles;
+SELECT * FROM tickets;
 
-SELECT * FROM seats;
-SELECT * FROM rooms;
-SELECT * FROM cinemas;
 
 -- Creat Table to show all the cinemas and Thier respective rooms
 SELECT cinemas.cinema_id,cinemas.cinema_name,room_id

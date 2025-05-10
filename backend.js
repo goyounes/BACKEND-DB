@@ -1,14 +1,23 @@
 import express from "express"
 import { getMovies ,getScreenings} from "./database.js";
 import cors from "cors"
+
+import { inspect } from 'node:util';
+
 const app = express();
 const PORT = 3000;
 
-app.use(cors());
+function reqIPlogger (req,res,next){
+    console.log(`Recived Request from ${req.get('Referer') || req.get('Origin') ||"unknown"}`)
+    next();
+}
+
+app.use(cors(),reqIPlogger);
 // app.use(express.static("public"));
 
 app.get("/",(req,res) => {
     res.status(200).send("go to /home page")
+    // const a = req.rawHeaders.
 })
 
 app.get("/home",(req,res) => {
@@ -24,11 +33,13 @@ app.get("/screenings",async(req,res) => {
 })
 
 app.get("/database/movies",async (req,res) => {
+    console.log("Fetching Movies from the DB...")
     const movies = await getMovies()
     res.status(200).json(movies)
 })
 
 app.get("/database/screenings",async(req,res) => {
+    console.log("Fetching Screenings from the DB...")
     const screenings = await getScreenings()
     res.status(200).json(screenings)
 })
