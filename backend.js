@@ -1,30 +1,29 @@
 import express from "express"
 import { getMovies ,getScreenings} from "./database.js";
 import cors from "cors"
-import { reqIPlogger } from "./utils.js"
+import { reqIPlogger , fetchJson} from "./utils.js"
 const app = express();
 const PORT = 3000;
+const APIpath = "http://localhost:3000" // change if DB backend is diff
 app.set("view engine","ejs")
-
-
 app.use(cors(), reqIPlogger);
+
 app.get("/home",(req,res) => {
-    res.render("/index.ejs")
+    res.redirect("/")
 })
-app.use(express.static("public"));
-
-
 app.get("/",(req,res) => {
-    res.status(200).render("/index.ejs",{root:"."})
+    res.status(200).render("pages/index.ejs")
+})
+app.get("/movies",async (req,res) => {
+    const movies = await fetchJson(APIpath+"/api/movies")
+    res.status(200).render("pages/movies.ejs",{movies})
+})
+app.get("/screenings",async (req,res) => {
+    const screenings = await fetchJson(APIpath+"/api/screenings")
+    res.status(200).render("pages/screenings.ejs",{screenings})
 })
 
-// app.get("/movies",async (req,res) => {
-//     res.status(200).sendFile("./public/movies.html",{root:"."})
-// })
-
-// app.get("/screenings",async(req,res) => {
-//     res.status(200).sendFile("./public/screenings.html",{root:"."})
-// })
+app.use(express.static("public"));
 
 app.get("/api/movies",async (req,res) => {
     console.log("Fetching Movies from the DB...")

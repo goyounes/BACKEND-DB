@@ -23,11 +23,13 @@
       background-color: #f4f4f4;
     }
     .highlight {
-      background-color: #e6ffe6;
+      background-color: #e6ffe6 !important;
     }
+    
   </style>
 </head>
 <body>
+  <%- include('../partials/navbar') %>
   <h1>Movies List</h1>
   <table>
     <thead>
@@ -40,11 +42,18 @@
       </tr>
     </thead>
     <tbody id="movies-body">
-      <%= %>
+      <% movies.forEach( movie => {%>
+        <tr class=<%= movie.is_team_pick ?"highlight":""%>>
+          <td> <%= movie.title%></td>
+          <td> <%= movie.description%></td>
+          <td> <%= movie.age_rating%></td>
+          <td> <%= movie.is_team_pick%></td>
+          <td> <%= movie.score%></td>
+        </tr>
+      <%})%>
     </tbody>
   </table>
 
 
-  </script>
 </body>
 </html>

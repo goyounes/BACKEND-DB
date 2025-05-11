@@ -17,7 +17,8 @@
     .button-container {
       margin-top: 50px;
     }
-    button {
+    a.button-link {
+      display: inline-block;
       padding: 15px 30px;
       font-size: 18px;
       cursor: pointer;
@@ -26,21 +27,24 @@
       border-radius: 5px;
       background-color: #4CAF50;
       color: white;
+      text-decoration: none;
       transition: background-color 0.3s ease;
     }
-    button:hover {
+
+    a.button-link:hover {
       background-color: #45a049;
     }
   </style>
 </head>
 <body>
+  <a href="home"> <h1>Home page</h1> </a>
 
   <h1>Welcome to Cinephoria</h1>
   <p>Choose what you want to explore:</p>
   
   <div class="button-container">
-    <button onclick="window.location.href='movies'">Movies</button>
-    <button onclick="window.location.href='screenings'">Screenings</button>
+    <a href='movies' class = "button-link">Movies</a>
+    <a href='screenings' class = "button-link">Screenings</a>
   </div>
 
 </body>
