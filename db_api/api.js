@@ -24,11 +24,6 @@ app.get("/api/movies/:id",async (req,res,next) => {
     console.log(`Fetching Movie with id :${id} from the DB...`)
     try {
         const movie = await dbFunc.getMovie(id);
-        if (!movie) {
-            const err = new Error(`Movie with id ${id} not found`);
-            err.status = 404;
-            throw err;
-        }
         res.status(200).json(movie);
     } catch (err) {
         next(err); // Pass error to error-handling middleware
@@ -44,20 +39,8 @@ app.get("/api/screenings",async(req,res) => {
 app.get("/api/screenings/:id",async (req,res,next) => {
     const id = req.params.id
     console.log(`Fetching Screening with id :${id} from the DB...`)
-    const screening = await dbFunc.getScreening(id)
-    res.status(200).json(screening)
-})
-
-app.get("/api/screenings/:id",async (req,res,next) => {
-    const id = req.params.id
-    console.log(`Fetching Screening with id :${id} from the DB...`)
     try {
     const screening = await dbFunc.getScreening(id)
-        if (!movie) {
-            const err = new Error(`Screening with id ${id} not found`);
-            err.status = 404;
-            throw err;
-        }
     res.status(200).json(screening)
     } catch (err) {
         next(err); // Pass error to error-handling middleware

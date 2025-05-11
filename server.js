@@ -51,7 +51,7 @@ app.get("/screenings/:id",async (req,res) => {
 // app.use(express.static("public"));
 
 app.use((err, req, res, next) => {
-  console.log("Server: Middleware logging error stack ...")
+  console.log("Server: Middleware logging error stack ...");
   console.error(err.stack); // Log the stack trace
   res.status(err.status || 500).send(err.message || "Something broke in the web server !");
 });
