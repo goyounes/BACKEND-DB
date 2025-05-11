@@ -1,6 +1,6 @@
 import mysql from "mysql2"
 import dotenv from "dotenv"
-dotenv.config()
+dotenv.config({ path: './db_api/.env' })
 
 const pool = mysql.createPool({
     host : process.env.MYSQL_HOST,
