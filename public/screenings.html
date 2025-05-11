@@ -52,7 +52,7 @@
   <script>
     async function loadScreenings() {
       try {
-        const response = await fetch('/database/screenings'); // Assuming your server serves this endpoint
+        const response = await fetch('/api/screenings'); // Assuming your server serves this endpoint
         const screenings = await response.json();
 
         const tbody = document.getElementById('screenings-body');

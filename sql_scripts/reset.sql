@@ -17,17 +17,8 @@ SHOW TABLES;
 
 SELECT * from information_schema;
 
-        SELECT column_name
-        FROM information_schema.columns
-        WHERE table_name = 'movies'
-        ORDER BY ordinal_position
-        LIMIT 2;
-        
-SELECT COLUMN_NAME, DATA_TYPE, IS_NULLABLE, COLUMN_DEFAULT
-  FROM INFORMATION_SCHEMA.COLUMNS
-  WHERE table_name = 'movies';
-  
-		SELECT column_name
-        FROM information_schema.columns
-        WHERE table_name = "users" AND DATA_TYPE !='text'
-        ORDER BY ordinal_position;
+SELECT column_name
+FROM information_schema.columns
+WHERE table_name = 'movies'
+ORDER BY ordinal_position
+LIMIT 2;

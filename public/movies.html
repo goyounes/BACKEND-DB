@@ -45,7 +45,7 @@
   <script>
     async function loadMovies() {
       try {
-        const response = await fetch('/database/movies'); // assumes same origin
+        const response = await fetch('/api/movies'); // assumes same origin
         const movies = await response.json();
 
         const tbody = document.getElementById('movies-body');
