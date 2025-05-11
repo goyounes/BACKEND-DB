@@ -50,11 +50,11 @@ export async function getTableRow(table_name,id){
     const name_for_id_column = columns[0].COLUMN_NAME
     const [selected_row] = await pool.query(`SELECT * FROM ${table_name} WHERE ${name_for_id_column} = ${id}`);
     if (selected_row.length ===0){
-        const error = new Error(`Resource with ID:${id} not found`);
-        error.status = 404
-        throw error
+        return null
     }
- 
+        //  const error = new Error(`Resource with ID:${id} not found`);
+        // error.status = 404
+        // throw error
     dbTableLogger(table_name,selected_row)
     return selected_row
 }

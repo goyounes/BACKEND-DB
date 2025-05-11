@@ -16,6 +16,10 @@ export function reqIPlogger (req,res,next){
 
 export async function fetchJson(url, options = {}) {
   const res = await fetch(url, options);
-  if (!res.ok) throw new Error(`Error ${res.status}: ${res.statusText}`);
+  if (!res.ok) {
+    const error = new Error(`Fetch Error ${res.status}: ${res.statusText}`);
+    error.status = res.status; // Attach the status code to the error
+    throw error;
+  }
   return res.json();
 }
