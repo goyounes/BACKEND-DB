@@ -29,9 +29,8 @@ async function dbTableLogger(table_name,array){
         return Object.fromEntries(colToDisplay.map( (key) => [key,obj[key]] ))
     })
     console.table(logArray)
-
 }
-export async function getTable(table_name){
+export async function getTable(table_name){    
     if (!allowedTables.includes(table_name)) { 
         throw new Error("Unauthorized table access.");
     }
@@ -39,6 +38,25 @@ export async function getTable(table_name){
 
     dbTableLogger(table_name,result_rows)
     return result_rows
+}
+
+export async function getTableRow(table_name,id){
+    const [columns] = await pool.query(`
+		SELECT column_name
+        FROM information_schema.columns
+        WHERE table_name = ? AND TABLE_SCHEMA = ?
+        ORDER BY ordinal_position;
+    `,[table_name,process.env.MYSQL_DATABASE])
+    const name_for_id_column = columns[0].COLUMN_NAME
+    const [selected_row] = await pool.query(`SELECT * FROM ${table_name} WHERE ${name_for_id_column} = ${id}`);
+    if (selected_row.length ===0){
+        const error = new Error(`Resource with ID:${id} not found`);
+        error.status = 404
+        throw error
+    }
+ 
+    dbTableLogger(table_name,selected_row)
+    return selected_row
 }
 
 export const getMovies = async () => getTable("movies");
@@ -53,6 +71,12 @@ export const getScreeningQualities = async () => getTable("screening_qualities")
 export const getRoles = async () => getTable("roles");
 export const getUsers = async () => getTable("users");
 export const getTickets = async () => getTable("tickets");
+
+
+export const getMovie = async(id) => getTableRow("movies",id)
+export const getScreening = async(id) => getTableRow("screenings",id)
+export const getCinema = async(id) => getTableRow("cinemas",id)
+
 
 
 export async function getClearScreenings(){

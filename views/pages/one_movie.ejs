@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Movies List</title>
+  <title>Movie Details</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -44,7 +44,7 @@
     <tbody id="movies-body">
       <% movies.forEach( movie => {%>
         <tr class=<%= movie.is_team_pick ?"highlight":""%>>
-          <td><a href= <%= "movies/" + movie.movie_id%> > <%= movie.title%> </a></td>
+          <td> <%= movie.title%> </a></td>
           <td> <%= movie.description%></td>
           <td> <%= movie.age_rating%></td>
           <td> <%= movie.is_team_pick%></td>

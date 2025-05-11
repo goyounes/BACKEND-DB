@@ -18,9 +18,24 @@ app.get("/movies",async (req,res) => {
     const movies = await fetchJson(APIpath+"/api/movies",{headers:{'X-Requested-By': 'backend-server'}})
     res.status(200).render("pages/movies.ejs",{movies})
 })
+
+app.get("/movies/:id",async (req,res) => {
+    const id = req.params.id
+    console.log("accesing data from DB for movie with movie_id =",id)
+    const movies = await fetchJson(APIpath + "/api/movies/" + id ,{headers:{'X-Requested-By': 'backend-server'}})
+    res.status(200).render("pages/one_movie.ejs",{movies})
+})
+
 app.get("/screenings",async (req,res) => {
     const screenings = await fetchJson(APIpath+"/api/screenings",{headers:{'X-Requested-By': 'frontend-server'}})
     res.status(200).render("pages/screenings.ejs",{screenings})
+})
+
+app.get("/screenings/:id",async (req,res) => {
+    const id = req.params.id
+    console.log("accesing data from DB for screening with screening_id =",id)
+    const screenings = await fetchJson(APIpath + "/api/screenings/" + id ,{headers:{'X-Requested-By': 'backend-server'}})
+    res.status(200).render("pages/one_screening.ejs",{screenings})
 })
 
 // app.use(express.static("public"));

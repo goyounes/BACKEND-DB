@@ -30,25 +30,29 @@
 </head>
 <body>
   <%- include('../partials/navbar') %>
-  <h1>Movies List</h1>
+  <h1>Screenings List</h1>
   <table>
     <thead>
       <tr>
-        <th>Title</th>
-        <th>Description</th>
-        <th>Age Rating</th>
-        <th>Team Pick</th>
-        <th>Score</th>
+        <th>Screening ID</th>
+        <th>Movie ID</th>
+        <th>Cinema ID</th>
+        <th>Room ID</th>
+        <th>Start Date</th>
+        <th>Start Time</th>
+        <th>End Time</th>
       </tr>
     </thead>
-    <tbody id="movies-body">
-      <% movies.forEach( movie => {%>
-        <tr class=<%= movie.is_team_pick ?"highlight":""%>>
-          <td><a href= <%= "movies/" + movie.movie_id%> > <%= movie.title%> </a></td>
-          <td> <%= movie.description%></td>
-          <td> <%= movie.age_rating%></td>
-          <td> <%= movie.is_team_pick%></td>
-          <td> <%= movie.score%></td>
+    <tbody id="screenings-body">
+      <% screenings.forEach( screening => {%>
+        <tr>
+            <td><%=screening.screening_id%></td>
+            <td><%=screening.movie_id%></td>
+            <td><%=screening.cinema_id%></td>
+            <td><%=screening.room_id%></td>
+            <td><%=new Date(screening.start_date).toLocaleDateString()%></td>
+            <td><%=screening.start_time%></td>
+            <td><%=screening.end_time%></td> 
         </tr>
       <%})%>
     </tbody>

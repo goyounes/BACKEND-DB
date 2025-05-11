@@ -46,7 +46,7 @@
     <tbody id="screenings-body">
       <% screenings.forEach( screening => {%>
         <tr>
-            <td><%=screening.screening_id%></td>
+            <td><a href= <%= "screenings/" + screening.screening_id%> > <%= screening.screening_id%> </a></td>
             <td><%=screening.movie_id%></td>
             <td><%=screening.cinema_id%></td>
             <td><%=screening.room_id%></td>
