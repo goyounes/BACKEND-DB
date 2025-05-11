@@ -23,7 +23,7 @@ app.get("/screenings",async (req,res) => {
     res.status(200).render("pages/screenings.ejs",{screenings})
 })
 
-app.use(express.static("public"));
+// app.use(express.static("public"));
 
 app.get("/api/movies",async (req,res) => {
     console.log("Fetching Movies from the DB...")
