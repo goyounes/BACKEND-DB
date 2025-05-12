@@ -116,7 +116,7 @@ export async function addMovie(movie){
         INSERT INTO movies (title, poster_img, description, age_rating, is_team_pick, score) 
         VALUES (?,?,?,?,?,?);
     `,[title, poster_img, description, age_rating, is_team_pick, score])
-    if (!result.insertId) return {}//console.log("Alert: no insertId was provided")   #1 How to handle this insert id missing case
+    if (!result.insertId) return null //return null
     return await getTableRow('movies',result.insertId)
 }
 
@@ -132,15 +132,23 @@ export async function addScreening(screening){
 
 
 // Update Resource -- Work in progress
-export async function updateMovie(movie){
-    const {title, poster_img, description, age_rating, is_team_pick, score} = movie
+export async function updateMovie(id,movieObj){
+    const name_for_id_column = await getNameForIdColumn('movies')
+    const movie_id = id
+    const {title, poster_img, description, age_rating, is_team_pick, score} = movieObj //ignore movieObj.movie_id as you cannot chose / modify it
+    
     const [result] = await pool.query(`
-        UPDATE table_name
+        UPDATE movies
         SET title = ?, poster_img = ?, description = ?, age_rating = ?, is_team_pick = ?, score = ?
-        WHERE ;
-    `,[title, poster_img, description, age_rating, is_team_pick, score])
-    if (!result.insertId) return {}//console.log("Alert: no insertId was provided")   #1 How to handle this insert id missing case
-    return await getTableRow('movies',result.insertId)
+        WHERE ${name_for_id_column} = ?;
+    `,[title, poster_img, description, age_rating, is_team_pick, score, movie_id])
+    if (result.affectedRows === 0 ){
+        const error = new Error ("Movie not found for update")
+        error.status = 404
+        throw error
+    } 
+
+    return await getTableRow('movies',movie_id)
 }
 
 

@@ -24,3 +24,9 @@ export async function fetchJson(url, options = {}) {
   }
   return res.json();
 }
+
+export function throwError(message,statusCode){
+  const err = new Error(message)
+  if (statusCode) err.status = statusCode
+  throw err
+}

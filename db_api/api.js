@@ -1,5 +1,6 @@
 import express from "express"
 import cors from "cors"
+import { throwError } from "../utils.js"
 const app = express();
 
 import dotenv from "dotenv"
@@ -36,6 +37,7 @@ app.post("/api/movies",async (req,res,next) => {
     }
     try {
         const db_inserted_movie = await dbFunc.addMovie(movie);
+        if (db_inserted_movie===null) res.sendStatus(204)   //Request succesful but no body or data to return 
         res.status(201).json(db_inserted_movie);
     } catch (err) {
         next(err); // Pass error to error-handling middleware
@@ -55,10 +57,12 @@ app.get("/api/movies/:id",async (req,res,next) => {
 
 app.put("/api/movies/:id",async (req,res,next) => {
     const id = req.params.id
+    if (isNaN(Number(id))) throwError("ID is not a number, update operation failed",400) //Checks if id is a number/string of a number
     console.log(`Updating Movie with id :${id} from the DB...`)
     try {
-        const movie = await dbFunc.updateMovie(id);
-        res.status(200).json(movie);
+        const movieObj = req.body
+        const db_updated_movie = await dbFunc.updateMovie(id,movieObj); 
+        res.status(200).json(db_updated_movie);
     } catch (err) {
         next(err); // Pass error to error-handling middleware
     }
