@@ -31,6 +31,4 @@ await db.addScreening({
   "end_time": "18:30:00"
 })
 
-// setTimeout(() => {
-    process.exit(0)
-// }, 1000);
+process.exit(0)

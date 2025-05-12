@@ -15,10 +15,4 @@ DROP TABLE rooms;
 DROP TABLE cinemas;
 SHOW TABLES;
 
-SELECT * from information_schema;
 
-SELECT column_name
-FROM information_schema.columns
-WHERE table_name = 'movies'
-ORDER BY ordinal_position
-LIMIT 2;

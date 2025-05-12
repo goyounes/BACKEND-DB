@@ -43,4 +43,12 @@ SELECT users.user_id,users.user_name,tickets.ticket_id,seats.seat_id, seats.seat
 FROM users LEFT JOIN tickets 
 ON users.user_id = tickets.user_id
 JOIN seats 
-ON tickets.seat_id = seats.seat_id
+ON tickets.seat_id = seats.seat_id;
+
+-- reading information stored in MYSQL
+SELECT * from information_schema;
+
+SELECT *
+FROM information_schema.columns
+WHERE table_name = 'movies'
+ORDER BY ordinal_position;

@@ -19,9 +19,7 @@ const pool = mysql.createPool({
 // async function testConnection() {    try {        const connection = await pool.getConnection();        console.log("Connected to MySQL!");        connection.release();     } catch (error) {        console.error("Connection failed:", error);    }}
 // testConnection();
 
-const allowedTables = [
-"movies","genres","movie_genres",                 "cinemas","rooms","seats",
-"screenings","qualities","screening_qualities",   "roles","users","tickets"]
+
 
 async function dbTableLogger(table_name,array){
     const [columns] = await pool.query(`
@@ -37,6 +35,38 @@ async function dbTableLogger(table_name,array){
     })
     console.table(logArray)
 }
+export async function getNameForIdColumn(table_name){    
+    const [columns] = await pool.query(`
+        SELECT column_name
+        FROM information_schema.columns
+        WHERE table_name = ? AND TABLE_SCHEMA = ?
+        ORDER BY ordinal_position;
+    `,[table_name,process.env.MYSQL_DATABASE])
+    return columns[0].COLUMN_NAME
+}
+
+
+
+
+
+
+
+
+
+export async function deleteTableRow(table_name,id){
+    // const name_for_id_column = await getNameForIdColumn(table_name)
+    // const result = await pool.query(`DELETE FROM ${table_name} WHERE ${name_for_id_column} = ${id};`);
+    const err = new Error("Delete operations are not supported as of now") 
+    err.status = 501
+    throw err
+}
+
+
+// Get Resources
+const allowedTables = [
+"movies","genres","movie_genres",                 "cinemas","rooms","seats",
+"screenings","qualities","screening_qualities",   "roles","users","tickets"]
+
 export async function getTable(table_name){    
     if (!allowedTables.includes(table_name)) { 
         throw new Error("Unauthorized table access.");
@@ -45,26 +75,6 @@ export async function getTable(table_name){
 
     await dbTableLogger(table_name,result_rows)
     return result_rows
-}
-
-export async function getTableRow(table_name,id){
-    const [columns] = await pool.query(`
-		SELECT column_name
-        FROM information_schema.columns
-        WHERE table_name = ? AND TABLE_SCHEMA = ?
-        ORDER BY ordinal_position;
-    `,[table_name,process.env.MYSQL_DATABASE])
-
-    const name_for_id_column = columns[0].COLUMN_NAME
-    const [result] = await pool.query(`SELECT * FROM ${table_name} WHERE ${name_for_id_column} = ${id};`);
-    if (result === 0) {
-        const error = new Error(`Resource with ID ${id} not found`);
-        error.status = 404;
-        throw error;  // Throw the error with status 404
-    }
-    await dbTableLogger(table_name,result)
-    const selected_row = result[0]
-    return selected_row
 }
 
 export const getMovies = async () => getTable("movies");
@@ -80,12 +90,26 @@ export const getRoles = async () => getTable("roles");
 export const getUsers = async () => getTable("users");
 export const getTickets = async () => getTable("tickets");
 
+// Get Resource
+export async function getTableRow(table_name,id){
+    const name_for_id_column = await getNameForIdColumn(table_name)
+
+    const [result] = await pool.query(`SELECT * FROM ${table_name} WHERE ${name_for_id_column} = ${id};`);
+    if (result === 0) {
+        const error = new Error(`Resource with ID ${id} not found`);
+        error.status = 404;
+        throw error;  // Throw the error with status 404
+    }
+    await dbTableLogger(table_name,result)
+    const selected_row = result[0]
+    return selected_row
+}
 
 export const getMovie = async(id) => getTableRow("movies",id)
 export const getScreening = async(id) => getTableRow("screenings",id)
 export const getCinema = async(id) => getTableRow("cinemas",id)
 
-
+// Add Resource
 export async function addMovie(movie){
     const {title, poster_img, description, age_rating, is_team_pick, score} = movie
     const [result] = await pool.query(`
@@ -106,3 +130,20 @@ export async function addScreening(screening){
     return await getTableRow('screenings',result.insertId)
 }
 
+
+// Update Resource -- Work in progress
+export async function updateMovie(movie){
+    const {title, poster_img, description, age_rating, is_team_pick, score} = movie
+    const [result] = await pool.query(`
+        UPDATE table_name
+        SET title = ?, poster_img = ?, description = ?, age_rating = ?, is_team_pick = ?, score = ?
+        WHERE ;
+    `,[title, poster_img, description, age_rating, is_team_pick, score])
+    if (!result.insertId) return {}//console.log("Alert: no insertId was provided")   #1 How to handle this insert id missing case
+    return await getTableRow('movies',result.insertId)
+}
+
+
+
+// Delete Resource
+export const deleteMovie = async(id) => deleteTableRow("movies",id)

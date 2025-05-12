@@ -19,24 +19,13 @@ app.get("/api/movies",async (req,res) => {
     res.status(200).json(movies)
 })
 
-app.get("/api/movies/:id",async (req,res,next) => {
-    const id = req.params.id
-    console.log(`Fetching Movie with id :${id} from the DB...`)
-    try {
-        const movie = await dbFunc.getMovie(id);
-        res.status(200).json(movie);
-    } catch (err) {
-        next(err); // Pass error to error-handling middleware
-    }
-})
-
 app.post("/api/movies",async (req,res,next) => {
     console.log(`adding Movie with title: ${req.body.title} from the DB...`)
     const {title, poster_img, description, age_rating, is_team_pick, score} = req.body
     if (!title ){
         res.status(400).json({ error: 'Title is required and must be a string' });
     }
-    // validation code has to be inserted here eventually 
+    // MORE validation code has to be inserted here eventually 
     const movie = {
 		title: title,
 		poster_img: poster_img || null,
@@ -52,6 +41,42 @@ app.post("/api/movies",async (req,res,next) => {
         next(err); // Pass error to error-handling middleware
     }
 })
+
+app.get("/api/movies/:id",async (req,res,next) => {
+    const id = req.params.id
+    console.log(`Fetching Movie with id :${id} from the DB...`)
+    try {
+        const movie = await dbFunc.getMovie(id);
+        res.status(200).json(movie);
+    } catch (err) {
+        next(err); // Pass error to error-handling middleware
+    }
+})
+
+app.put("/api/movies/:id",async (req,res,next) => {
+    const id = req.params.id
+    console.log(`Updating Movie with id :${id} from the DB...`)
+    try {
+        const movie = await dbFunc.updateMovie(id);
+        res.status(200).json(movie);
+    } catch (err) {
+        next(err); // Pass error to error-handling middleware
+    }
+})
+
+// #2 How to handle soft deletes vs hard deletes, What about movies? users? seats?
+// #3 i think good buisness practise for (Auditing,customer data analysis) it's intersting to always soft delete everything that's important
+app.delete("/api/movies/:id",async (req,res,next) => {
+    const id = req.params.id
+    console.log(`Deleting Movie with id :${id} from the DB...`)
+    try {
+        const movie = await dbFunc.deleteMovie(id);
+        res.status(200).json(movie);
+    } catch (err) {
+        next(err); // Pass error to error-handling middleware
+    }
+})
+
 
 app.get("/api/screenings",async(req,res) => {
     console.log("Fetching Screenings from the DB...")
