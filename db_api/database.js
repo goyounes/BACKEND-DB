@@ -41,9 +41,9 @@ export async function getTable(table_name){
     if (!allowedTables.includes(table_name)) { 
         throw new Error("Unauthorized table access.");
     }
-    const [result_rows] = await pool.query(`SELECT * FROM ${table_name}`);
+    const [result_rows] = await pool.query(`SELECT * FROM ${table_name};`);
 
-    dbTableLogger(table_name,result_rows)
+    await dbTableLogger(table_name,result_rows)
     return result_rows
 }
 
@@ -54,17 +54,16 @@ export async function getTableRow(table_name,id){
         WHERE table_name = ? AND TABLE_SCHEMA = ?
         ORDER BY ordinal_position;
     `,[table_name,process.env.MYSQL_DATABASE])
+
     const name_for_id_column = columns[0].COLUMN_NAME
-    const [selected_row] = await pool.query(`SELECT * FROM ${table_name} WHERE ${name_for_id_column} = ${id}`);
-    // if (selected_row.length ===0){
-    //     return null
-    // }
-    if (selected_row.length === 0) {
+    const [result] = await pool.query(`SELECT * FROM ${table_name} WHERE ${name_for_id_column} = ${id};`);
+    if (result === 0) {
         const error = new Error(`Resource with ID ${id} not found`);
         error.status = 404;
         throw error;  // Throw the error with status 404
     }
-    dbTableLogger(table_name,selected_row)
+    await dbTableLogger(table_name,result)
+    const selected_row = result[0]
     return selected_row
 }
 
@@ -86,13 +85,24 @@ export const getMovie = async(id) => getTableRow("movies",id)
 export const getScreening = async(id) => getTableRow("screenings",id)
 export const getCinema = async(id) => getTableRow("cinemas",id)
 
-export const addMovie = async(movie) => addTableRow("movie")
 
-export async function getClearScreenings(){
-    const [result_rows] = await pool.query("SELECT * FROM screenings");
-    console.log(result_rows)
-    // need to add more stuff
-    return result_rows
+export async function addMovie(movie){
+    const {title, poster_img, description, age_rating, is_team_pick, score} = movie
+    const [result] = await pool.query(`
+        INSERT INTO movies (title, poster_img, description, age_rating, is_team_pick, score) 
+        VALUES (?,?,?,?,?,?);
+    `,[title, poster_img, description, age_rating, is_team_pick, score])
+    if (!result.insertId) return {}//console.log("Alert: no insertId was provided")   #1 How to handle this insert id missing case
+    return await getTableRow('movies',result.insertId)
 }
 
-// await pool.end()
+export async function addScreening(screening){
+    const {movie_id,cinema_id,room_id,start_date,start_time,end_time} = screening
+    const [result] = await pool.query(`
+    INSERT INTO screenings(movie_id,cinema_id,room_id,start_date,start_time,end_time)
+    VALUES (?,?,?,?,?,?);
+    `,[movie_id, cinema_id, room_id, start_date, start_time, end_time])
+    if (!result.insertId) return {}//console.log("Alert: no insertId was provided")   #1 How to handle this insert id missing case
+    return await getTableRow('screenings',result.insertId)
+}
+

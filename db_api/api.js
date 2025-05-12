@@ -7,7 +7,7 @@ dotenv.config()
 const PORT = process.env.DB_SERVER_PORT;
 
 import { reqIPlogger} from "../utils.js"
-app.use(cors(), reqIPlogger);
+app.use(cors(), reqIPlogger,express.json());
 
 
 import * as dbFunc from "./database.js";
@@ -25,6 +25,29 @@ app.get("/api/movies/:id",async (req,res,next) => {
     try {
         const movie = await dbFunc.getMovie(id);
         res.status(200).json(movie);
+    } catch (err) {
+        next(err); // Pass error to error-handling middleware
+    }
+})
+
+app.post("/api/movies",async (req,res,next) => {
+    console.log(`adding Movie with title: ${req.body.title} from the DB...`)
+    const {title, poster_img, description, age_rating, is_team_pick, score} = req.body
+    if (!title ){
+        res.status(400).json({ error: 'Title is required and must be a string' });
+    }
+    // validation code has to be inserted here eventually 
+    const movie = {
+		title: title,
+		poster_img: poster_img || null,
+		description: description || null,
+		age_rating: age_rating || null,
+		is_team_pick: is_team_pick || null,
+		score: score || null
+    }
+    try {
+        const db_inserted_movie = await dbFunc.addMovie(movie);
+        res.status(201).json(db_inserted_movie);
     } catch (err) {
         next(err); // Pass error to error-handling middleware
     }
