@@ -14,9 +14,11 @@ export function reqIPlogger (req,res,next){
     next();
 }
 
-export function throwError(message,statusCode){
+export function throwError(message,status,code,details){
   console.log("Throw error function : Recived input", {message,statusCode})
   const err = new Error(message)
-  if (statusCode) err.status = statusCode
+  if (status) err.status = status
+  if (code) err.code = code
+  if (details) err.details = details
   throw err
 }

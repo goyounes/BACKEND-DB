@@ -132,7 +132,7 @@ app.use((err, req, res, next) => {
     error: {
       message: err.message,
       status: err.status,
-      code: err.code || 'INTERNAL_ERROR',
+      code: err.code || 'INTERNAL_API_ERROR',
       details: err.details || null,
     }
   });

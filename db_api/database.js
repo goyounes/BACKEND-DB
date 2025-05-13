@@ -131,9 +131,9 @@ export async function updateMovie(id,movie){
 
 
 // Delete Resource
-export async function deleteTableRow(table_name,id){
+export async function softDeleteTableRow(table_name,id){
     // const name_for_id_column = await getNameForIdColumn(table_name)
     // const result = await pool.query(`DELETE FROM ${table_name} WHERE ${name_for_id_column} = ${id};`);
     throwError("Delete operations are not supported as of now",501)
 }
-export const deleteMovie = async(id) => deleteTableRow("movies",id)
+export const deleteMovie = async(id) => softDeleteTableRow("movies",id)
