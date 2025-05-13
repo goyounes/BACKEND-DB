@@ -27,12 +27,12 @@ app.get("/movies",async (req,res) => {
 app.get("/movies/:id",async (req,res) => {
     const id = req.params.id
     console.log("accesing data from DB for movie with movie_id =",id)
-    const movies = await fetchJson(APIpath + "/api/movies/" + id ,{headers:{'X-Requested-By': 'backend-server'}})
+    const movie = await fetchJson(APIpath + "/api/movies/" + id ,{headers:{'X-Requested-By': 'backend-server'}})
     // if (!res.ok) {
     //     console.log("error handeled like a boss !")
     //     throw new Error(`Error ${res.status}: ${res.statusText}`);
     // }
-    res.status(200).render("pages/one_movie.ejs",{movies})
+    res.status(200).render("pages/one_movie.ejs",{movie})
 })
 
 app.get("/screenings",async (req,res) => {
@@ -43,9 +43,9 @@ app.get("/screenings",async (req,res) => {
 app.get("/screenings/:id",async (req,res) => {
     const id = req.params.id
     console.log("accesing data from DB for screening with screening_id =",id)
-    const screenings = await fetchJson(APIpath + "/api/screenings/" + id ,{headers:{'X-Requested-By': 'backend-server'}})
+    const screening = await fetchJson(APIpath + "/api/screenings/" + id ,{headers:{'X-Requested-By': 'backend-server'}})
     // if (!res.ok) throw new Error(`Error ${res.status}: ${res.statusText}`);
-    res.status(200).render("pages/one_screening.ejs",{screenings})
+    res.status(200).render("pages/one_screening.ejs",{screening})
 })
 
 // app.use(express.static("public"));

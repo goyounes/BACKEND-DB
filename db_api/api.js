@@ -20,54 +20,45 @@ app.get("/api/movies",async (req,res) => {
     res.status(200).json(movies)
 })
 
-app.post("/api/movies",async (req,res,next) => {
-    console.log(`adding Movie with title: ${req.body.title} from the DB...`)
-    const {title, poster_img, description, age_rating, is_team_pick, score} = req.body
-    if (!title ){
-        res.status(400).json({ error: 'Title is required and must be a string' });
-    }
-    // MORE validation code has to be inserted here eventually 
-    const movie = {
-		title: title,
-		poster_img: poster_img || null,
-		description: description || null,
-		age_rating: age_rating || null,
-		is_team_pick: is_team_pick || null,
-		score: score || null
-    }
-    try {
-        const db_inserted_movie = await dbFunc.addMovie(movie);
-        if (db_inserted_movie===null) res.sendStatus(204)   //Request succesful but no body or data to return 
-        res.status(201).json(db_inserted_movie);
-    } catch (err) {
-        next(err); // Pass error to error-handling middleware
-    }
-})
-
 app.get("/api/movies/:id",async (req,res,next) => {
     const id = req.params.id
+    if (isNaN(Number(id))) throwError("ID is not a number, update operation failed",400) //Checks if id is a number/string of a number
     console.log(`Fetching Movie with id :${id} from the DB...`)
     try {
+        console.log('here')
         const movie = await dbFunc.getMovie(id);
         res.status(200).json(movie);
     } catch (err) {
         next(err); // Pass error to error-handling middleware
     }
 })
+app.post("/api/movies",async (req,res,next) => {
+    const movie = req.body
+    if (!title)  throwError("Title is required and must be a string",400)
+    // MORE validation code has to be inserted here eventually, erros have to be returned at the same time.
 
+    console.log(`adding Movie with title: ${req.body.title} to the DB...`)
+    try {
+        const db_inserted_movie = await dbFunc.addMovie(movie);
+        if (db_inserted_movie===null) res.sendStatus(204)      //Request succesful but no body or data to return 
+        res.status(201).json(db_inserted_movie);
+    } catch (err) {
+        next(err); // Pass error to error-handling middleware
+    }
+})
 app.put("/api/movies/:id",async (req,res,next) => {
     const id = req.params.id
-    if (isNaN(Number(id))) throwError("ID is not a number, update operation failed",400) //Checks if id is a number/string of a number
+    if (isNaN(Number(id)))   throwError("ID is not a number, update operation failed",400)   //Checks if id is a number/string of a number
+    
     console.log(`Updating Movie with id :${id} from the DB...`)
     try {
-        const movieObj = req.body
-        const db_updated_movie = await dbFunc.updateMovie(id,movieObj); 
+        const movie = req.body
+        const db_updated_movie = await dbFunc.updateMovie(id,movie); 
         res.status(200).json(db_updated_movie);
     } catch (err) {
         next(err); // Pass error to error-handling middleware
     }
 })
-
 // #2 How to handle soft deletes vs hard deletes, What about movies? users? seats?
 // #3 i think good buisness practise for (Auditing,customer data analysis) it's intersting to always soft delete everything that's important
 app.delete("/api/movies/:id",async (req,res,next) => {
@@ -90,6 +81,7 @@ app.get("/api/screenings",async(req,res) => {
 
 app.get("/api/screenings/:id",async (req,res,next) => {
     const id = req.params.id
+    if (isNaN(Number(id))) throwError("ID is not a number, update operation failed",400) //Checks if id is a number/string of a number
     console.log(`Fetching Screening with id :${id} from the DB...`)
     try {
     const screening = await dbFunc.getScreening(id)
@@ -104,7 +96,6 @@ app.get("/api/cinemas",async(req,res) => {
     const cinemas = await dbFunc.getCinemas()
     res.status(200).json(cinemas)
 })
-
 app.get("/api/cinema/:id",async (req,res) => {
     const id = req.params.id
     console.log("Fetching cinema with id :"+ id +" from the DB...")

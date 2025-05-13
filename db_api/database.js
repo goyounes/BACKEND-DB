@@ -1,19 +1,21 @@
 import mysql from "mysql2"
 import dotenv from "dotenv"
+import { throwError } from "../utils";
 dotenv.config({ path: './db_api/.env' })
 
 const pool = mysql.createPool({
     host : process.env.MYSQL_HOST,
     user : process.env.MYSQL_USER,
     password : process.env.MYSQL_PASSWORD,
-    database : process.env.MYSQL_DATABASE,
-    typeCast: function (field, next) {// mysql2 driver sends decimal type data as string, converted this to number
-        if (field.type == "NEWDECIMAL") {
-            var value = field.string();
-            return (value === null) ? null : Number(value);
-        }
-        return next();
-    }
+    database : process.env.MYSQL_DATABASE
+//type cast Canceled to stay consistent, handle data convertion at time of use/display IF NEEDED
+    // typeCast: function (field, next) {// mysql2 driver sends decimal type data as string, converted this to number
+    //     if (field.type == "NEWDECIMAL") {
+    //         var value = field.string();
+    //         return (value === null) ? null : Number(value);
+    //     }
+    //     return next();
+    // }
 }).promise()
 
 // async function testConnection() {    try {        const connection = await pool.getConnection();        console.log("Connected to MySQL!");        connection.release();     } catch (error) {        console.error("Connection failed:", error);    }}
@@ -95,11 +97,8 @@ export async function getTableRow(table_name,id){
     const name_for_id_column = await getNameForIdColumn(table_name)
 
     const [result] = await pool.query(`SELECT * FROM ${table_name} WHERE ${name_for_id_column} = ${id};`);
-    if (result === 0) {
-        const error = new Error(`Resource with ID ${id} not found`);
-        error.status = 404;
-        throw error;  // Throw the error with status 404
-    }
+    if (result === 0)     throwError(`Resource with ID ${id} not found`,404)
+
     await dbTableLogger(table_name,result)
     const selected_row = result[0]
     return selected_row
@@ -132,21 +131,17 @@ export async function addScreening(screening){
 
 
 // Update Resource -- Work in progress
-export async function updateMovie(id,movieObj){
+export async function updateMovie(id,movie){
     const name_for_id_column = await getNameForIdColumn('movies')
     const movie_id = id
-    const {title, poster_img, description, age_rating, is_team_pick, score} = movieObj //ignore movieObj.movie_id as you cannot chose / modify it
+    const {title, poster_img, description, age_rating, is_team_pick, score} = movie //ignore movieObj.movie_id as you cannot chose / modify it
     
     const [result] = await pool.query(`
         UPDATE movies
         SET title = ?, poster_img = ?, description = ?, age_rating = ?, is_team_pick = ?, score = ?
         WHERE ${name_for_id_column} = ?;
     `,[title, poster_img, description, age_rating, is_team_pick, score, movie_id])
-    if (result.affectedRows === 0 ){
-        const error = new Error ("Movie not found for update")
-        error.status = 404
-        throw error
-    } 
+    if (result.affectedRows === 0 )   throwError("Movie not found for update",404)
 
     return await getTableRow('movies',movie_id)
 }

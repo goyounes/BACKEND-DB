@@ -25,7 +25,8 @@ CREATE TABLE movies (
     description TEXT,
     age_rating INT,
     is_team_pick BOOL,
-    score DECIMAL(2,1)
+    score DECIMAL(2,1),
+    length 
 );
 
 INSERT INTO movies (title,  description, age_rating, is_team_pick, score) 

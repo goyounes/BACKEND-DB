@@ -44,7 +44,6 @@
       </tr>
     </thead>
     <tbody id="screenings-body">
-      <% screenings.forEach( screening => {%>
         <tr>
             <td><%=screening.screening_id%></td>
             <td><%=screening.movie_id%></td>
@@ -54,7 +53,6 @@
             <td><%=screening.start_time%></td>
             <td><%=screening.end_time%></td> 
         </tr>
-      <%})%>
     </tbody>
   </table>
 

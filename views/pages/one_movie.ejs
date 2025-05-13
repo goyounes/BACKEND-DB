@@ -30,7 +30,7 @@
 </head>
 <body>
   <%- include('../partials/navbar') %>
-  <h1>Movies List</h1>
+  <h1>Movie Details</h1>
   <table>
     <thead>
       <tr>
@@ -41,16 +41,14 @@
         <th>Score</th>
       </tr>
     </thead>
-    <tbody id="movies-body">
-      <% movies.forEach( movie => {%>
-        <tr class=<%= movie.is_team_pick ?"highlight":""%>>
-          <td> <%= movie.title%> </a></td>
-          <td> <%= movie.description%></td>
-          <td> <%= movie.age_rating%></td>
-          <td> <%= movie.is_team_pick%></td>
-          <td> <%= movie.score%></td>
+    <tbody id="movie-body">
+        <tr class=<%=movie.is_team_pick ?"highlight":""%>>
+          <td> <%= movie.title%> </td>
+          <td> <%= movie.description%> </td>
+          <td> <%= movie.age_rating%> </td>
+          <td> <%= movie.is_team_pick%> </td>
+          <td> <%= movie.score%> </td>
         </tr>
-      <%})%>
     </tbody>
   </table>
 
