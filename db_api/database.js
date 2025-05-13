@@ -156,7 +156,7 @@ export async function addUser(user){// this is a super function only admins shou
             INSERT INTO users_credentials (user_id,user_password_hash)
 			VALUES (?,?);
             `,[user_id,user_password])
-            if (!credResult.affectedRows) throwError("Password was not saved!");
+            if (!credResult.affectedRows) throwError("Password was not saved!",500);
 
             await conn.commit(); // ✅ All good
             console.log(`User :${user_name} email:${user_email} created succesfully`)
