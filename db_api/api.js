@@ -1,7 +1,6 @@
 import express from "express"
 import cors from "cors"
 import { throwError } from "../utils.js"
-import createError from 'http-errors';
 const app = express();
 
 import dotenv from "dotenv"
@@ -15,32 +14,34 @@ app.use(cors(), reqIPlogger,express.json());
 import * as dbFunc from "./database.js";
 // app.use(express.static("public"));
 
-app.get("/api/movies",async (req,res) => {
+app.get("/api/v1/movies",async (req,res,next) => {
     console.log("Fetching Movies from the DB...")
-    const movies = await dbFunc.getMovies()
-    res.status(200).json(movies)
+    try {
+        const movies = await dbFunc.getMovies()
+        res.status(200).json(movies)
+    } catch (error) {
+        next(error)  // Passes the error to the global error-handling middleware
+    }
 })
 
-app.get("/api/movies/:id",async (req,res,next) => {
+app.get("/api/v1/movies/:id",async (req,res,next) => {
     const id = req.params.id
-    if (isNaN(Number(id))) throwError("ID is not a number, update operation failed",400) //Checks if id is a number/string of a number
+    if (isNaN(Number(id))) throwError("ID is not a number, get operation failed",400) //Checks if id is a number/string of a number
     
     console.log(`Fetching Movie with id :${id} from the DB...`)
     try {
         const movie = await dbFunc.getMovie(id);
-        console.log("did we enter here?")
-        console.log(movie)
         res.status(200).json(movie);
     } catch (err) {
         next(err); // Pass error to error-handling middleware
     }
 })
-app.post("/api/movies",async (req,res,next) => {
+app.post("/api/v1/movies",async (req,res,next) => {
     const movie = req.body
-    if (!title)  throwError("Title is required and must be a string",400)
+    if (!movie.title)  throwError("Title is required and must be a string, create operation failed",400)
     // MORE validation code has to be inserted here eventually, erros have to be returned at the same time.
 
-    console.log(`Adding Movie with title: ${req.body.title} to the DB...`)
+    console.log(`Adding Movie with title: ${movie.title} to the DB...`)
     try {
         const db_inserted_movie = await dbFunc.addMovie(movie);
         if (db_inserted_movie===null) res.sendStatus(204)      //Request succesful but no body or data to return 
@@ -49,7 +50,7 @@ app.post("/api/movies",async (req,res,next) => {
         next(err); // Pass error to error-handling middleware
     }
 })
-app.put("/api/movies/:id",async (req,res,next) => {
+app.put("/api/v1/movies/:id",async (req,res,next) => {
     const id = req.params.id
     if (isNaN(Number(id)))   throwError("ID is not a number, update operation failed",400)   //Checks if id is a number/string of a number
     
@@ -64,7 +65,7 @@ app.put("/api/movies/:id",async (req,res,next) => {
 })
 // #2 How to handle soft deletes vs hard deletes, What about movies? users? seats?
 // #3 i think good buisness practise for (Auditing,customer data analysis) it's intersting to always soft delete everything that's important
-app.delete("/api/movies/:id",async (req,res,next) => {
+app.delete("/api/v1/movies/:id",async (req,res,next) => {
     const id = req.params.id
     console.log(`Deleting Movie with id :${id} from the DB...`)
     try {
@@ -75,16 +76,20 @@ app.delete("/api/movies/:id",async (req,res,next) => {
     }
 })
 
-
-app.get("/api/screenings",async(req,res) => {
+app.get("/api/v1/screenings",async (req,res,next) => {
     console.log("Fetching Screenings from the DB...")
-    const screenings = await dbFunc.getScreenings()
-    res.status(200).json(screenings)
+    try {
+        const screenings = await dbFunc.getScreenings()
+        res.status(200).json(screenings)
+    } catch (error) {
+        next(error)  // Passes the error to the global error-handling middleware
+    }
 })
 
-app.get("/api/screenings/:id",async (req,res,next) => {
+app.get("/api/v1/screenings/:id",async (req,res,next) => {
     const id = req.params.id
-    if (isNaN(Number(id))) throwError("ID is not a number, update operation failed",400) //Checks if id is a number/string of a number
+    if (isNaN(Number(id))) throwError("ID is not a number, get operation failed",400) //Checks if id is a number/string of a number
+    
     console.log(`Fetching Screening with id :${id} from the DB...`)
     try {
     const screening = await dbFunc.getScreening(id)
@@ -94,16 +99,27 @@ app.get("/api/screenings/:id",async (req,res,next) => {
     }
 })
 
-app.get("/api/cinemas",async(req,res) => {
+app.get("/api/v1/cinemas",async (req,res,next) => {
     console.log("Fetching Cinemas from the DB...")
-    const cinemas = await dbFunc.getCinemas()
-    res.status(200).json(cinemas)
+    try {
+        const cinemas = await dbFunc.getCinemas()
+        res.status(200).json(cinemas)
+    } catch (error) {
+        next(error)  // Passes the error to the global error-handling middleware
+    }
 })
-app.get("/api/cinema/:id",async (req,res) => {
+
+app.get("/api/v1/cinemas/:id",async (req,res,next) => {
     const id = req.params.id
-    console.log("Fetching cinema with id :"+ id +" from the DB...")
-    const cinema = await dbFunc.getCinema(id)
-    res.status(200).json(cinema)
+    if (isNaN(Number(id))) throwError("ID is not a number, get operation failed",400) //Checks if id is a number/string of a number
+    
+    console.log(`Fetching Cinemas with id :${id} from the DB...`)
+    try {
+    const cinemas = await dbFunc.getCinema(id)
+    res.status(200).json(cinemas)
+    } catch (err) {
+        next(err); // Pass error to error-handling middleware
+    }
 })
 
 

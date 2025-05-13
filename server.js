@@ -1,17 +1,13 @@
 import express from "express"
 import cors from "cors"
-import { reqIPlogger , fetchJson} from "./utils.js"
+import { reqIPlogger, throwError} from "./utils.js"
+
 const app = express();
 const PORT = 3000;
-const APIpath = "http://localhost:5000" // change if DB backend is diff
+const APIpath = "http://localhost:5000/api/v1" // change if DB backend is diff
 
 app.set("view engine","ejs")
 app.use(cors(), reqIPlogger);
-app.use((err, req, res, next) => {
-  console.error(err.stack); // Log the stack trace
-  res.status(err.status || 500).send("Something broke in the API server !");
-});
-
 
 app.get("/home",(req,res) => {
     res.redirect("/")
@@ -19,9 +15,10 @@ app.get("/home",(req,res) => {
 app.get("/",(req,res) => {
     res.status(200).render("pages/index.ejs")
 })
-app.get("/movies",async (req,res) => {
+app.get("/movies",async (req,res,next) => {
     try {
-        const movies = await fetchJson(APIpath+"/api/movies",{headers:{'X-Requested-By': 'backend-server'}})
+        const result = await fetch(APIpath+"/movies",{headers:{'X-Requested-By': 'backend-server'}})
+        const movies = await result.json()
         res.status(200).render("pages/movies.ejs",{movies})
     } catch (error) {
         next(error)
@@ -30,24 +27,39 @@ app.get("/movies",async (req,res) => {
 
 app.get("/movies/:id",async (req,res,next) => {
     const id = req.params.id
-    console.log("accesing data from DB for movie with movie_id =",id)
-    const movie = await fetchJson(APIpath + "/api/movies/" + id ,{headers:{'X-Requested-By': 'backend-server'}})
-        // if (!res.ok) throwError (res.message,res.status)
-    res.status(200).render("pages/one_movie.ejs",{movie})
-
+    console.log("accesing API for movie with movie_id =",id)
+    try {
+        const result = await fetch(APIpath + "/movies/" + id ,{headers:{'X-Requested-By': 'backend-server'}})
+        const movie = await result.json() // either a reosurce obj or err obj
+        if ('error' in movie) throwError (movie.error.message,movie.error.status)
+        res.status(200).render("pages/one_movie.ejs",{movie})
+    } catch (error) {
+        next(error) // network request or re-thrown error
+    }
 })
 
-app.get("/screenings",async (req,res) => {
-    const screenings = await fetchJson(APIpath+"/api/screenings",{headers:{'X-Requested-By': 'frontend-server'}})
-    res.status(200).render("pages/screenings.ejs",{screenings})
+app.get("/screenings",async (req,res,next) => {
+    try {
+        const result = await fetch(APIpath+"/screenings",{headers:{'X-Requested-By': 'backend-server'}})
+        const screenings = await result.json()
+        res.status(200).render("pages/screenings.ejs",{screenings})
+    } catch (error) {
+        next(error)
+    }
 })
 
-app.get("/screenings/:id",async (req,res) => {
+
+app.get("/screenings/:id",async (req,res,next) => {
     const id = req.params.id
-    console.log("accesing data from DB for screening with screening_id =",id)
-    const screening = await fetchJson(APIpath + "/api/screenings/" + id ,{headers:{'X-Requested-By': 'backend-server'}})
-    // if (!res.ok) throw new Error(`Error ${res.status}: ${res.statusText}`);
-    res.status(200).render("pages/one_screening.ejs",{screening})
+    console.log("accesing API for screening with screening_id =",id)
+    try {
+        const result = await fetch(APIpath + "/screenings/" + id ,{headers:{'X-Requested-By': 'backend-server'}})
+        const screening = await result.json() // either a reosurce obj or err obj
+        if ('error' in screening) throwError (screening.error.message,screening.error.status)
+        res.status(200).render("pages/one_screening.ejs",{screening})
+    } catch (error) {
+        next(error) // network request or re-thrown error
+    }
 })
 
 // app.use(express.static("public"));

@@ -47,7 +47,7 @@
           <td><a href= <%= "movies/" + movie.movie_id%> > <%= movie.title%> </a></td>
           <td> <%= movie.description%></td>
           <td> <%= movie.age_rating%></td>
-          <td> <%= movie.is_team_pick%></td>
+          <td> <%= movie.is_team_pick?"Yes":"No"%></td>
           <td> <%= movie.score%></td>
         </tr>
       <%})%>

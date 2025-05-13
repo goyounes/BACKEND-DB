@@ -1,5 +1,4 @@
 import * as db from "./database.js";
-import { fetchJson } from "../utils.js";
 
 // db.getMovies();
 // db.getGenres();
@@ -31,13 +30,5 @@ import { fetchJson } from "../utils.js";
 //   "start_time": "16:30:00",
 //   "end_time": "18:30:00"
 // })
-
-const path = "http://localhost:5000/api/movies/1548" // change if DB backend is diff
-try {
-  const movie = await fetchJson(path ,{headers:{'X-Requested-By': 'backend-server'}})
-  } catch (error) {
-  console.error
-}
-
 
 process.exit(0)
