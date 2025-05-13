@@ -10,7 +10,7 @@ import * as db from "./database.js";
 // db.getQualities();
 // db.getScreeningQualities();
 // db.getRoles();
-// db.getUsers();
+await db.getUsers();
 // db.getTickets();
 
 // db.addMovie({

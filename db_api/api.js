@@ -1,5 +1,5 @@
+import * as dbFunc from "./database.js";
 import express from "express"
-import cors from "cors"
 import { throwError } from "../utils.js"
 const app = express();
 
@@ -7,13 +7,11 @@ import dotenv from "dotenv"
 dotenv.config()
 const PORT = process.env.DB_SERVER_PORT;
 
-import { reqIPlogger} from "../utils.js"
+import cors from "cors"
+import {reqIPlogger} from "../utils.js"
 app.use(cors(), reqIPlogger,express.json());
 
-
-import * as dbFunc from "./database.js";
-// app.use(express.static("public"));
-
+// ---------------------------------------------- Movies ----------------------------------------------
 app.get("/api/v1/movies",async (req,res,next) => {
     console.log("Fetching Movies from the DB...")
     try {
@@ -40,6 +38,7 @@ app.post("/api/v1/movies",async (req,res,next) => {
     const movie = req.body
     if (!movie.title)  throwError("Title is required and must be a string, create operation failed",400)
     // MORE validation code has to be inserted here eventually, erros have to be returned at the same time.
+    // Post should be able to update all the fields, if an NotNULL field is missing, it shouldnt work.
 
     console.log(`Adding Movie with title: ${movie.title} to the DB...`)
     try {
@@ -53,10 +52,11 @@ app.post("/api/v1/movies",async (req,res,next) => {
 app.put("/api/v1/movies/:id",async (req,res,next) => {
     const id = req.params.id
     if (isNaN(Number(id)))   throwError("ID is not a number, update operation failed",400)   //Checks if id is a number/string of a number
+    const movie = req.body
+    if (!movie.title)  throwError("Title is required and must be a string, create operation failed",400)
     
     console.log(`Updating Movie with id :${id} from the DB...`)
     try {
-        const movie = req.body
         const db_updated_movie = await dbFunc.updateMovie(id,movie); 
         res.status(200).json(db_updated_movie);
     } catch (err) {
@@ -76,6 +76,9 @@ app.delete("/api/v1/movies/:id",async (req,res,next) => {
     }
 })
 
+// -------------------------------------------------------------------------------------------------------------------------
+// -----------------------Screenings-----------------------Screnings-----------------------Screenings-----------------------
+// -------------------------------------------------------------------------------------------------------------------------
 app.get("/api/v1/screenings",async (req,res,next) => {
     console.log("Fetching Screenings from the DB...")
     try {
@@ -99,6 +102,10 @@ app.get("/api/v1/screenings/:id",async (req,res,next) => {
     }
 })
 
+
+// -------------------------------------------------------------------------------------------------------------------------
+// -------------------------Cinemas-------------------------Cinemas-------------------------Cinemas-------------------------
+// -------------------------------------------------------------------------------------------------------------------------
 app.get("/api/v1/cinemas",async (req,res,next) => {
     console.log("Fetching Cinemas from the DB...")
     try {
@@ -122,11 +129,78 @@ app.get("/api/v1/cinemas/:id",async (req,res,next) => {
     }
 })
 
+// -------------------------------------------------------------------------------------------------------------------------
+// --------------------------Users--------------------------Users--------------------------Users----------------------------
+// -------------------------------------------------------------------------------------------------------------------------
+app.get("/api/v1/users",async (req,res,next) => {
+    console.log("Fetching Users from the DB...")
+    try {
+        const users = await dbFunc.getUsers()
+        res.status(200).json(users)
+    } catch (error) {
+        next(error)  // Passes the error to the global error-handling middleware
+    }
+})
+
+app.get("/api/v1/users/:id",async (req,res,next) => {
+    const id = req.params.id
+    if (isNaN(Number(id))) throwError("ID is not a number, get operation failed",400) //Checks if id is a number/string of a number
+    
+    console.log(`Fetching User with id :${id} from the DB...`)
+    try {
+        const user = await dbFunc.getUser(id);
+        res.status(200).json(user);
+    } catch (err) {
+        next(err); // Pass error to error-handling middleware
+    }
+})
+app.post("/api/v1/users",async (req,res,next) => {
+    const user = req.body
+    if (!user.user_name ||!user.user_email ||!user.user_password) throwError("Missing user data, creation operation failed",400) //Checks if id is a number/string of a number
+    // MORE validation code has to be inserted here eventually, erros have to be returned at the same time.
+    // Post should be able to update all the fields, if an NotNULL field is missing, it shouldnt work.
+
+    console.log(`Adding User :${user.user_name} email:${user.user_email} created succesfully to the DB`)
+    try {
+        const db_inserted_user = await dbFunc.addUser(user);
+        if (db_inserted_user===null) res.sendStatus(204)      //Request succesful but no body or data to return 
+        res.status(201).json(db_inserted_user);
+    } catch (err) {
+        next(err); // Pass error to error-handling middleware
+    }
+})
+app.put("/api/v1/users/:id",async (req,res,next) => {
+    const id = req.params.id
+    if (isNaN(Number(id)))   throwError("ID is not a number, update operation failed",400)   //Checks if id is a number/string of a number  
+    const user = req.body
+    if (!user.user_name ||!user.user_email ||!user.user_password)  throwError("Missing user data, creation operation failed",400)
+
+    console.log(`Updating User :${user.user_name} email:${user.user_email} from the DB...`)
+    try {
+        const db_updated_user = await dbFunc.updateUser(id,user); 
+        res.status(200).json(db_updated_user);
+    } catch (err) {
+        next(err); // Pass error to error-handling middleware
+    }
+})
+// #2 How to handle soft deletes vs hard deletes, What about movies? users? seats?
+// #3 i think good buisness practise for (Auditing,customer data analysis) it's intersting to always soft delete everything that's important
+app.delete("/api/v1/users/:id",async (req,res,next) => {
+    const id = req.params.id
+    console.log(`Deleting User with id :${id} email:${user.user_email} user:${user.user_name} from the DB...`)
+    try {
+        const movie = await dbFunc.deleteUser(id);
+        res.status(200).json(movie);
+    } catch (err) {
+        next(err); // Pass error to error-handling middleware
+    }
+})
+
+
 
 app.use((err, req, res, next) => {
   console.log("API: Middleware logging error stack ...")
   console.error(err.stack);  // Log the stack trace for debugging
-
   // Send structured error response
   res.status(err.status || 500).json({
     error: {

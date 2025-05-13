@@ -15,6 +15,7 @@ app.get("/home",(req,res) => {
 app.get("/",(req,res) => {
     res.status(200).render("pages/index.ejs")
 })
+
 app.get("/movies",async (req,res,next) => {
     try {
         const result = await fetch(APIpath+"/movies",{headers:{'X-Requested-By': 'backend-server'}})
@@ -61,6 +62,17 @@ app.get("/screenings/:id",async (req,res,next) => {
         next(error) // network request or re-thrown error
     }
 })
+
+app.get("/users",async (req,res,next) => {
+    try {
+        const result = await fetch(APIpath+"/users",{headers:{'X-Requested-By': 'backend-server'}})
+        const users = await result.json()
+        res.status(200).render("pages/users.ejs",{users})
+    } catch (error) {
+        next(error)
+    }
+})
+
 
 // app.use(express.static("public"));
 

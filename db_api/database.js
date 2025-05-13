@@ -21,7 +21,28 @@ const pool = mysql.createPool({
 // async function testConnection() {    try {        const connection = await pool.getConnection();        console.log("Connected to MySQL!");        connection.release();     } catch (error) {        console.error("Connection failed:", error);    }}
 // testConnection();
 
-
+const UIET = { //userInsertErrorsTranslation
+    ER_DUP_ENTRY: {
+        message: "The provided username or email is already in use. Please choose another.",
+        status: 409
+    },
+    ER_NO_REFERENCED_ROW_2: {
+        message: "The specified role is invalid. Please check and try again.",
+        status: 400
+    },
+    ER_BAD_NULL_ERROR: {
+        message: "Required fields are missing or invalid. Please check your input.",
+        status: 400
+    },
+    ER_DATA_TOO_LONG: {
+        message: "The data entered is too long for one of the fields. Please shorten your input.",
+        status: 400
+    },
+    ER_UNKNOWN_ERROR: {
+        message: "An unexpected error occurred. Please try again later.",
+        status: 500
+    }
+};
 
 async function dbTableLogger(table_name,array){
     const [columns] = await pool.query(`
@@ -60,16 +81,19 @@ export async function getTable(table_name){
     await dbTableLogger(table_name,result_rows)
     return result_rows
 }
-
+//Shows section
 export const getMovies = async () => getTable("movies");
 export const getGenres = async () => getTable("genres");
 export const getMovieGenres = async () => getTable("movie_genres");
+//Cinemas section
 export const getCinemas = async () => getTable("cinemas");
 export const getRooms = async () => getTable("rooms");
 export const getSeats = async () => getTable("seats");
+//Screenings section
 export const getScreenings = async () => getTable("screenings");
 export const getQualities = async () => getTable("qualities");
 export const getScreeningQualities = async () => getTable("screening_qualities");
+//Users section
 export const getRoles = async () => getTable("roles");
 export const getUsers = async () => getTable("users");
 export const getTickets = async () => getTable("tickets");
@@ -80,7 +104,7 @@ export async function getTableRow(table_name,id){
 
     const [result] = await pool.query(`SELECT * FROM ${table_name} WHERE ${name_for_id_column} = ${id};`);
     if (result.length === 0)     throwError(`Resource with ID ${id} not found`,404)
-
+,
     await dbTableLogger(table_name,result)
     const selected_row = result[0]
     return selected_row
@@ -89,6 +113,8 @@ export async function getTableRow(table_name,id){
 export const getMovie = async(id) => getTableRow("movies",id)
 export const getScreening = async(id) => getTableRow("screenings",id)
 export const getCinema = async(id) => getTableRow("cinemas",id)
+export const getUser = async(id) => getTableRow("users",id)
+export const getTicket = async(id) => getTableRow("tickets",id)
 
 // Add Resource
 export async function addMovie(movie){
@@ -111,8 +137,40 @@ export async function addScreening(screening){
     return await getTableRow('screenings',result.insertId)
 }
 
+export async function addUser(user){// this is a super function only admins should be able to use this technically 
+                                    // it allows them to creat more admin accounts, employe accounts etc
+    const {user_name,user_email,user_password,first_name,last_name,role_id} = user
+    const conn = await pool.getConnection();
+        try {
+            await conn.beginTransaction();
+            //creating the user in users table
+            const [result] = await conn.query(`
+                INSERT INTO users (user_name,user_email,first_name,last_name,role_id) 
+                VALUES (?,?,?,?,?);
+            `,[user_name,user_email,first_name,last_name,role_id])
+            if (!result.insertId) throwError("User creation failed",500)
 
-// Update Resource -- Work in progress
+            //add password to the credentials table
+            const user_id = result.insertId
+            const [credResult] = await conn.query(`
+            INSERT INTO users_credentials (user_id,user_password_hash)
+			VALUES (?,?);
+            `,[user_id,user_password])
+            if (!credResult.affectedRows) throwError("Password was not saved!");
+
+            await conn.commit(); // ✅ All good
+            console.log(`User :${user_name} email:${user_email} created succesfully`)
+            return await getTableRow('users',user_id)
+        } catch (error) {
+            await conn.rollback(); // ❌ Undo everything
+            console.error("⚠️ User creation rolled back due to error:", error.message);
+            throwError(`${UIET[error.code].message}. User creation failed. Changes rolled back.`, UIET[error.code].status||500);
+        }finally{
+            conn.release();
+        }
+}
+
+// Update Resource 
 export async function updateMovie(id,movie){
     const name_for_id_column = await getNameForIdColumn('movies')
     const movie_id = id

@@ -17,6 +17,9 @@ SELECT * FROM users;
 SELECT * FROM roles;
 SELECT * FROM tickets;
 
+        UPDATE movies
+        SET title = "FINALLY ", description = ?, age_rating = ?, is_team_pick = ?, score = ?
+        WHERE ${name_for_id_column} = ?;
 
 -- Creat Table to show all the cinemas and Thier respective rooms
 SELECT cinemas.cinema_id,cinemas.cinema_name,room_id

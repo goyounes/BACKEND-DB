@@ -8,6 +8,7 @@ DROP TABLE screenings;
 DROP TABLE genres;
 DROP TABLE movies;
 DROP TABLE qualities;
+DROP TABLE users_credentials;
 DROP TABLE users;
 DROP TABLE roles;
 DROP TABLE seats;

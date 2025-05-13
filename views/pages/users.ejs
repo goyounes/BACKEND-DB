@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Movies List</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 12px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+    th {
+      background-color: #f4f4f4;
+    }
+    .highlight {
+      background-color: #e6ffe6 !important;
+    }
+    
+  </style>
+</head>
+<body>
+  <%- include('../partials/navbar') %>
+  <h1>Movies List</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Age Rating</th>
+        <th>Team Pick</th>
+        <th>Score</th>
+      </tr>
+    </thead>
+    <tbody id="users-body">
+      <% users.forEach( user => {%>
+        <tr>
+          <td><a href= <%= "users/" + user.user_id%>> <%= user.user_id%> </a></td>
+          <td> <%= user.user_name%></td>
+          <td> <%= user.user_email%></td>
+          <td> <%= user.first_name%></td>
+          <td> <%= user.last_name%></td>
+          <td> <%= user.role_id%></td>
+        </tr>
+      <%})%>
+    </tbody>
+  </table>
+
+
+</body>
+</html>

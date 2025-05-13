@@ -26,7 +26,7 @@ CREATE TABLE movies (
     age_rating INT,
     is_team_pick BOOL,
     score DECIMAL(2,1),
-    length 
+    length TIME
 );
 
 INSERT INTO movies (title,  description, age_rating, is_team_pick, score) 
@@ -497,35 +497,69 @@ CREATE TABLE users (
     user_id INT PRIMARY KEY AUTO_INCREMENT,
     user_name VARCHAR(255) NOT NULL,
     user_email VARCHAR(255) NOT NULL,
-    user_password VARCHAR(255) NOT NULL,
     first_name VARCHAR(255) NOT NULL,
     last_name VARCHAR(255) NOT NULL,
     role_id INT,
+    UNIQUE (user_name),
+	UNIQUE (user_email),
     FOREIGN KEY (role_id) REFERENCES roles(role_id)
 );
 
-INSERT INTO users(user_name,user_email,user_password,first_name,last_name,role_id)
+INSERT INTO users(user_name,user_email,first_name,last_name,role_id)
 VALUES 
-("bbraney0","bbraney0@tinyurl.com","wG0@3l?E","Bernard","Braney",2),
-("ffolonin1","ffolonin1@ucla.edu","yC0~tBzc&(vu(","Fletch","Folonin",2),
-("rkinnier2","rkinnier2@thetimes.co.uk","sQ5\H4D&Vq","Raynor","Kinnier",3),
-("bmongin3","bmongin3@seesaa.net","jV5}O~lyv1hC","Butch","Mongin",4),
-("phaglinton4","phaglinton4@acquirethisname.com","nS8?gJ=A8G*0","Pamelina","Haglinton",2),
-("mshambroke5","mshambroke5@lulu.com","kT4*7x3?Tr","Miner","Shambroke",2),
-("dmundford6","dmundford6@java.com","pI5{L8KN>*1`","Denis","Mundford",2),
-("gkelinge7","gkelinge7@cmu.edu","gX9}P#%~h3","Guthrie","Kelinge",2),
-("hyanyushkin8","hyanyushkin8@sciencedaily.com","mC9,4%R7=0hc","Hamlin","Yanyushkin",2),
-("smessiter9","smessiter9@marketwatch.com","hX3'qMU_%XKLBg&","Sydney","Messiter",2),
-("cburrena","cburrena@yahoo.com","oA4!$NV6bk/>e'K6","Clement","Burren",3),
-("hvaneschib","hvaneschib@google.co.jp","hN6%+>~LC5XYamg","Heywood","Vaneschi",4),
-("fdavallc","fdavallc@networksolutions.com","lN8<A$82lbmx0NRc","Faye","Davall",2),
-("lleadstond","lleadstond@ning.com","uP5~?@yU`!j","Lenore","Leadston",4),
-("jfleischmanne","jfleischmanne@globo.com","pZ1?4d<5+","June","Fleischmann",2);
+("bbraney0","bbraney0@tinyurl.com","Bernard","Braney",2),
+("ffolonin1","ffolonin1@ucla.edu","Fletch","Folonin",2),
+("rkinnier2","rkinnier2@thetimes.co.uk","Raynor","Kinnier",3),
+("bmongin3","bmongin3@seesaa.net","Butch","Mongin",4),
+("phaglinton4","phaglinton4@acquirethisname.com","Pamelina","Haglinton",2),
+("mshambroke5","mshambroke5@lulu.com","Miner","Shambroke",2),
+("dmundford6","dmundford6@java.com","Denis","Mundford",2),
+("gkelinge7","gkelinge7@cmu.edu","Guthrie","Kelinge",2),
+("hyanyushkin8","hyanyushkin8@sciencedaily.com","Hamlin","Yanyushkin",2),
+("smessiter9","smessiter9@marketwatch.com","Sydney","Messiter",2),
+("cburrena","cburrena@yahoo.com","Clement","Burren",3),
+("hvaneschib","hvaneschib@google.co.jp","Heywood","Vaneschi",4),
+("fdavallc","fdavallc@networksolutions.com","Faye","Davall",2),
+("lleadstond","lleadstond@ning.com","Lenore","Leadston",4),
+("jfleischmanne","jfleischmanne@globo.com","June","Fleischmann",2);
 
 
 SELECT * FROM users;
 -- ---------------------------------------------------------------------------------------------------------------------------
 
+CREATE TABLE users_credentials (
+    user_id INT PRIMARY KEY,
+    user_password_hash CHAR(60) NOT NULL,
+    password_updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    failed_attempts INT DEFAULT 0,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+INSERT INTO users_credentials(user_id,user_password_hash)
+VALUES 
+(1,"wG0@3l?E"),
+(2,"yC0~tBzc&(vu("),
+(3,"sQ5\H4D&Vq"),
+(4,"jV5}O~lyv1hC"),
+(5,"nS8?gJ=A8G*0"),
+(6,"kT4*7x3?Tr"),
+(7,"pI5{L8KN>*1`"),
+(8,"gX9}P#%~h3"),
+(9,"mC9,4%R7=0hc"),
+(10,"hX3'qMU_%XKLBg&");
+-- (11,"oA4!$NV6bk/>e'K6"),
+-- (12,"hN6%+>~LC5XYamg"),
+-- (13,"lN8<A$82lbmx0NRc"),
+-- (14,"uP5~?@yU`!j"),
+-- (15,"pZ1?4d<5+");
+          INSERT INTO users_credentials (user_id,user_password_hash)
+			VALUES (11,"password happy af");
+       --     INSERT INTO users_credentials (user_id,user_password_hash)
+       -- VALUES (8,"gX9}P#%~h3");
+
+
+SELECT * FROM users_credentials;
+-- ---------------------------------------------------------------------------------------------------------------------------
 CREATE TABLE tickets (
     ticket_id INT PRIMARY KEY AUTO_INCREMENT,
 	screening_id INT,
