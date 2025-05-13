@@ -1,6 +1,6 @@
 import mysql from "mysql2"
 import dotenv from "dotenv"
-import { throwError } from "../utils";
+import { throwError } from "../utils.js";
 dotenv.config({ path: './db_api/.env' })
 
 const pool = mysql.createPool({
@@ -47,32 +47,14 @@ export async function getNameForIdColumn(table_name){
     return columns[0].COLUMN_NAME
 }
 
-
-
-
-
-
-
-
-
-export async function deleteTableRow(table_name,id){
-    // const name_for_id_column = await getNameForIdColumn(table_name)
-    // const result = await pool.query(`DELETE FROM ${table_name} WHERE ${name_for_id_column} = ${id};`);
-    const err = new Error("Delete operations are not supported as of now") 
-    err.status = 501
-    throw err
-}
-
-
 // Get Resources
 const allowedTables = [
 "movies","genres","movie_genres",                 "cinemas","rooms","seats",
 "screenings","qualities","screening_qualities",   "roles","users","tickets"]
 
 export async function getTable(table_name){    
-    if (!allowedTables.includes(table_name)) { 
-        throw new Error("Unauthorized table access.");
-    }
+    if (!allowedTables.includes(table_name)) throwError("Unauthorized table access.",400);
+
     const [result_rows] = await pool.query(`SELECT * FROM ${table_name};`);
 
     await dbTableLogger(table_name,result_rows)
@@ -97,7 +79,7 @@ export async function getTableRow(table_name,id){
     const name_for_id_column = await getNameForIdColumn(table_name)
 
     const [result] = await pool.query(`SELECT * FROM ${table_name} WHERE ${name_for_id_column} = ${id};`);
-    if (result === 0)     throwError(`Resource with ID ${id} not found`,404)
+    if (result.length === 0)     throwError(`Resource with ID ${id} not found`,404)
 
     await dbTableLogger(table_name,result)
     const selected_row = result[0]
@@ -149,4 +131,9 @@ export async function updateMovie(id,movie){
 
 
 // Delete Resource
+export async function deleteTableRow(table_name,id){
+    // const name_for_id_column = await getNameForIdColumn(table_name)
+    // const result = await pool.query(`DELETE FROM ${table_name} WHERE ${name_for_id_column} = ${id};`);
+    throwError("Delete operations are not supported as of now",501)
+}
 export const deleteMovie = async(id) => deleteTableRow("movies",id)

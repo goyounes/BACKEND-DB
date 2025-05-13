@@ -23,10 +23,12 @@ app.get("/api/movies",async (req,res) => {
 app.get("/api/movies/:id",async (req,res,next) => {
     const id = req.params.id
     if (isNaN(Number(id))) throwError("ID is not a number, update operation failed",400) //Checks if id is a number/string of a number
+    
     console.log(`Fetching Movie with id :${id} from the DB...`)
     try {
-        console.log('here')
         const movie = await dbFunc.getMovie(id);
+        console.log("did we enter here?")
+        console.log(movie)
         res.status(200).json(movie);
     } catch (err) {
         next(err); // Pass error to error-handling middleware
@@ -37,7 +39,7 @@ app.post("/api/movies",async (req,res,next) => {
     if (!title)  throwError("Title is required and must be a string",400)
     // MORE validation code has to be inserted here eventually, erros have to be returned at the same time.
 
-    console.log(`adding Movie with title: ${req.body.title} to the DB...`)
+    console.log(`Adding Movie with title: ${req.body.title} to the DB...`)
     try {
         const db_inserted_movie = await dbFunc.addMovie(movie);
         if (db_inserted_movie===null) res.sendStatus(204)      //Request succesful but no body or data to return 
@@ -107,7 +109,15 @@ app.get("/api/cinema/:id",async (req,res) => {
 app.use((err, req, res, next) => {
   console.log("API: Middleware logging error stack ...")
   console.error(err.stack); // Log the stack trace
-  res.status(err.status || 500).send(err.message || "Something broke in the API server !");
+
+  // Default error handling structure
+  const status = err.status || 500;
+  const code = err.code || "INTERNAL_API_ERROR";
+  const message = err.message || "Something broke in the API server !";
+
+  res.status(status).json({
+    error: {message, status, code, details: err.details || null},
+  });
 });
 
 app.listen(PORT,() => {

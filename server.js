@@ -20,19 +20,21 @@ app.get("/",(req,res) => {
     res.status(200).render("pages/index.ejs")
 })
 app.get("/movies",async (req,res) => {
-    const movies = await fetchJson(APIpath+"/api/movies",{headers:{'X-Requested-By': 'backend-server'}})
-    res.status(200).render("pages/movies.ejs",{movies})
+    try {
+        const movies = await fetchJson(APIpath+"/api/movies",{headers:{'X-Requested-By': 'backend-server'}})
+        res.status(200).render("pages/movies.ejs",{movies})
+    } catch (error) {
+        next(error)
+    }
 })
 
-app.get("/movies/:id",async (req,res) => {
+app.get("/movies/:id",async (req,res,next) => {
     const id = req.params.id
     console.log("accesing data from DB for movie with movie_id =",id)
     const movie = await fetchJson(APIpath + "/api/movies/" + id ,{headers:{'X-Requested-By': 'backend-server'}})
-    // if (!res.ok) {
-    //     console.log("error handeled like a boss !")
-    //     throw new Error(`Error ${res.status}: ${res.statusText}`);
-    // }
-    res.status(200).render("pages/one_movie.ejs",{movie})
+        // if (!res.ok) throwError (res.message,res.status)
+    // res.status(200).render("pages/one_movie.ejs",{movie})
+
 })
 
 app.get("/screenings",async (req,res) => {
