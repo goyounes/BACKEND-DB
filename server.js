@@ -33,7 +33,7 @@ app.get("/movies/:id",async (req,res,next) => {
     console.log("accesing data from DB for movie with movie_id =",id)
     const movie = await fetchJson(APIpath + "/api/movies/" + id ,{headers:{'X-Requested-By': 'backend-server'}})
         // if (!res.ok) throwError (res.message,res.status)
-    // res.status(200).render("pages/one_movie.ejs",{movie})
+    res.status(200).render("pages/one_movie.ejs",{movie})
 
 })
 

@@ -1,6 +1,7 @@
 import express from "express"
 import cors from "cors"
 import { throwError } from "../utils.js"
+import createError from 'http-errors';
 const app = express();
 
 import dotenv from "dotenv"
@@ -108,15 +109,16 @@ app.get("/api/cinema/:id",async (req,res) => {
 
 app.use((err, req, res, next) => {
   console.log("API: Middleware logging error stack ...")
-  console.error(err.stack); // Log the stack trace
+  console.error(err.stack);  // Log the stack trace for debugging
 
-  // Default error handling structure
-  const status = err.status || 500;
-  const code = err.code || "INTERNAL_API_ERROR";
-  const message = err.message || "Something broke in the API server !";
-
-  res.status(status).json({
-    error: {message, status, code, details: err.details || null},
+  // Send structured error response
+  res.status(err.status || 500).json({
+    error: {
+      message: err.message,
+      status: err.status,
+      code: err.code || 'INTERNAL_ERROR',
+      details: err.details || null,
+    }
   });
 });
 
