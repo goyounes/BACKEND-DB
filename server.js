@@ -77,10 +77,10 @@ app.get("/users/:id",async (req,res,next) => {
     const id = req.params.id
     console.log("accesing API for movie with movie_id =",id)
     try {
-        const result = await fetch(APIpath + "/movies/" + id ,{headers:{'X-Requested-By': 'backend-server'}})
+        const result = await fetch(APIpath + "/users/" + id ,{headers:{'X-Requested-By': 'backend-server'}})
         const user = await result.json() // either a reosurce obj or err obj
         if ('error' in user) throwError (user.error.message,user.error.status)
-        res.status(200).render("pages/one_user.ejs",{user: user})
+        res.status(200).render("pages/one_user.ejs",{user})
     } catch (error) {
         next(error) // network request or re-thrown error
     }

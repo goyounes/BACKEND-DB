@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>User Details</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 12px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+    th {
+      background-color: #f4f4f4;
+    }
+    .highlight {
+      background-color: #e6ffe6 !important;
+    }
+    
+  </style>
+</head>
+<body>
+  <%- include('../partials/navbar') %>
+  <h1>Users List</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>user id</th>      
+        <th>username</th>
+        <th>email</th>
+        <th>first name</th>
+        <th>last name</th>
+        <th>role_id%</th>
+      </tr>
+    </thead>
+    <% const roles = { 1: "visitor", 2: "user", 3: "employee", 4: "admin" } %>
+    <tbody id="user-body">
+        <tr>
+          <td> <%= user.user_id%></td>
+          <td> <%= user.user_name%></td>
+          <td> <%= user.user_email%></td>
+          <td> <%= user.first_name%></td>
+          <td> <%= user.last_name%></td>
+          <td> <%= roles[user.role_id]%></td>
+        </tr>
+    </tbody>
+  </table>
+
+
+</body>
+</html>
