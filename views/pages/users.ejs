@@ -25,7 +25,6 @@
     .highlight {
       background-color: #e6ffe6 !important;
     }
-    
   </style>
 </head>
 <body>
@@ -42,7 +41,7 @@
         <th>role_id%</th>
       </tr>
     </thead>
-    <% const roles = { 1: "visitor", 2: "user", 3: "employee", 4: "admin" } %>
+    <% const roles = { 1: "user", 2: "employee", 3: "admin" } %>
     <tbody id="users-body">
       <% users.forEach( user => {%>
         <tr>

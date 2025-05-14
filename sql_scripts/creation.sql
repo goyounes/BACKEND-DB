@@ -20,7 +20,6 @@ SELECT * FROM genres;
 CREATE TABLE movies (
     movie_id INT PRIMARY KEY AUTO_INCREMENT,
     title VARCHAR(255) NOT NULL,
-    -- length TIME,
     poster_img BLOB , -- the default can be a generic image 
     description TEXT,
     age_rating INT,
@@ -422,8 +421,7 @@ END;
 -- DROP TRIGGER IF EXISTS update_screenings_cinema_id;
 //
 DELIMITER ;
-
--- ---------------------------------------------------------------------------------------------------------------------------
+-- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 CREATE TABLE qualities (
     quality_id INT PRIMARY KEY AUTO_INCREMENT,
@@ -507,21 +505,22 @@ CREATE TABLE users (
 
 INSERT INTO users(user_name,user_email,first_name,last_name,role_id)
 VALUES 
-("bbraney0","bbraney0@tinyurl.com","Bernard","Braney",2),
-("ffolonin1","ffolonin1@ucla.edu","Fletch","Folonin",2),
-("rkinnier2","rkinnier2@thetimes.co.uk","Raynor","Kinnier",3),
-("bmongin3","bmongin3@seesaa.net","Butch","Mongin",4),
-("phaglinton4","phaglinton4@acquirethisname.com","Pamelina","Haglinton",2),
-("mshambroke5","mshambroke5@lulu.com","Miner","Shambroke",2),
-("dmundford6","dmundford6@java.com","Denis","Mundford",2),
-("gkelinge7","gkelinge7@cmu.edu","Guthrie","Kelinge",2),
-("hyanyushkin8","hyanyushkin8@sciencedaily.com","Hamlin","Yanyushkin",2),
-("smessiter9","smessiter9@marketwatch.com","Sydney","Messiter",2),
-("cburrena","cburrena@yahoo.com","Clement","Burren",3),
-("hvaneschib","hvaneschib@google.co.jp","Heywood","Vaneschi",4),
-("fdavallc","fdavallc@networksolutions.com","Faye","Davall",2),
-("lleadstond","lleadstond@ning.com","Lenore","Leadston",4),
-("jfleischmanne","jfleischmanne@globo.com","June","Fleischmann",2);
+("bbraney0","bbraney0@tinyurl.com","Bernard","Braney",1),
+("ffolonin1","ffolonin1@ucla.edu","Fletch","Folonin",1),
+("rkinnier2","rkinnier2@thetimes.co.uk","Raynor","Kinnier",2),
+("bmongin3","bmongin3@seesaa.net","Butch","Mongin",3),
+("phaglinton4","phaglinton4@acquirethisname.com","Pamelina","Haglinton",1),
+("mshambroke5","mshambroke5@lulu.com","Miner","Shambroke",1),
+("dmundford6","dmundford6@java.com","Denis","Mundford",1),
+("gkelinge7","gkelinge7@cmu.edu","Guthrie","Kelinge",1),
+("hyanyushkin8","hyanyushkin8@sciencedaily.com","Hamlin","Yanyushkin",1),
+("smessiter9","smessiter9@marketwatch.com","Sydney","Messiter",1),
+("cburrena","cburrena@yahoo.com","Clement","Burren",2),
+("hvaneschib","hvaneschib@google.co.jp","Heywood","Vaneschi",3),
+("fdavallc","fdavallc@networksolutions.com","Faye","Davall",1),
+("lleadstond","lleadstond@ning.com","Lenore","Leadston",3),
+("jfleischmanne","jfleischmanne@globo.com","June","Fleischmann",1),
+
 
 
 SELECT * FROM users;

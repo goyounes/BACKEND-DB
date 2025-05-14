@@ -2,12 +2,14 @@ import express from "express"
 import cors from "cors"
 import { reqIPlogger, throwError} from "./utils.js"
 
+
 const app = express();
 const PORT = 3000;
 const APIpath = "http://localhost:5000/api/v1" // change if DB backend is diff
 
 app.set("view engine","ejs")
 app.use(cors(), reqIPlogger);
+// app.use(express.static('public'));
 
 app.get("/home",(req,res) => {
     res.redirect("/")
@@ -25,6 +27,11 @@ app.get("/movies",async (req,res,next) => {
         next(error)
     }
 })
+
+app.get('/movies/create', (req, res) => {
+    res.sendFile("/static/create_user.html",{root:"."})
+});
+
 
 app.get("/movies/:id",async (req,res,next) => {
     const id = req.params.id
