@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Create movie</title>
+  <title>Add Movie</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -12,73 +12,61 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      min-width: 500px; /* Set the minimum width for the body */
-      height: 100vh; /* Full viewport height */
+      min-width: 500px;
+      height: 100vh;
     }
-    h1{
-      text-align: center
+    h1 {
+      text-align: center;
     }
     fieldset {
-       /* padding: 15px; */
-      margin-bottom: 10px;  /* Add margin between fieldsets*/ 
+      margin-bottom: 10px;
     }
-    input {
-      width: 100%; /* Make input fields take full width */
+    input, textarea, select {
+      width: 100%;
       padding: 8px;
-      box-sizing: border-box; /* Ensure padding is included in width */
-    }
-    select {
-      width: auto; /* Let the select box size to its content */
-      padding: 8px;
-      box-sizing: border-box; /* Ensure padding is included in width */
+      box-sizing: border-box;
     }
     .container {
       width: 100%;
-      max-width: 500px; /* Max width for both h1 and form */
+      max-width: 500px;
     }
-    
   </style>
 </head>
 <body>
   <div class="container">
-  <h1>Add new user</h1>
+    <h1>Add New Movie</h1>
 
-  <form action="/api/v1/users" method="post">
+    <form action="/api/v1/movies" method="post" enctype="multipart/form-data">
       <fieldset>
-      <legend>User Credentials</legend>
+        <legend>Movie Details</legend>
 
-      <label for="user_email">Email:</label><br>
-      <input type="email" id="user_email" name="user_email" placeholder="example@mail.com" required><br><br>
+        <label for="title">Title:</label><br>
+        <input type="text" id="title" name="title" required><br><br>
 
-      <label for="password">Password:</label><br>
-      <input type="password" id="password" name="password" required><br><br>
+        <label for="poster_img">Poster Image:</label><br>
+        <input type="file" id="poster_img" name="poster_img" accept="image/*"><br><br>
 
-      <label for="user_name">Username:</label><br>
-      <input type="text" id="user_name" name="user_name" required><br><br>
+        <label for="description">Description:</label><br>
+        <textarea id="description" name="description" rows="4"></textarea><br><br>
 
+        <label for="age_rating">Age Rating:</label><br>
+        <input type="number" id="age_rating" name="age_rating" min="0" max="21"><br><br>
+
+        <label for="is_team_pick">Team Pick:</label><br>
+        <select id="is_team_pick" name="is_team_pick">
+          <option value="0">No</option>
+          <option value="1">Yes</option>
+        </select><br><br>
+
+        <label for="score">Score (0.0 - 9.9):</label><br>
+        <input type="number" id="score" name="score" step="0.1" min="0" max="9.9"><br><br>
+
+        <label for="length">Length (HH:MM:SS):</label><br>
+        <input type="time" id="length" name="length" step="1"><br><br>
       </fieldset>
-      <fieldset>
-      <legend>User Information</legend>
-      <label for="first_name">First Name:</label><br>
-      <input type="text" id="first_name" name="first_name" required><br><br>
 
-      <label for="last_name">Last Name:</label><br>
-      <input type="text" id="last_name" name="last_name" required><br><br>
-
-      <label for="role_id">Role:</label><br>
-      <select id="role_id" name="role_id" required>
-          <option value="1">User</option>
-          <option value="2">Employee</option>
-          <option value="3">Admin</option>
-      </select><br><br>
-    </fieldset>
-
-    <br>
-    <input type="submit" value="Create User">
-  </form>
-</div>
-
-
-
+      <input type="submit" value="Add Movie">
+    </form>
+  </div>
 </body>
 </html>

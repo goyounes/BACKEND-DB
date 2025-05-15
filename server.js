@@ -1,11 +1,12 @@
 import express from "express"
 import cors from "cors"
 import { reqIPlogger, throwError} from "./utils.js"
-
+import dotenv from "dotenv"
+dotenv.config()
 
 const app = express();
 const PORT = 3000;
-const APIpath = "http://localhost:5000/api/v1" // change if DB backend is diff
+const APIpath = process.env.DB_API_HREF // change if DB backend is diff
 
 app.set("view engine","ejs")
 app.use(cors(), reqIPlogger);
@@ -29,7 +30,7 @@ app.get("/movies",async (req,res,next) => {
 })
 
 app.get('/movies/create', (req, res) => {
-    res.sendFile("/static/create_user.html",{root:"."})
+    res.sendFile("/static/create_movie.html",{root:"."})
 });
 
 
@@ -79,6 +80,11 @@ app.get("/users",async (req,res,next) => {
         next(error)
     }
 })
+
+app.get('/users/create', (req, res) => {
+    res.sendFile("/static/create_user.html",{root:"."})
+});
+
 
 app.get("/users/:id",async (req,res,next) => {
     const id = req.params.id
