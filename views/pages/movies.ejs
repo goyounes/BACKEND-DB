@@ -56,6 +56,7 @@
   <table>
     <thead>
       <tr>
+        <th>Poster</th>
         <th>Title</th>
         <th>Description</th>
         <th>Age Rating</th>
@@ -66,6 +67,17 @@
     <tbody id="movies-body">
       <% movies.forEach( movie => {%>
         <tr class=<%= movie.is_team_pick ?"highlight":""%>>
+          <td>
+            <% if (movie.poster_img) { %>
+                <img 
+                  src="data:<%= movie.poster_img_type %>;base64,<%= movie.poster_img %>" 
+                  alt="Poster for <%= movie.title %>" 
+                  style="width: 80px; height: auto; border-radius: 5px;" 
+                />
+              <% } else { %>
+                N/A
+              <% } %>
+          </td>
           <td><a href= <%= "movies/" + movie.movie_id%> > <%= movie.title%> </a></td>
           <td> <%= movie.description%></td>
           <td> <%= movie.age_rating%></td>

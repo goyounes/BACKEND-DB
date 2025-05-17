@@ -1,16 +1,6 @@
 import * as dbFunc from "./database.js";
 import express from "express"
-import { throwError } from "../utils.js"
-//---------------Reading files for poster img------------
-import path from 'path';
-import fs from 'fs/promises';
-const ALLOWED_DIR = path.resolve('/absolute/path/to/allowed/images/folder');
-
-function isSafePath(filePath) {
-  const resolvedPath = path.resolve(filePath);
-  return resolvedPath.startsWith(ALLOWED_DIR);
-}
-//-------------------------------------------------------
+import { throwError, decodeBinaryToBase64, getImgDataAndImgStype } from "../utils.js"
 
 const app = express();
 
@@ -27,6 +17,7 @@ app.get("/api/v1/movies",async (req,res,next) => {
     console.log("Fetching Movies from the DB...")
     try {
         const movies = await dbFunc.getMovies()
+        movies.forEach((movie) => {movie.poster_img = decodeBinaryToBase64(movie.poster_img)})
         res.status(200).json(movies)
     } catch (error) {
         next(error)  // Passes the error to the global error-handling middleware
@@ -40,6 +31,7 @@ app.get("/api/v1/movies/:id",async (req,res,next) => {
     console.log(`Fetching Movie with id :${id} from the DB...`)
     try {
         const movie = await dbFunc.getMovie(id);
+        movie.poster_img = decodeBinaryToBase64(movie.poster_img)
         res.status(200).json(movie);
     } catch (err) {
         next(err); // Pass error to error-handling middleware
@@ -51,29 +43,20 @@ app.post("/api/v1/movies",async (req,res,next) => {
     // MORE validation code has to be inserted here eventually, erros have to be returned at the same time.
     // Post should be able to update all the fields, if an NotNULL field is missing, it shouldnt work.
 
-    //-------------------------------
-    if (movie.poster_img) {
-      if (!isSafePath(movie.poster_img)) {
-        return res.status(400).json({ error: "Invalid poster_img path" });
-      }
-      
-      // Read file as base64
-      const fileBuffer = await fs.readFile(movie.poster_img);
-      movie.poster_img = fileBuffer.toString('base64');
-    } else {
-      movie.poster_img = null;
-    }
-    //-------------------------------
-
-
     console.log(`Adding Movie with title: ${movie.title} to the DB...`)
     try {
-        const db_inserted_movie = await dbFunc.addMovie(movie);
-        if (db_inserted_movie===null) res.sendStatus(204)      //Request succesful but no body or data to return 
-        res.status(201).json(db_inserted_movie);
-    } catch (err) {
-        next(err); // Pass error to error-handling middleware
-    }
+        const MAX_SIZE_BYTES = 10 * 1024 * 1024; // 10MB in bytes 10 000 000
+        [movie.poster_img,movie.poster_img_type] = getImgDataAndImgStype(movie.poster_img,movie.poster_img_type,MAX_SIZE_BYTES)
+
+    // console.log(`Adding Movie with title: ${movie.title} to the DB...`);
+    const db_inserted_movie = await dbFunc.addMovie(movie);
+    if (db_inserted_movie === null) return res.sendStatus(204);
+    db_inserted_movie.poster_img = decodeBinaryToBase64(db_inserted_movie.poster_img)
+    res.status(201).json(db_inserted_movie);
+
+  } catch (err) {
+    next(err);
+  }
 })
 app.put("/api/v1/movies/:id",async (req,res,next) => {
     const id = req.params.id

@@ -48,7 +48,7 @@ async function dbTableLogger(table_name,array){
     const [columns] = await pool.query(`
 		SELECT column_name
         FROM information_schema.columns
-        WHERE table_name = ? AND DATA_TYPE !='text' AND TABLE_SCHEMA = ?
+        WHERE table_name = ? AND DATA_TYPE !='text' AND DATA_TYPE !='mediumblob' AND TABLE_SCHEMA = ?
         ORDER BY ordinal_position;
     `,[table_name,process.env.MYSQL_DATABASE]);
     // removes columns that have long texts.
@@ -118,11 +118,11 @@ export const getTicket = async(id) => getTableRow("tickets",id)
 
 // Add Resource
 export async function addMovie(movie){
-    const {title, poster_img, description, age_rating, is_team_pick, score} = movie
+    const {title, poster_img, description, age_rating, poster_img_type, is_team_pick, score, length} = movie
     const [result] = await pool.query(`
-        INSERT INTO movies (title, poster_img, description, age_rating, is_team_pick, score) 
-        VALUES (?,?,?,?,?,?);
-    `,[title, poster_img, description, age_rating, is_team_pick, score])
+        INSERT INTO movies (title, poster_img, poster_img_type, description, age_rating, is_team_pick, score, length) 
+        VALUES (?,?,?,?,?,?,?,?);
+    `,[title, poster_img, poster_img_type, description, age_rating, is_team_pick, score, length])
     if (!result.insertId) return null //return null
     return await getTableRow('movies',result.insertId)
 }

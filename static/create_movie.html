@@ -44,7 +44,8 @@
         <input type="text" id="title" name="title" required><br><br>
 
         <label for="poster_img">Poster Image URL:</label><br>
-        <input type="url" id="poster_img" name="poster_img" placeholder="https://example.com/image.jpg"><br><br>
+        <input type="file" name="poster_img" accept="image/*" />
+        <!-- <input type="url" id="poster_img" name="poster_img" placeholder="https://example.com/image.jpg"><br><br> -->
 
         <label for="description">Description:</label><br>
         <textarea id="description" name="description" rows="4"></textarea><br><br>
@@ -70,47 +71,66 @@
   </div>
 
   <script>
+      const MAX_SIZE = 10 * 1024 * 1024; // 10MB in bytes 10 000 000
       const API_URL = "http://127.0.0.1:5000/api/v1";
 
       document.getElementById("NewMovieForm").addEventListener("submit", async (event) => {
-      event.preventDefault();
+        event.preventDefault();
 
-      const form = event.target;
-
-      try {
-
-        const movieData = {
-          title: form.title.value,
-          age_rating: Number(form.age_rating.value),
-          description: form.description.value,
-          is_team_pick: Boolean(form.is_team_pick.value === "1" ? 1 : 0), // example
-          score: Number(form.score.value),    // example
-          length: form.length.value || null,
-          poster_img: form.poster_img.value || null  // URL string or null
-        };
-
-        const response = await fetch(`${API_URL}/movies`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(movieData)
-        });
-
-        if (!response.ok) {
-          throw new Error(`Error: ${response.statusText}`);
+        const form = event.target;
+        const fileInput = form.poster_img.files[0];
+        if (fileInput && fileInput.size > MAX_SIZE) {
+          alert('File size exceeds 10MB limit.');
+          return; // stop submission
         }
 
-        const result = await response.json();
-        alert("Movie added successfully!");
-        form.reset();
-        window.location.href = "/movies";
+        try {
+          let base64Poster = null;
+          if (fileInput) {
+            base64Poster = await toBase64(fileInput);
+          }
 
-      } catch (err) {
-        alert("Failed to add movie: " + err.message);
-      }
+          const movieData = {
+            title: form.title.value,
+            age_rating: Number(form.age_rating.value),
+            description: form.description.value,
+            is_team_pick: Boolean(form.is_team_pick.value === "1" ? 1 : 0), // example
+            score: Number(form.score.value),    // example
+            length: form.length.value || null,
+            poster_img: base64Poster || null// base64 string or null
+          };
+
+          const response = await fetch(`${API_URL}/movies`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(movieData)
+          });
+
+          if (!response.ok) {
+            throw new Error(`Error: ${response.statusText}`);
+          }
+
+          const result = await response.json();
+          alert("Movie added successfully!");
+          form.reset();
+          window.location.href = "/movies";
+
+        } catch (err) {
+          alert("Failed to add movie: " + err.message);
+        }
+
     });
 
+  function toBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file); // returns base64 string prefixed with MIME type
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+    });
+  }
 </script>
 
 

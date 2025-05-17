@@ -21,3 +21,43 @@ export function throwError(message,status,code,details){
   if (details) err.details = details
   throw err
 }
+
+export function base64ToBlob(base64, mimeType = '') {
+  console.log("Converted the base 64 to blob")
+  const byteChars = atob(base64);
+  const byteNumbers = new Array(byteChars.length);
+  for (let i = 0; i < byteChars.length; i++) {
+    byteNumbers[i] = byteChars.charCodeAt(i);
+  }
+  const byteArray = new Uint8Array(byteNumbers);
+  console.log(byteArray)
+  return new Blob([byteArray], { type: mimeType });
+}
+
+export function decodeBinaryToBase64(data){
+  if (!data) return null;
+  const posterBuffer = Buffer.from(data);
+  return posterBuffer.toString('base64');
+}
+
+export function getImgDataAndImgStype(poster_img,poster_img_type,MAX_SIZE_BYTES){
+  if (!poster_img) {
+      poster_img_type = null;
+      poster_img = null;
+  } else { //movie poster img not null
+      const matches = poster_img.match(/^data:(.+);base64,(.+)$/);
+      if (matches) {
+          const mimeType = matches[1];
+          const base64Data = matches[2];
+          const buffer = Buffer.from(base64Data, 'base64');
+          if (buffer.length > MAX_SIZE_BYTES) throw new Error("Poster image exceeds maximum allowed size of 10MB");
+
+          poster_img_type = mimeType;
+          poster_img = buffer;
+      } else {
+          poster_img_type = null;
+          poster_img = null;
+      }
+  }
+  return [poster_img,poster_img_type,]
+}

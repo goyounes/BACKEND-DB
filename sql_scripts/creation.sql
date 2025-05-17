@@ -20,7 +20,8 @@ SELECT * FROM genres;
 CREATE TABLE movies (
     movie_id INT PRIMARY KEY AUTO_INCREMENT,
     title VARCHAR(255) NOT NULL,
-    poster_img BLOB , -- the default can be a generic image 
+    poster_img MEDIUMBLOB  , -- the default can be a generic image 
+    poster_img_type VARCHAR(255),
     description TEXT,
     age_rating INT,
     is_team_pick BOOL,

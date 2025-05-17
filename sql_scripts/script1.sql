@@ -17,9 +17,7 @@ SELECT * FROM users;
 SELECT * FROM roles;
 SELECT * FROM tickets;
 
-        UPDATE movies
-        SET title = "FINALLY ", description = ?, age_rating = ?, is_team_pick = ?, score = ?
-        WHERE ${name_for_id_column} = ?;
+
 
 -- Creat Table to show all the cinemas and Thier respective rooms
 SELECT cinemas.cinema_id,cinemas.cinema_name,room_id
@@ -49,9 +47,10 @@ JOIN seats
 ON tickets.seat_id = seats.seat_id;
 
 -- reading information stored in MYSQL
-SELECT * from information_schema;
+		SELECT column_name
+        FROM information_schema.columns;
 
-SELECT *
-FROM information_schema.columns
-WHERE table_name = 'movies'
-ORDER BY ordinal_position;
+		SELECT *
+        FROM information_schema.columns
+                WHERE table_name = movies AND DATA_TYPE !='text';
+        ORDER BY ordinal_position;
