@@ -19,6 +19,10 @@ app.get("/",(req,res) => {
     res.status(200).render("pages/index.ejs")
 })
 
+app.get('/reservation', (req, res) => {
+    res.sendFile("/static/reservation.html",{root:"."})
+});
+
 app.get("/movies",async (req,res,next) => {
     try {
         const result = await fetch(APIpath+"/movies",{headers:{'X-Requested-By': 'backend-server'}})
@@ -67,7 +71,7 @@ app.get("/screenings",async (req,res,next) => {
     }
 })
 
-app.get('/movies/create', (req, res) => {
+app.get('/screenings/create', (req, res) => {
     res.sendFile("/static/create_screening.html",{root:"."})
 });
 

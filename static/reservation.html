@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Reservation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+    }
+    label, select {
+      font-size: 1.2em;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Find a movie</h1>
+
+  <label for="cinemaSelect">Choose a cinema:</label><br><br>
+  <select id="cinemaSelect">
+    <option value="">Loading...</option>
+  </select>
+
+  <script>
+    async function populateSelectFromAPI(apiUrl, selectId, valueKey, displayKey) {
+      try {
+        const response = await fetch(apiUrl);
+        if (!response.ok) throw new Error("Failed to fetch data");
+        
+        const data = await response.json();
+        const select = document.getElementById(selectId);
+        select.innerHTML = ""; // clear default option
+
+        data.forEach(item => {
+          const option = document.createElement("option");
+          option.value = item[valueKey];
+          option.textContent = item[displayKey];
+          select.appendChild(option);
+        });
+
+      } catch (err) {
+        console.error("Error populating select:", err);
+        const select = document.getElementById(selectId);
+        select.innerHTML = `<option value="">Failed to load</option>`;
+      }
+    }
+
+    // Call the function with your API endpoint
+    populateSelectFromAPI(
+      "http://127.0.0.1:5000/api/v1/cinemas",  // example endpoint
+      "cinemaSelect",
+      "cinema_id",
+      "cinema_name"
+    );
+  </script>
+
+</body>
+</html>

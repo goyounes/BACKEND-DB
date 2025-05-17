@@ -46,11 +46,49 @@ ON users.user_id = tickets.user_id
 JOIN seats 
 ON tickets.seat_id = seats.seat_id;
 
+
+
+-- Creat Table to show all the cinemas and Thier respective rooms
+SELECT DISTINCT cinemas.cinema_id,cinemas.cinema_name, movies.movie_id, movies.title
+ FROM cinemas 
+JOIN screenings 
+ON cinemas.cinema_id = screenings.cinema_id
+JOIN movies 
+ON screenings.movie_id = movies.movie_id
+WHERE cinemas.cinema_id = 5;
+
+        SELECT *
+        FROM cinemas 
+        JOIN screenings
+            ON cinemas.cinema_id = screenings.cinema_id
+        JOIN movies 
+            ON screenings.movie_id = movies.movie_id
+        WHERE cinemas.cinema_id = 1;
+
+SELECT DISTINCT movies.*
+        FROM cinemas 
+        JOIN (
+            Select * FROM screenings 
+            WHERE
+            start_date > CURDATE() -- Future dates
+              OR (
+                start_date = CURDATE() -- Today
+              AND 
+                start_time > CURTIME() -- But later than now
+            )
+		)as screenings
+        ON cinemas.cinema_id = screenings.cinema_id
+        JOIN movies 
+        ON screenings.movie_id = movies.movie_id
+        WHERE cinemas.cinema_id = 1;
+
 -- reading information stored in MYSQL
 		SELECT column_name
         FROM information_schema.columns;
 
 		SELECT *
         FROM information_schema.columns
-                WHERE table_name = movies AND DATA_TYPE !='text';
+                WHERE table_name = "movies" AND DATA_TYPE !='text';
         ORDER BY ordinal_position;
+        
+        

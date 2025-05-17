@@ -149,6 +149,20 @@ app.get("/api/v1/cinemas/:id",async (req,res,next) => {
     }
 })
 
+app.get("/api/v1/cinemas/:id/movies",async (req,res,next) => {
+    const id = req.params.id
+    if (isNaN(Number(id))) throwError("ID is not a number, get operation failed",400) //Checks if id is a number/string of a number
+    
+    console.log(`Fetching Movies showing in Cinemas with id :${id} from the DB...`)
+    try {
+        const movies = await dbFunc.getMoviesListInCinema(id)
+        movies.forEach((movie) => {movie.poster_img = decodeBinaryToBase64(movie.poster_img)})
+        res.status(200).json(movies)
+    } catch (error) {
+        next(error)  // Passes the error to the global error-handling middleware
+    }
+})
+
 // -------------------------------------------------------------------------------------------------------------------------
 // --------------------------Users--------------------------Users--------------------------Users----------------------------
 // -------------------------------------------------------------------------------------------------------------------------

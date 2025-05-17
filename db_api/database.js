@@ -218,3 +218,27 @@ export async function getRecentMovies(){
     await dbTableLogger('movies',result_rows)
     return result_rows
 }
+
+export async function getMoviesListInCinema(cinema_id){
+    const [result_rows] = await pool.query(`
+        SELECT DISTINCT movies.*
+        FROM cinemas 
+        JOIN (
+                Select * FROM screenings 
+                WHERE
+                start_date > CURDATE() -- Future dates
+                OR (
+                    start_date = CURDATE() -- Today
+                AND 
+                    start_time > CURTIME() -- But later than now
+                )
+            ) as screenings
+        ON cinemas.cinema_id = screenings.cinema_id
+        JOIN movies 
+        ON screenings.movie_id = movies.movie_id
+        WHERE cinemas.cinema_id = ?;
+        `,[cinema_id]);
+
+    await dbTableLogger('movies',result_rows)
+    return result_rows
+}
