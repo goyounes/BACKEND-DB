@@ -1,3 +1,5 @@
+import bcrypt from 'bcrypt';
+
 export function reqIPlogger (req,res,next){
     if (req.originalUrl.startsWith('/.well-known')) return next()
     // console.log(`Recived Request from ${req.get('Referer') || req.get('Origin') ||"unknown"}`)
@@ -60,4 +62,17 @@ export function getImgDataAndImgStype(poster_img,poster_img_type,MAX_SIZE_BYTES)
       }
   }
   return [poster_img,poster_img_type,]
+}
+
+
+
+const saltRounds = 10;
+export async function hashPassword(plainPassword) {
+  try {
+    const hash = await bcrypt.hash(plainPassword, saltRounds);
+    return hash;
+  } catch (err) {
+    console.error("Error hashing password:", err);
+    throw err;
+  }
 }

@@ -1,6 +1,6 @@
 import * as dbFunc from "./database.js";
 import express from "express"
-import { throwError, decodeBinaryToBase64, getImgDataAndImgStype } from "../utils.js"
+import { throwError, decodeBinaryToBase64, getImgDataAndImgStype, hashPassword } from "../utils.js"
 
 const app = express();
 
@@ -168,7 +168,8 @@ app.post("/api/v1/users",async (req,res,next) => {
     if (!user.user_name ||!user.user_email ||!user.user_password) throwError("Missing user data, creation operation failed",400) //Checks if id is a number/string of a number
     // MORE validation code has to be inserted here eventually, erros have to be returned at the same time.
     // Post should be able to update all the fields, if an NotNULL field is missing, it shouldnt work.
-
+    user.user_password_hash = await hashPassword(user.user_password);
+    delete user.user_password;
     console.log(`Adding User :${user.user_name} email:${user.user_email} created succesfully to the DB`)
     try {
         const db_inserted_user = await dbFunc.addUser(user);

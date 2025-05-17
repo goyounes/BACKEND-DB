@@ -29,14 +29,14 @@ CREATE TABLE movies (
     length TIME
 );
 
-INSERT INTO movies (title,  description, age_rating, is_team_pick, score) 
+INSERT INTO movies (title,  description, age_rating, is_team_pick, score, length) 
 VALUES
-('The Shawshank Redemption', 'Two imprisoned men form a deep friendship, finding solace and eventual redemption through acts of common decency.', 18, TRUE, 4.5),
-('The Dark Knight', 'When the menace known as the Joker emerges from his mysterious past, he wreaks havoc and chaos on the people of Gotham.', 13, TRUE, 3.7),
-('Inception', 'A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a CEO.', 13, TRUE, 2.5),
-('The Matrix', 'A computer hacker learns from mysterious rebels about the true nature of his reality and his role in the war against its controllers.', 13, TRUE, 1.5),
-('The Godfather', 'The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.', 18, FALSE, 3.2),
-('Pulp Fiction', 'The lives of two mob hitmen, a boxer, a gangster’s wife, and a pair of diner bandits intertwine in four tales of violence and redemption',18,FALSE,4.3);
+('The Shawshank Redemption', 'Two imprisoned men form a deep friendship, finding solace and eventual redemption through acts of common decency.', 18, TRUE, 4.5,"01:30:30"),
+('The Dark Knight', 'When the menace known as the Joker emerges from his mysterious past, he wreaks havoc and chaos on the people of Gotham.', 13, TRUE, 3.7,"01:30:30"),
+('Inception', 'A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a CEO.', 13, TRUE, 2.5,"01:00:30"),
+('The Matrix', 'A computer hacker learns from mysterious rebels about the true nature of his reality and his role in the war against its controllers.', 13, TRUE, 1.5,"01:00:30"),
+('The Godfather', 'The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.', 18, FALSE, 3.2,"01:10:30"),
+('Pulp Fiction', 'The lives of two mob hitmen, a boxer, a gangster’s wife, and a pair of diner bandits intertwine in four tales of violence and redemption',18,FALSE,4.3,"01:10:30");
 
 SELECT * FROM movies;
 -- ----------------------JOINING TABLE-----------------------------------------------------------------------------------------------------

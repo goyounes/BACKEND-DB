@@ -139,7 +139,7 @@ export async function addScreening(screening){
 
 export async function addUser(user){// this is a super function only admins should be able to use this technically 
                                     // it allows them to creat more admin accounts, employe accounts etc
-    const {user_name,user_email,user_password,first_name,last_name,role_id} = user
+    const {user_name,user_email,user_password_hash,first_name,last_name,role_id} = user
     const conn = await pool.getConnection();
         try {
             await conn.beginTransaction();
@@ -155,7 +155,7 @@ export async function addUser(user){// this is a super function only admins shou
             const [credResult] = await conn.query(`
             INSERT INTO users_credentials (user_id,user_password_hash)
 			VALUES (?,?);
-            `,[user_id,user_password])
+            `,[user_id,user_password_hash])
             if (!credResult.affectedRows) throwError("Password was not saved!",500);
 
             await conn.commit(); // ✅ All good

@@ -22,14 +22,32 @@
     th {
       background-color: #f4f4f4;
     }
-    .highlight {
-      background-color: #e6ffe6 !important;
+    a.button-link {
+      display: inline-block;
+      padding: 10px 30px;
+      font-size: 18px;
+      cursor: pointer;
+      border: none;
+      margin-top: 5px;
+      border-radius: 5px;
+      background-color: #4CAF50;
+      color: white;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    a.button-link:hover {
+      background-color: #45a049;
     }
   </style>
 </head>
 <body>
   <%- include('../partials/navbar') %>
-  <h1>Users List</h1>
+  <div class="users-header">
+    <h1>Users List</h1>
+    <a class="button-link" href='/users/create'>Add User</a>
+  </div>
+
+
   <table>
     <thead>
       <tr>
