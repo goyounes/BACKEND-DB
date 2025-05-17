@@ -20,7 +20,7 @@ app.get("/",(req,res) => {
 })
 
 app.get('/reservation', (req, res) => {
-    res.sendFile("/static/reservation.html",{root:"."})
+    res.sendFile("/static/reservation2.html",{root:"."})
 });
 
 app.get("/movies",async (req,res,next) => {
@@ -37,7 +37,7 @@ app.get("/movies/recent",async (req,res,next) => {
     try {
         const result = await fetch(APIpath+"/movies/recent",{headers:{'X-Requested-By': 'backend-server'}})
         const movies = await result.json()
-        res.status(200).render("pages/movies.ejs",{movies})
+        res.status(200).render("pages/movies_recent.ejs",{movies})
     } catch (error) {
         next(error)
     }

@@ -45,6 +45,12 @@ VALUES
 ('Pulp Fiction', 'The lives of two mob hitmen, a boxer, a gangster’s wife, and a pair of diner bandits intertwine in four tales of violence and redemption',18,FALSE,4.3,"01:10:30","2025-04-10 06:00:00");
 
 
+UPDATE movies
+SET poster_img = LOAD_FILE('C:\Users\Younes\Documents\NavFaroLady.png'),
+    poster_img_type = 'image/png'
+WHERE movie_id != 0;
+
+
 
 SELECT * FROM movies;
 -- ----------------------JOINING TABLE-----------------------------------------------------------------------------------------------------
