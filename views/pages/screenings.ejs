@@ -25,12 +25,30 @@
     .highlight {
       background-color: #e6ffe6 !important;
     }
-    
+    a.button-link {
+      display: inline-block;
+      padding: 10px 30px;
+      font-size: 18px;
+      cursor: pointer;
+      border: none;
+      margin-top: 5px;
+      border-radius: 5px;
+      background-color: #4CAF50;
+      color: white;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+    a.button-link:hover {
+      background-color: #45a049;
+    }
   </style>
 </head>
 <body>
   <%- include('../partials/navbar') %>
-  <h1>Screenings List</h1>
+  <div class="screenings-header">
+    <h1>Screenings List</h1>
+    <a class="button-link" href='/screenings/create'>Add Screening</a>
+  </div>
   <table>
     <thead>
       <tr>

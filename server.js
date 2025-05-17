@@ -67,6 +67,9 @@ app.get("/screenings",async (req,res,next) => {
     }
 })
 
+app.get('/movies/create', (req, res) => {
+    res.sendFile("/static/create_screening.html",{root:"."})
+});
 
 app.get("/screenings/:id",async (req,res,next) => {
     const id = req.params.id
