@@ -90,7 +90,28 @@ export const getCinemas = async () => getTable("cinemas");
 export const getRooms = async () => getTable("rooms");
 export const getSeats = async () => getTable("seats");
 //Screenings section
-export const getScreenings = async () => getTable("screenings");
+export async function getScreenings(cinema_id,movie_id){    
+    const [result_rows] = await pool.query(`
+        SELECT screenings.*, cinemas.cinema_name, movies.title
+        FROM screenings
+        JOIN cinemas 
+            ON screenings.cinema_id = cinemas.cinema_id
+        JOIN movies
+            ON screenings.movie_id = movies.movie_id
+        WHERE (
+            ? IS NULL OR screenings.cinema_id = ?
+        ) AND (
+            ? IS NULL OR screenings.movie_id = ?
+        )
+        AND (
+            screenings.start_date > CURDATE()   OR  (screenings.start_date = CURDATE() AND screenings.start_time > CURTIME())
+        )
+        ORDER BY screenings.start_date, screenings.start_time;`,
+    [cinema_id, cinema_id, movie_id, movie_id])
+    await dbTableLogger("screenings",result_rows)
+    return result_rows
+}
+
 export const getQualities = async () => getTable("qualities");
 export const getScreeningQualities = async () => getTable("screening_qualities");
 //Users section
@@ -98,12 +119,15 @@ export const getRoles = async () => getTable("roles");
 export const getUsers = async () => getTable("users");
 export const getTickets = async () => getTable("tickets");
 
+
+
+
 // Get Resource
 export async function getTableRow(table_name,id){
     const name_for_id_column = await getNameForIdColumn(table_name)
 
     const [result] = await pool.query(`SELECT * FROM ${table_name} WHERE ${name_for_id_column} = ${id};`);
-    if (result.length === 0)     throwError(`Resource with ID ${id} not found`,404)
+    if (result.length === 0)  throwError(`Resource with ID ${id} not found`,404)
 ,
     await dbTableLogger(table_name,result)
     const selected_row = result[0]
@@ -115,6 +139,10 @@ export const getScreening = async(id) => getTableRow("screenings",id)
 export const getCinema = async(id) => getTableRow("cinemas",id)
 export const getUser = async(id) => getTableRow("users",id)
 export const getTicket = async(id) => getTableRow("tickets",id)
+
+
+
+
 
 // Add Resource
 export async function addMovie(movie){
@@ -170,6 +198,9 @@ export async function addUser(user){// this is a super function only admins shou
         }
 }
 
+
+
+
 // Update Resource 
 export async function updateMovie(id,movie){
     const name_for_id_column = await getNameForIdColumn('movies')
@@ -188,6 +219,8 @@ export async function updateMovie(id,movie){
 
 
 
+
+
 // Delete Resource
 export async function softDeleteTableRow(table_name,id){
     // const name_for_id_column = await getNameForIdColumn(table_name)
@@ -196,6 +229,9 @@ export async function softDeleteTableRow(table_name,id){
 }
 export const deleteMovie = async(id) => softDeleteTableRow("movies",id)
 
+
+
+// Advanced functionality
 
 export async function getRecentMovies(){
     const today = new Date();
@@ -238,6 +274,30 @@ export async function getMoviesListInCinema(cinema_id){
         ON screenings.movie_id = movies.movie_id
         WHERE cinemas.cinema_id = ?;
         `,[cinema_id]);
+
+    await dbTableLogger('movies',result_rows)
+    return result_rows
+}
+
+export async function getMovieScreeningsByCinema(cinema_id,movie_id){
+    const [result_rows] = await pool.query(`
+        SELECT screenings.*
+        FROM cinemas 
+        JOIN (
+                Select * FROM screenings 
+                WHERE
+                start_date > CURDATE() -- Future dates
+                OR (
+                    start_date = CURDATE() -- Today
+                AND 
+                    start_time > CURTIME() -- But later than now
+                )
+            ) as screenings
+        ON cinemas.cinema_id = screenings.cinema_id
+        JOIN movies 
+        ON screenings.movie_id = movies.movie_id
+        WHERE cinemas.cinema_id = ? AND movies.movie_id = ?;
+        `,[cinema_id,movie_id]);
 
     await dbTableLogger('movies',result_rows)
     return result_rows

@@ -100,9 +100,13 @@ app.delete("/api/v1/movies/:id",async (req,res,next) => {
 // -----------------------Screenings-----------------------Screnings-----------------------Screenings-----------------------
 // -------------------------------------------------------------------------------------------------------------------------
 app.get("/api/v1/screenings",async (req,res,next) => {
+    const cinema_id = req.query.cinema_id || null;
+    const movie_id = req.query.movie_id || null;
     console.log("Fetching Screenings from the DB...")
+    cinema_id && console.log(cinema_id)
+    movie_id && console.log(movie_id)
     try {
-        const screenings = await dbFunc.getScreenings()
+        const screenings = await dbFunc.getScreenings(cinema_id,movie_id)
         res.status(200).json(screenings)
     } catch (error) {
         next(error)  // Passes the error to the global error-handling middleware
@@ -160,6 +164,21 @@ app.get("/api/v1/cinemas/:id/movies",async (req,res,next) => {
         res.status(200).json(movies)
     } catch (error) {
         next(error)  // Passes the error to the global error-handling middleware
+    }
+})
+
+app.get("/api/v1/cinemas/:id/movies/:id2/screenings",async (req,res,next) => {
+    const cinema_id = req.params.id
+    const movie_id = req.params.id2
+    if (isNaN(Number(cinema_id))) throwError("cinema_id is not a number, get operation failed",400) //Checks if id is a number/string of a number
+    if (isNaN(Number(movie_id))) throwError("movie_id is not a number, get operation failed",400) //Checks if id is a number/string of a number
+    
+    console.log(`Fetching Screenings for Movie with id: ${movie_id} showing in Cinemas with id: ${cinema_id} from the DB...`)
+    try {
+        const screenings = await dbFunc.getMovieScreeningsByCinema(cinema_id,movie_id)
+        res.status(200).json(screenings)
+    } catch (err) {
+        next(err); // Pass error to error-handling middleware
     }
 })
 

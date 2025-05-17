@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Reservation</title>
+  <title>Select Cinema and Movie</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -11,49 +11,89 @@
     }
     label, select {
       font-size: 1.2em;
+      margin-bottom: 15px;
+      display: block;
     }
   </style>
 </head>
 <body>
 
-  <h1>Find a movie</h1>
+  <h1>Select a Cinema and Movie</h1>
 
-  <label for="cinemaSelect">Choose a cinema:</label><br><br>
+  <label for="cinemaSelect">Choose a cinema:</label>
   <select id="cinemaSelect">
-    <option value="">Loading...</option>
+    <option value="">-- Select a cinema --</option>
+  </select>
+
+  <label for="movieSelect">Choose a movie:</label>
+  <select id="movieSelect" disabled>
+    <option value="">-- Select a cinema first --</option>
   </select>
 
   <script>
-    async function populateSelectFromAPI(apiUrl, selectId, valueKey, displayKey) {
-      try {
-        const response = await fetch(apiUrl);
-        if (!response.ok) throw new Error("Failed to fetch data");
-        
-        const data = await response.json();
-        const select = document.getElementById(selectId);
-        select.innerHTML = ""; // clear default option
+    const API_BASE = "http://127.0.0.1:5000/api/v1";
 
-        data.forEach(item => {
-          const option = document.createElement("option");
-          option.value = item[valueKey];
-          option.textContent = item[displayKey];
-          select.appendChild(option);
-        });
+async function populateSelectFromAPI(apiUrl, selectId, valueKey, displayKey, placeholderText = "Select an option", emptyMessage = "No data found") {
+  const select = document.getElementById(selectId);
+  
+  // Add disabled, selected placeholder option
+  select.innerHTML = `<option value="" disabled selected>-- ${placeholderText} --</option>`;
+  select.disabled = true;
 
-      } catch (err) {
-        console.error("Error populating select:", err);
-        const select = document.getElementById(selectId);
-        select.innerHTML = `<option value="">Failed to load</option>`;
-      }
+  try {
+    const response = await fetch(apiUrl);
+    if (!response.ok) throw new Error("Failed to fetch data");
+
+    const data = await response.json();
+    if (!data.length) {
+      select.innerHTML = `<option value="">${emptyMessage}</option>`;
+      return;
     }
 
-    // Call the function with your API endpoint
+    data.forEach(item => {
+      const option = document.createElement("option");
+      option.value = item[valueKey];
+      option.textContent = item[displayKey];
+      select.appendChild(option);
+    });
+
+    select.disabled = false;
+  } catch (err) {
+    console.error("Error populating select:", err);
+    select.innerHTML = `<option value="">Error loading data</option>`;
+  }
+}
+
+
+    // Load cinemas with a placeholder
     populateSelectFromAPI(
-      "http://127.0.0.1:5000/api/v1/cinemas",  // example endpoint
+      `${API_BASE}/cinemas`,
       "cinemaSelect",
       "cinema_id",
-      "cinema_name"
+      "cinema_name",
+      "Select a cinema"
     );
+
+    // When a cinema is selected, fetch its movies
+    document.getElementById("cinemaSelect").addEventListener("change", (event) => {
+      const cinemaId = event.target.value;
+      const movieSelect = document.getElementById("movieSelect");
+
+      if (!cinemaId) {
+        movieSelect.innerHTML = `<option value="">-- Select a cinema first --</option>`;
+        movieSelect.disabled = true;
+        return;
+      }
+
+      populateSelectFromAPI(
+        `${API_BASE}/cinemas/${cinemaId}/movies`,
+        "movieSelect",
+        "movie_id",
+        "title",
+        "Select a movie",
+        "No movies available"
+      );
+    });
   </script>
 
 </body>
