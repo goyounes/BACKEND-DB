@@ -197,7 +197,7 @@ export async function softDeleteTableRow(table_name,id){
 export const deleteMovie = async(id) => softDeleteTableRow("movies",id)
 
 
-export async function getLatestMovies(){
+export async function getRecentMovies(){
     const today = new Date();
     const lastWednesdayDate = new Date()
 

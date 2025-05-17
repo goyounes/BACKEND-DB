@@ -29,6 +29,16 @@ app.get("/movies",async (req,res,next) => {
     }
 })
 
+app.get("/movies/recent",async (req,res,next) => {
+    try {
+        const result = await fetch(APIpath+"/movies/recent",{headers:{'X-Requested-By': 'backend-server'}})
+        const movies = await result.json()
+        res.status(200).render("pages/movies.ejs",{movies})
+    } catch (error) {
+        next(error)
+    }
+})
+
 app.get('/movies/create', (req, res) => {
     res.sendFile("/static/create_movie.html",{root:"."})
 });
