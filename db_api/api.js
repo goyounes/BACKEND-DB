@@ -1,6 +1,17 @@
 import * as dbFunc from "./database.js";
 import express from "express"
 import { throwError } from "../utils.js"
+//---------------Reading files for poster img------------
+import path from 'path';
+import fs from 'fs/promises';
+const ALLOWED_DIR = path.resolve('/absolute/path/to/allowed/images/folder');
+
+function isSafePath(filePath) {
+  const resolvedPath = path.resolve(filePath);
+  return resolvedPath.startsWith(ALLOWED_DIR);
+}
+//-------------------------------------------------------
+
 const app = express();
 
 import dotenv from "dotenv"
@@ -9,7 +20,7 @@ const PORT = process.env.DB_SERVER_PORT;
 
 import cors from "cors"
 import {reqIPlogger} from "../utils.js"
-app.use(cors(), reqIPlogger,express.json());
+app.use(cors(), reqIPlogger, express.json({ limit: '10mb' }) );
 
 // ---------------------------------------------- Movies ----------------------------------------------
 app.get("/api/v1/movies",async (req,res,next) => {
@@ -39,6 +50,21 @@ app.post("/api/v1/movies",async (req,res,next) => {
     if (!movie.title)  throwError("Title is required and must be a string, create operation failed",400)
     // MORE validation code has to be inserted here eventually, erros have to be returned at the same time.
     // Post should be able to update all the fields, if an NotNULL field is missing, it shouldnt work.
+
+    //-------------------------------
+    if (movie.poster_img) {
+      if (!isSafePath(movie.poster_img)) {
+        return res.status(400).json({ error: "Invalid poster_img path" });
+      }
+      
+      // Read file as base64
+      const fileBuffer = await fs.readFile(movie.poster_img);
+      movie.poster_img = fileBuffer.toString('base64');
+    } else {
+      movie.poster_img = null;
+    }
+    //-------------------------------
+
 
     console.log(`Adding Movie with title: ${movie.title} to the DB...`)
     try {
