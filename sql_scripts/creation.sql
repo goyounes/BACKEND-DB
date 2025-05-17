@@ -519,7 +519,7 @@ VALUES
 ("hvaneschib","hvaneschib@google.co.jp","Heywood","Vaneschi",3),
 ("fdavallc","fdavallc@networksolutions.com","Faye","Davall",1),
 ("lleadstond","lleadstond@ning.com","Lenore","Leadston",3),
-("jfleischmanne","jfleischmanne@globo.com","June","Fleischmann",1),
+("jfleischmanne","jfleischmanne@globo.com","June","Fleischmann",1);
 
 
 

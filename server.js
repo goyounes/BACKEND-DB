@@ -6,7 +6,7 @@ dotenv.config()
 
 const app = express();
 const PORT = 3000;
-const APIpath = process.env.DB_API_HREF // change if DB backend is diff
+const APIpath = process.env.DB_API_URL // change if DB backend is diff
 
 app.set("view engine","ejs")
 app.use(cors(), reqIPlogger);

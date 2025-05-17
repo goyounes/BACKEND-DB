@@ -36,7 +36,7 @@
   <div class="container">
     <h1>Add New Movie</h1>
 
-    <form action="/api/v1/movies" method="post" enctype="multipart/form-data">
+    <form  id="NewMovieForm" enctype="multipart/form-data">
       <fieldset>
         <legend>Movie Details</legend>
 
@@ -68,5 +68,31 @@
       <input type="submit" value="Add Movie">
     </form>
   </div>
+  <script>
+    const API_URL = "http://127.0.0.1:5000/api/v1"
+
+    document.getElementById("NewMovieForm").addEventListener("submit", async (event) => {
+      event.preventDefault(); // stop default HTML submission
+      const form = event.target;
+      const {formData} = new FormData(form);
+      try {
+        const response = await fetch(`${API_URL}/movies`, {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!response.ok) {
+          throw new Error(`Error: ${response.statusText}`);
+        }
+
+        const result = await response.json();
+        alert("Movie added successfully!");
+        form.reset();
+      } catch (err) {
+        alert("Failed to add movie: " + err.message);
+      }
+  });
+</script>
+
 </body>
 </html>
