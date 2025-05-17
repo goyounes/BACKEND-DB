@@ -10,7 +10,7 @@ import * as db from "./database.js";
 // db.getQualities();
 // db.getScreeningQualities();
 // db.getRoles();
-await db.getUsers();
+// await db.getUsers();
 // db.getTickets();
 
 // db.addMovie({
@@ -30,5 +30,5 @@ await db.getUsers();
 //   "start_time": "16:30:00",
 //   "end_time": "18:30:00"
 // })
-
+await db.getLatestMovies()
 process.exit(0)

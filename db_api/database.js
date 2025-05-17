@@ -1,6 +1,6 @@
 import mysql from "mysql2"
 import dotenv from "dotenv"
-import { throwError } from "../utils.js";
+import { throwError , formatDateToMySQL} from "../utils.js";
 dotenv.config({ path: './db_api/.env' })
 
 const pool = mysql.createPool({
@@ -195,3 +195,26 @@ export async function softDeleteTableRow(table_name,id){
     throwError("Delete operations are not supported as of now",501)
 }
 export const deleteMovie = async(id) => softDeleteTableRow("movies",id)
+
+
+export async function getLatestMovies(){
+    const today = new Date();
+    const lastWednesdayDate = new Date()
+
+    const WEDNSDAY_DAY_CODE = 3
+    const TodayDayCode = today.getDay() // which day of the week it is
+    
+    const Offset =  (TodayDayCode - WEDNSDAY_DAY_CODE + 7) % 7;
+    lastWednesdayDate.setDate(today.getDate() - Offset)
+    lastWednesdayDate.setHours(5, 0, 0, 0 );
+    
+    const date_in_mysql_format = formatDateToMySQL(lastWednesdayDate)
+
+    const [result_rows] = await pool.query(`
+        SELECT * FROM movies
+        WHERE created_at > ?;
+    `,[date_in_mysql_format]);
+
+    await dbTableLogger('movies',result_rows)
+    return result_rows
+}

@@ -26,7 +26,8 @@ CREATE TABLE movies (
     age_rating INT,
     is_team_pick BOOL,
     score DECIMAL(2,1),
-    length TIME
+    length TIME,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 INSERT INTO movies (title,  description, age_rating, is_team_pick, score, length) 
