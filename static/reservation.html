@@ -8,7 +8,7 @@
 <style>
 label, select {
   font-size: 1.2em;
-  margin-bottom: 0.9375rem; /* 15px */
+  margin-bottom: 0.95rem; /* 15px */
   display: block;
 }
 
@@ -94,7 +94,6 @@ label, select {
   font-size: 0.75rem;
   text-align: right;
   display: inline-block;
-  float: right;
   opacity: 0.8;
   margin-left: 0.5rem;
   font-weight: 400;
@@ -125,6 +124,9 @@ label, select {
         <li><a href="/screenings" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; color: inherit;">
             🎟️
             <span>Screenings</span></a></li>
+        <li><a href="/cinemas" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; color: inherit;">
+            🏛️
+        <span>Cinemas</span></a></li>
         <li><a href="/reservation" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; color: inherit;">
             📅
             <span>Reservation</span></a></li>
@@ -143,7 +145,7 @@ label, select {
 
     <h1>Select a Cinema and Movie</h1>
 
-    <label for="cinemaSelect">Choose a cinema:</label>
+    <label class="" for="cinemaSelect">Choose a cinema:</label>
     <select id="cinemaSelect">
       <option value="">-- Select a cinema --</option>
     </select>
@@ -163,7 +165,7 @@ label, select {
       <div><strong>Charleroi (BE)</strong><br>26 Rue Léon Bernus, 6000 Charleroi<br>📞 +32 71 23 45 67<br>🕒 10:00–22:00</div>
       <div><strong>Liège (BE)</strong><br>59 Quai de la Batte, 4020 Liège<br>📞 +32 4 78 90 12 34<br>🕒 10:00–23:00</div>
     </div>
-    <p style="text-align: center; margin-top: 15px;">&copy; 2025 Cinephoria. All rights reserved.</p>
+    <h6>&copy; 2025 Cinephoria. All rights reserved.</h6>
   </footer>
 
 

@@ -116,7 +116,15 @@ app.get("/users/:id",async (req,res,next) => {
     }
 })
 
-
+app.get("/cinemas",async (req,res,next) => {
+    try {
+        const result = await fetch(APIpath+"/cinemas",{headers:{'X-Requested-By': 'backend-server'}})
+        const cinemas = await result.json()
+        res.status(200).render("pages/cinemas.ejs",{cinemas})
+    } catch (error) {
+        next(error)
+    }
+})
 // app.use(express.static("public"));
 
 app.use((err, req, res, next) => {

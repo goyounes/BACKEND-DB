@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cinemas List</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="page-container">
+  <div class="main-content">
+    <%- include('../partials/navbar') %>
+    <div class="movies-header">
+      <h1>Cinemas List</h1>
+      <!-- <a class="button-link" href='/cinemas/create'>Add Cinema</a> -->
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Location</th>
+        </tr>
+      </thead>
+      <tbody id="cinemas-body">
+        <% cinemas.forEach(cinema => { %>
+          <tr>
+            <td><%= cinema.cinema_name %></td>
+            <td><%= cinema.cinema_location %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+
+  <%- include('../partials/footer') %>
+</body>
+</html>
