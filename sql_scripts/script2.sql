@@ -1,7 +1,16 @@
 SELECT *,screenings.screening_id, movies.title FROM screenings
 JOIN movies ON screenings.movie_id = movies.movie_id;
 
+SHOW VARIABLES LIKE 'secure_file_priv';
 
+
+SELECT LOAD_FILE('C:\ProgramData\MySQL\MySQL Server 8.0\Uploads\poster_img.webp');
+SELECT LENGTH(LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/poster_img.webp'));
+
+SHOW GRANTS FOR CURRENT_USER();
+
+SHOW VARIABLES LIKE 'secure_file_priv';
+SHOW VARIABLES LIKE 'max_allowed_packet';
 
 SELECT cinema_id,cinema_name FROM cinemas
 WHERE NOT isDeleted;

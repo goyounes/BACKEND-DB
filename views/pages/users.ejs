@@ -4,10 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Movies List</title>
+  <link rel="stylesheet" href="/styles.css">
+
   <style>
     body {
+      margin: 0;
       font-family: Arial, sans-serif;
-      padding: 20px;
+      height: 100%;
+    }
+    html{
+      margin: 0;
+      height: 100%;
     }
     table {
       width: 100%;
@@ -22,58 +29,42 @@
     th {
       background-color: #f4f4f4;
     }
-    a.button-link {
-      display: inline-block;
-      padding: 10px 30px;
-      font-size: 18px;
-      cursor: pointer;
-      border: none;
-      margin-top: 5px;
-      border-radius: 5px;
-      background-color: #4CAF50;
-      color: white;
-      text-decoration: none;
-      transition: background-color 0.3s ease;
-    }
-    a.button-link:hover {
-      background-color: #45a049;
-    }
   </style>
 </head>
-<body>
-  <%- include('../partials/navbar') %>
-  <div class="users-header">
-    <h1>Users List</h1>
-    <a class="button-link" href='/users/create'>Add User</a>
+<body class="page-container">
+  <div class="main-content">
+    <%- include('../partials/navbar') %>
+    <div class="users-header">
+      <h1>Users List</h1>
+      <a class="button-link" href='/users/create'>Add User</a>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>user id</th>      
+          <th>username</th>
+          <th>email</th>
+          <th>first name</th>
+          <th>last name</th>
+          <th>role_id%</th>
+        </tr>
+      </thead>
+      <% const roles = { 1: "user", 2: "employee", 3: "admin" } %>
+      <tbody id="users-body">
+        <% users.forEach( user => {%>
+          <tr>
+            <td><a href= <%= "users/" + user.user_id%>> <%= user.user_id%> </a></td>
+            <td> <%= user.user_name%></td>
+            <td> <%= user.user_email%></td>
+            <td> <%= user.first_name%></td>
+            <td> <%= user.last_name%></td>
+            <td> <%= roles[user.role_id]%></td>
+          </tr>
+        <%})%>
+      </tbody>
+    </table>
   </div>
 
-
-  <table>
-    <thead>
-      <tr>
-        <th>user id</th>      
-        <th>username</th>
-        <th>email</th>
-        <th>first name</th>
-        <th>last name</th>
-        <th>role_id%</th>
-      </tr>
-    </thead>
-    <% const roles = { 1: "user", 2: "employee", 3: "admin" } %>
-    <tbody id="users-body">
-      <% users.forEach( user => {%>
-        <tr>
-          <td><a href= <%= "users/" + user.user_id%>> <%= user.user_id%> </a></td>
-          <td> <%= user.user_name%></td>
-          <td> <%= user.user_email%></td>
-          <td> <%= user.first_name%></td>
-          <td> <%= user.last_name%></td>
-          <td> <%= roles[user.role_id]%></td>
-        </tr>
-      <%})%>
-    </tbody>
-  </table>
-
-
+  <%- include('../partials/footer') %>
 </body>
 </html>

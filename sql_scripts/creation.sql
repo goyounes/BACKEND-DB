@@ -36,20 +36,31 @@ VALUES
 ('The Dark Knight', 'When the menace known as the Joker emerges from his mysterious past, he wreaks havoc and chaos on the people of Gotham.', 13, TRUE, 3.7,"01:30:30"),
 ('Inception', 'A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a CEO.', 13, TRUE, 2.5,"01:00:30"),
 ('The Matrix', 'A computer hacker learns from mysterious rebels about the true nature of his reality and his role in the war against its controllers.', 13, TRUE, 1.5,"01:00:30"),
-('The Godfather', 'The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.', 18, FALSE, 3.2,"01:10:30");
-
-
-
-INSERT INTO movies (title,  description, age_rating, is_team_pick, score, length, created_at) 
-VALUES
-('Pulp Fiction', 'The lives of two mob hitmen, a boxer, a gangster’s wife, and a pair of diner bandits intertwine in four tales of violence and redemption',18,FALSE,4.3,"01:10:30","2025-04-10 06:00:00");
-
+('The Godfather', 'The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.', 18, FALSE, 3.2,"01:10:30"),
+('Pulp Fiction', 'The lives of two mob hitmen, a boxer, a gangster’s wife, and a pair of diner bandits intertwine in four tales of violence and redemption',18,FALSE,4.3,"01:10:30");
 
 UPDATE movies
-SET poster_img = LOAD_FILE('C:\Users\Younes\Documents\NavFaroLady.png'),
-    poster_img_type = 'image/png'
-WHERE movie_id != 0;
+SET created_at = "2025-04-10 06:00:00"
+WHERE movie_id = 6;
 
+UPDATE movies SET poster_img = LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/poster_img_1.webp'),
+    poster_img_type = 'image/webp'
+WHERE movie_id = 1;
+UPDATE movies SET poster_img = LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/poster_img_2.webp'),
+    poster_img_type = 'image/webp'
+WHERE movie_id = 2;
+UPDATE movies SET poster_img = LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/poster_img_3.webp'),
+    poster_img_type = 'image/webp'
+WHERE movie_id = 3;
+UPDATE movies SET poster_img = LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/poster_img_4.webp'),
+    poster_img_type = 'image/webp'
+WHERE movie_id = 4;
+UPDATE movies SET poster_img = LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/poster_img_5.webp'),
+    poster_img_type = 'image/webp'
+WHERE movie_id = 5;
+UPDATE movies SET poster_img = LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/poster_img_6.webp'),
+    poster_img_type = 'image/webp'
+WHERE movie_id = 6;
 
 
 SELECT * FROM movies;

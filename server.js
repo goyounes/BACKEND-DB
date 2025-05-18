@@ -10,7 +10,7 @@ const APIpath = process.env.DB_API_URL // change if DB backend is diff
 
 app.set("view engine","ejs")
 app.use(cors(), reqIPlogger);
-// app.use(express.static('public'));
+app.use(express.static('public'));
 
 app.get("/home",(req,res) => {
     res.redirect("/")
@@ -20,7 +20,7 @@ app.get("/",(req,res) => {
 })
 
 app.get('/reservation', (req, res) => {
-    res.sendFile("/static/reservation2.html",{root:"."})
+    res.sendFile("/static/reservation.html",{root:"."})
 });
 
 app.get("/movies",async (req,res,next) => {

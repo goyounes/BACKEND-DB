@@ -14,35 +14,8 @@
       margin-bottom: 15px;
       display: block;
     }
-
-    #moviesGrid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 20px;
-      margin-top: 20px;
-    }
-    .movie-card {
-      text-align: center;
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
-    .movie-card:hover {
-      transform: scale(1.05);
-    }
-    .movie-poster {
-      width: 100%;
-      height: 220px;
-      object-fit: cover;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
-    .movie-title {
-      margin-top: 8px;
-      font-weight: bold;
-    }
-
     #screeningsContainer {
-      margin-top: 40px;
+      margin-top: 30px;
     }
     .date-block {
       margin-bottom: 25px;
@@ -79,9 +52,29 @@
     <option value="">-- Select a cinema --</option>
   </select>
 
-  <div id="moviesGrid"></div>
+  <label for="movieSelect">Choose a movie:</label>
+  <select id="movieSelect" disabled>
+    <option value="">-- Select a cinema first --</option>
+  </select>
 
   <div id="screeningsContainer"></div>
+
+
+  <footer>
+      <h4>Our Cinemas</h4>
+      <div class="footer-grid">
+        <div><strong>Nantes</strong><br>12 Rue de la Loire, 44000 Nantes<br>📞 +33 2 40 12 34 56<br>🕒 10:00–23:00</div>
+        <div><strong>Bordeaux</strong><br>33 Rue du Chai des Farines, 33800 Bordeaux<br>📞 +33 5 56 78 90 12<br>🕒 10:00–23:00</div>
+        <div><strong>Paris</strong><br>42 Rue de Rivoli, 75004 Paris<br>📞 +33 1 45 67 89 01<br>🕒 09:30–00:00</div>
+        <div><strong>Toulouse</strong><br>18 Rue du Languedoc, 31000 Toulouse<br>📞 +33 5 34 56 78 90<br>🕒 10:00–23:00</div>
+        <div><strong>Lille</strong><br>77 Rue Nationale, 59800 Lille<br>📞 +33 3 20 12 34 56<br>🕒 10:00–22:30</div>
+        <div><strong>Charleroi (BE)</strong><br>26 Rue Léon Bernus, 6000 Charleroi<br>📞 +32 71 23 45 67<br>🕒 10:00–22:00</div>
+        <div><strong>Liège (BE)</strong><br>59 Quai de la Batte, 4020 Liège<br>📞 +32 4 78 90 12 34<br>🕒 10:00–23:00</div>
+      </div>
+      <p style="text-align: center; margin-top: 15px;">&copy; 2025 Cinephoria. All rights reserved.</p>
+  </footer>
+
+
 
   <script>
     const API_BASE = "http://127.0.0.1:5000/api/v1";
@@ -125,54 +118,35 @@
     );
 
     // When a cinema is selected, fetch its movies
-    document.getElementById("cinemaSelect").addEventListener("change", async (event) => {
+    document.getElementById("cinemaSelect").addEventListener("change", (event) => {
       const cinemaId = event.target.value;
-      const moviesGrid = document.getElementById("moviesGrid");
-      const screeningsContainer = document.getElementById("screeningsContainer");
+      const movieSelect = document.getElementById("movieSelect");
 
-      moviesGrid.innerHTML = "";
-      screeningsContainer.innerHTML = "";
-
-      if (!cinemaId) return;
-
-      try {
-        const res = await fetch(`${API_BASE}/cinemas/${cinemaId}/movies`);
-        const movies = await res.json();
-
-        if (!movies.length) {
-          moviesGrid.innerHTML = "<p>No movies available.</p>";
-          return;
-        }
-
-          movies.forEach(movie => {
-            const card = document.createElement("div");
-            card.className = "movie-card";
-
-            const posterImg = movie.poster_img
-              ? `<img src="data:${movie.poster_img_type};base64,${movie.poster_img}" alt="Poster for ${movie.title}" class="movie-poster">`
-              : `<div style="width: 100%; height: 220px; background-color: #ccc; border-radius: 8px; display: flex; align-items: center; justify-content: center;">N/A</div>`;
-
-            card.innerHTML = `
-              ${posterImg}
-              <div class="movie-title">${movie.title}</div>
-            `;
-
-            card.addEventListener("click", () => {
-              loadScreenings(cinemaId, movie.movie_id);
-            });
-
-            moviesGrid.appendChild(card);
-          });
-
-      } catch (err) {
-        console.error("Error loading movies:", err);
-        moviesGrid.innerHTML = "<p>Failed to load movies.</p>";
+      if (!cinemaId) {
+        movieSelect.innerHTML = `<option value="">-- Select a cinema first --</option>`;
+        movieSelect.disabled = true;
+        return;
       }
+
+      populateSelectFromAPI(
+        `${API_BASE}/cinemas/${cinemaId}/movies`,
+        "movieSelect",
+        "movie_id",
+        "title",
+        "Select a movie",
+        "No movies available"
+      );
     });
 
-    async function loadScreenings(cinemaId, movieId) {
+    // When a movie is selected, fetch screenings
+    document.getElementById("movieSelect").addEventListener("change", async () => {
+      const cinemaId = document.getElementById("cinemaSelect").value;
+      const movieId = document.getElementById("movieSelect").value;
       const container = document.getElementById("screeningsContainer");
+
       container.innerHTML = "";
+
+      if (!cinemaId || !movieId) return;
 
       try {
         const res = await fetch(`${API_BASE}/screenings?cinema_id=${cinemaId}&movie_id=${movieId}`);
@@ -183,6 +157,7 @@
           return;
         }
 
+        // Group screenings by start_date
         const grouped = {};
         data.forEach(s => {
           const date = new Date(s.start_date).toLocaleDateString();
@@ -190,6 +165,7 @@
           grouped[date].push(s);
         });
 
+        // Render grouped screenings
         for (const date in grouped) {
           const dateBlock = document.createElement("div");
           dateBlock.className = "date-block";
@@ -214,7 +190,7 @@
         console.error("Error fetching screenings:", err);
         container.innerHTML = "<p>Failed to load screenings.</p>";
       }
-    }
+    });
   </script>
 
 </body>

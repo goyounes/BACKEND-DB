@@ -4,10 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Movies List</title>
+  <link rel="stylesheet" href="/styles.css">
+
   <style>
     body {
+      margin: 0;
       font-family: Arial, sans-serif;
-      padding: 20px;
+      height: 100%;
+    }
+    html{
+      margin: 0;
+      height: 100%;
     }
     table {
       width: 100%;
@@ -22,40 +29,38 @@
     th {
       background-color: #f4f4f4;
     }
-    .highlight {
-      background-color: #e6ffe6 !important;
-    }
     
   </style>
 </head>
-<body>
-  <%- include('../partials/navbar') %>
-  <h1>Screenings List</h1>
-  <table>
-    <thead>
-      <tr>
-        <th>Screening ID</th>
-        <th>Movie ID</th>
-        <th>Cinema ID</th>
-        <th>Room ID</th>
-        <th>Start Date</th>
-        <th>Start Time</th>
-        <th>End Time</th>
-      </tr>
-    </thead>
-    <tbody id="screenings-body">
+<body class="page-container">
+  <div class="main-content">
+    <%- include('../partials/navbar') %>
+    <h1>Screenings List</h1>
+    <table>
+      <thead>
         <tr>
-            <td><%=screening.screening_id%></td>
-            <td><%=screening.movie_id%></td>
-            <td><%=screening.cinema_id%></td>
-            <td><%=screening.room_id%></td>
-            <td><%=new Date(screening.start_date).toLocaleDateString()%></td>
-            <td><%=screening.start_time%></td>
-            <td><%=screening.end_time%></td> 
+          <th>Screening ID</th>
+          <th>Movie ID</th>
+          <th>Cinema ID</th>
+          <th>Room ID</th>
+          <th>Start Date</th>
+          <th>Start Time</th>
+          <th>End Time</th>
         </tr>
-    </tbody>
-  </table>
-
-
+      </thead>
+      <tbody id="screenings-body">
+          <tr>
+              <td><%=screening.screening_id%></td>
+              <td><%=screening.movie_id%></td>
+              <td><%=screening.cinema_id%></td>
+              <td><%=screening.room_id%></td>
+              <td><%=new Date(screening.start_date).toLocaleDateString()%></td>
+              <td><%=screening.start_time%></td>
+              <td><%=screening.end_time%></td> 
+          </tr>
+      </tbody>
+    </table>
+  </div>
+  <%- include('../partials/footer') %>
 </body>
 </html>

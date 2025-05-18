@@ -4,48 +4,22 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Home Page</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 50px;
-      background-color: #f9f9f9;
-    }
-    h1 {
-      font-size: 36px;
-    }
-    .button-container {
-      margin-top: 50px;
-    }
-    a.button-link {
-      display: inline-block;
-      padding: 15px 30px;
-      font-size: 18px;
-      cursor: pointer;
-      margin: 20px;
-      border: none;
-      border-radius: 5px;
-      background-color: #4CAF50;
-      color: white;
-      text-decoration: none;
-      transition: background-color 0.3s ease;
-    }
+  <link rel="stylesheet" href="/styles.css">
 
-    a.button-link:hover {
-      background-color: #45a049;
-    }
-  </style>
 </head>
-<body>
-  <%- include('../partials/navbar') %>
-  <h1>Welcome to Cinephoria</h1>
-  <p>Choose what you want to explore:</p>
-  
-  <div class="button-container">
-    <a href='movies' class = "button-link">Movies</a>
-    <a href='screenings' class = "button-link">Screenings</a>
-    <a href='users' class = "button-link">Users</a>
+<body class="page-container">
+  <div class="main-content">
+    <%- include('../partials/navbar') %>
+    <h1>Welcome to Cinephoria</h1>
+    <p>Choose what you want to explore:</p>
+
+    <div class="button-container">
+      <a href='movies' class="button-link-main">Movies</a>
+      <a href='screenings' class="button-link-main">Screenings</a>
+      <a href='users' class="button-link-main">Users</a>
+    </div>
   </div>
 
+  <%- include('../partials/footer') %>
 </body>
 </html>
