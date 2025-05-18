@@ -202,7 +202,6 @@ input {
   max-width: 500px; /* Max width for both h1 and form 
 } */
 
-
     /* body {
       font-family: Arial, sans-serif;
       padding: 20px;
@@ -212,3 +211,6 @@ input {
       align-items: center;
       min-width: 500px; 
     } */
+    "start_db_api": "nodemon ./db_api/api.js",
+    "start_server": "nodemon server.js"
+concurrently "nodemon ./db_api/api.js" "nodemon server.js"
