@@ -211,6 +211,8 @@ input {
       align-items: center;
       min-width: 500px; 
     } */
-    "start_db_api": "nodemon ./db_api/api.js",
+    /* "start_db_api": "nodemon ./db_api/api.js",
     "start_server": "nodemon server.js"
-concurrently "nodemon ./db_api/api.js" "nodemon server.js"
+concurrently "nodemon ./db_api/api.js" "nodemon server.js" */
+
+scp -i "C:\Users\Younes\Projects\key1.pem" BACKEND-DB  ubuntu@ec2-13-60-234-94.eu-north-1.compute.amazonaws.com:~/app

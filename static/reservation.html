@@ -171,7 +171,7 @@ label, select {
 
 
   <script>
-const API_BASE = "http://127.0.0.1:5000/api/v1";
+      const API_URL = "http://13.60.234.94:3000/api/v1";
 
 async function populateSelectFromAPI(apiUrl, selectId, valueKey, displayKey, placeholderText = "Select an option", emptyMessage = "No data found") {
   const select = document.getElementById(selectId);
@@ -204,7 +204,7 @@ async function populateSelectFromAPI(apiUrl, selectId, valueKey, displayKey, pla
 
 // Load cinemas
 populateSelectFromAPI(
-  `${API_BASE}/cinemas`,
+  `${API_URL}/cinemas`,
   "cinemaSelect",
   "cinema_id",
   "cinema_name",
@@ -223,7 +223,7 @@ document.getElementById("cinemaSelect").addEventListener("change", async (event)
   if (!cinema_id) return;
 
   try {
-    const res = await fetch(`${API_BASE}/cinemas/${cinema_id}/movies`);
+    const res = await fetch(`${API_URL}/cinemas/${cinema_id}/movies`);
     const movies = await res.json();
 
     if (!movies.length) {
@@ -284,7 +284,7 @@ async function loadScreenings(cinemaId, movieId) {
   container.innerHTML = "";
 
   try {
-    const res = await fetch(`${API_BASE}/screenings?cinema_id=${cinemaId}&movie_id=${movieId}`);
+    const res = await fetch(`${API_URL}/screenings?cinema_id=${cinemaId}&movie_id=${movieId}`);
     const data = await res.json();
 
     if (!data.length) {
