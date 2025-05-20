@@ -99,7 +99,7 @@ app.get("/users",async (req,res,next) => {
 })
 
 app.get('/users/create', (req, res) => {
-    res.sendFile("/static/create_user.html",{root:"."})
+    res.sendFile("/static/create_user archive.html",{root:"."})
 });
 
 

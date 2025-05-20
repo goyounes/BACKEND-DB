@@ -14,17 +14,6 @@ html {
   margin: 0;
   height: 100%;
 }
-.navbar-container {
-  width: 100%;
-  margin-bottom: 1rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid #ccc; /* acts as a visible hr line */
-}
-
-.navbar-container hr {
-  display: none; /* optional: hide hr if border is used instead */
-}
-
 nav{
   padding: 1rem; /* 20px */
   width: 75%;

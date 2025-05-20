@@ -1,35 +1,62 @@
 *, *::before, *::after {
   box-sizing: border-box;
 }
+:root {
+  --cinephoria-accent: #ffffff;
+  --cinephoria-bg: hsl(0, 0%, 100%);         /* optional dark background */
+  --cinephoria-text: #000000;
+}
 
+.header-icon-link {
+  color: var(--cinephoria-accent);
+}
+html,body{
+  height: 100%;
+  margin: 0;
+}
 body {
-  margin: 0;
+  background-color: var(--cinephoria-bg);
+  color: var(--cinephoria-text);
   font-family: Arial, sans-serif;
-  height: 100%;
+  display: flex;
   flex-direction: column;
+  align-items: stretch; 
+  flex: 1 1 auto;
+}
+header{
+  padding: 0.25rem;
+  display: flex;
+  flex-direction: row;
   align-items: center;
+  justify-content: space-between;
+  background-color: var(--cinephoria-bg);
+  position: sticky;
+  top:0;
+  border-bottom: solid 1px #000000;
+}
+header > * {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+.header-left, .header-right{
+  flex-grow: 0;
+}
+.header-middle{
+  flex-grow: 1;
+  gap: 0.5rem;
+}
+  
+.header-icon-link{
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  color: inherit;
+  text-decoration: inherit;
 }
 
-html {
-  margin: 0;
-  height: 100%;
-}
-.navbar-container {
-  width: 100%;
-  margin-bottom: 1rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid #ccc; /* acts as a visible hr line */
-}
 
-.navbar-container hr {
-  display: none; /* optional: hide hr if border is used instead */
-}
 
-nav{
-  padding: 1rem; /* 20px */
-  width: 75%;
-  background-color: #f9f9f900 !important;
-}
 .page-container {
   display: flex;
   flex-direction: column;
@@ -47,17 +74,19 @@ hr {
   padding: 1rem; /* 20px */
   font-family: Arial, sans-serif;
   background-color: #f9f9f9;
-  width: 75%;
+  margin-left: 25%;
+  margin-right: 25%;
 }
-.main-content-center {
+.form-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: left;
   justify-content: center;
   padding: 1.25rem; /* 20px */
   font-family: Arial, sans-serif;
   background-color: #f9f9f9;
-  width: 75%;
+  margin-left: 25%;
+  margin-right: 25%;
 }
 /* .leftH{
   margin: 0;
@@ -178,7 +207,6 @@ a.button-link:hover {
 /* CSS for creation pages */
 form{
   text-align: left;
-  width: 50%;
 }
 .form-row {
   display: flex;
