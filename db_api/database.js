@@ -141,9 +141,6 @@ export const getUser = async(id) => getTableRow("users",id)
 export const getTicket = async(id) => getTableRow("tickets",id)
 
 
-
-
-
 // Add Resource
 export async function addMovie(movie){
     const {title, poster_img, description, age_rating, poster_img_type, is_team_pick, score, length} = movie
@@ -197,6 +194,8 @@ export async function addUser(user){// this is a super function only admins shou
             conn.release();
         }
 }
+
+
 
 
 
@@ -278,6 +277,31 @@ export async function getMoviesListInCinema(cinema_id){
     await dbTableLogger('movies',result_rows)
     return result_rows
 }
+
+export async function getRoomsInCinema(cinema_id){
+    const [result_rows] = await pool.query(`
+        SELECT cinemas.cinema_name, rooms.*
+        FROM cinemas       
+        JOIN rooms
+        ON cinemas.cinema_id = rooms.cinema_id 
+        WHERE cinemas.cinema_id = ?;
+        `,[cinema_id]);
+
+    await dbTableLogger('rooms',result_rows)
+    return result_rows
+}
+export async function getAllRoomsInCinemas(){
+    const [result_rows] = await pool.query(`
+        SELECT cinemas.cinema_id,cinemas.cinema_name, rooms.room_id,rooms.room_capacity
+        FROM cinemas       
+        JOIN rooms
+        ON cinemas.cinema_id = rooms.cinema_id
+        ORDER BY cinemas.cinema_name;
+        `);
+    console.table(result_rows)
+    return result_rows
+}
+
 
 export async function getMovieScreeningsByCinema(cinema_id,movie_id){
     const [result_rows] = await pool.query(`

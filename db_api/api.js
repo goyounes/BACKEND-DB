@@ -112,6 +112,27 @@ app.get("/api/v1/screenings",async (req,res,next) => {
         next(error)  // Passes the error to the global error-handling middleware
     }
 })
+app.post("/api/v1/movies",async (req,res,next) => {
+    const movie = req.body
+    if (!movie.title)  throwError("Title is required and must be a string, create operation failed",400)
+    // MORE validation code has to be inserted here eventually, erros have to be returned at the same time.
+    // Post should be able to update all the fields, if an NotNULL field is missing, it shouldnt work.
+
+    console.log(`Adding Movie with title: ${movie.title} to the DB...`)
+    try {
+        const MAX_SIZE_BYTES = 10 * 1024 * 1024; // 10MB in bytes 10 000 000
+        [movie.poster_img,movie.poster_img_type] = getImgDataAndImgStype(movie.poster_img,movie.poster_img_type,MAX_SIZE_BYTES)
+
+    // console.log(`Adding Movie with title: ${movie.title} to the DB...`);
+    const db_inserted_movie = await dbFunc.addMovie(movie);
+    if (db_inserted_movie === null) return res.sendStatus(204);
+    db_inserted_movie.poster_img = decodeBinaryToBase64(db_inserted_movie.poster_img)
+    res.status(201).json(db_inserted_movie);
+
+  } catch (err) {
+    next(err);
+  }
+})
 
 app.get("/api/v1/screenings/:id",async (req,res,next) => {
     const id = req.params.id
@@ -140,6 +161,16 @@ app.get("/api/v1/cinemas",async (req,res,next) => {
     }
 })
 
+app.get("/api/v1/cinemas/rooms",async (req,res,next) => {
+    console.log(`Fetching Rooms in all Cinemas from the DB...`)
+    try {
+        const rooms = await dbFunc.getAllRoomsInCinemas()
+        res.status(200).json(rooms)
+    } catch (error) {
+        next(error)  // Passes the error to the global error-handling middleware
+    }
+})
+
 app.get("/api/v1/cinemas/:id",async (req,res,next) => {
     const id = req.params.id
     if (isNaN(Number(id))) throwError("ID is not a number, get operation failed",400) //Checks if id is a number/string of a number
@@ -150,6 +181,19 @@ app.get("/api/v1/cinemas/:id",async (req,res,next) => {
     res.status(200).json(cinemas)
     } catch (err) {
         next(err); // Pass error to error-handling middleware
+    }
+})
+
+app.get("/api/v1/cinemas/:id/rooms",async (req,res,next) => {
+    const id = req.params.id
+    if (isNaN(Number(id))) throwError("ID is not a number, get operation failed",400) //Checks if id is a number/string of a number
+    
+    console.log(`Fetching Rooms in Cinemas with id :${id} from the DB...`)
+    try {
+        const rooms = await dbFunc.getRoomsListInCinema(id)
+        res.status(200).json(rooms)
+    } catch (error) {
+        next(error)  // Passes the error to the global error-handling middleware
     }
 })
 

@@ -116,7 +116,7 @@ SELECT * FROM cinemas;
 CREATE TABLE rooms (
     room_id INT PRIMARY KEY AUTO_INCREMENT,
     room_name VARCHAR(255) ,
-    room_capacity VARCHAR(255) NOT NULL,
+    room_capacity INT NOT NULL,
     isDeleted BOOl DEFAULT FALSE,
 	cinema_id INT,
     FOREIGN KEY (cinema_id) REFERENCES cinemas(cinema_id)

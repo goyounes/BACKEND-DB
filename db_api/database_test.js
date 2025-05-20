@@ -30,5 +30,10 @@ import * as db from "./database.js";
 //   "start_time": "16:30:00",
 //   "end_time": "18:30:00"
 // })
-await db.getLatestMovies()
+await db.getRecentMovies()
+await db.getRoomsInCinema(1)
+await db.getAllRoomsInCinemas(1)
+
+
+
 process.exit(0)
