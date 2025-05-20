@@ -24,39 +24,40 @@
 </head>
 <body>
   <%- include('../partials/navbar') %>
-  <div class="container-3of4-center">
+  <main>
+    <div class="container-3of4-center">
 
-    <div class="users-header">
-      <h1>Users List</h1>
-      <a class="button-link" href='/users/create'>Add User</a>
-    </div>
-    <table>
-      <thead>
-        <tr>
-          <th>user id</th>      
-          <th>username</th>
-          <th>email</th>
-          <th>first name</th>
-          <th>last name</th>
-          <th>role_id%</th>
-        </tr>
-      </thead>
-      <% const roles = { 1: "user", 2: "employee", 3: "admin" } %>
-      <tbody id="users-body">
-        <% users.forEach( user => {%>
+      <div class="users-header">
+        <h1>Users List</h1>
+        <a class="button-link" href='/users/create'>Add User</a>
+      </div>
+      <table>
+        <thead>
           <tr>
-            <td><a href= <%= "users/" + user.user_id%>> <%= user.user_id%> </a></td>
-            <td> <%= user.user_name%></td>
-            <td> <%= user.user_email%></td>
-            <td> <%= user.first_name%></td>
-            <td> <%= user.last_name%></td>
-            <td> <%= roles[user.role_id]%></td>
+            <th>user id</th>      
+            <th>username</th>
+            <th>email</th>
+            <th>first name</th>
+            <th>last name</th>
+            <th>role_id%</th>
           </tr>
-        <%})%>
-      </tbody>
-    </table>
-  </div>
-
+        </thead>
+        <% const roles = { 1: "user", 2: "employee", 3: "admin" } %>
+        <tbody id="users-body">
+          <% users.forEach( user => {%>
+            <tr>
+              <td><a href= <%= "users/" + user.user_id%>> <%= user.user_id%> </a></td>
+              <td> <%= user.user_name%></td>
+              <td> <%= user.user_email%></td>
+              <td> <%= user.first_name%></td>
+              <td> <%= user.last_name%></td>
+              <td> <%= roles[user.role_id]%></td>
+            </tr>
+          <%})%>
+        </tbody>
+      </table>
+    </div>
+  </main>
   <%- include('../partials/footer') %>
 </body>
 </html>

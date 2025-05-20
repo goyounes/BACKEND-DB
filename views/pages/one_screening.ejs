@@ -25,33 +25,35 @@
 </head>
 <body>
   <%- include('../partials/navbar') %>
-  <div class="container-3of4-center">
-    <h1>Screenings List</h1>
-    <table>
-      <thead>
-        <tr>
-          <th>Screening ID</th>
-          <th>Movie ID</th>
-          <th>Cinema ID</th>
-          <th>Room ID</th>
-          <th>Start Date</th>
-          <th>Start Time</th>
-          <th>End Time</th>
-        </tr>
-      </thead>
-      <tbody id="screenings-body">
+  <main>
+    <div class="container-3of4-center">
+      <h1>Screenings List</h1>
+      <table>
+        <thead>
           <tr>
-              <td><%=screening.screening_id%></td>
-              <td><%=screening.movie_id%></td>
-              <td><%=screening.cinema_id%></td>
-              <td><%=screening.room_id%></td>
-              <td><%=new Date(screening.start_date).toLocaleDateString()%></td>
-              <td><%=screening.start_time%></td>
-              <td><%=screening.end_time%></td> 
+            <th>Screening ID</th>
+            <th>Movie ID</th>
+            <th>Cinema ID</th>
+            <th>Room ID</th>
+            <th>Start Date</th>
+            <th>Start Time</th>
+            <th>End Time</th>
           </tr>
-      </tbody>
-    </table>
-  </div>
+        </thead>
+        <tbody id="screenings-body">
+            <tr>
+                <td><%=screening.screening_id%></td>
+                <td><%=screening.movie_id%></td>
+                <td><%=screening.cinema_id%></td>
+                <td><%=screening.room_id%></td>
+                <td><%=new Date(screening.start_date).toLocaleDateString()%></td>
+                <td><%=screening.start_time%></td>
+                <td><%=screening.end_time%></td> 
+            </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
   <%- include('../partials/footer') %>
 </body>
 </html>

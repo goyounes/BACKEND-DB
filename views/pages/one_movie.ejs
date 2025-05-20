@@ -25,44 +25,45 @@
 </head>
 <body>
   <%- include('../partials/navbar') %>
-  <div class="container-3of4-center">
-    <h1>Movie Details</h1>
-    <table>
-      <thead>
-        <tr>
-          <th>Poster</th>
-          <th>Title</th>
-          <th>Description</th>
-          <th>Age Rating</th>
-          <th>Team Pick</th>
-          <th>Score</th>
-          <th>Length</th>
-        </tr>
-      </thead>
-      <tbody id="movie-body">
-          <tr class=<%=movie.is_team_pick ?"highlight":""%>>
-                      <td>
-              <% if (movie.poster_img) { %>
-                  <img 
-                    src="data:<%= movie.poster_img_type  %>;base64,<%= movie.poster_img %>" 
-                    alt="Poster for <%= movie.title %>" 
-                    style="width: 80px; height: auto; border-radius: 5px;" 
-                  />
-                <% } else { %>
-                  N/A
-                <% } %>
-            </td>
-            <td> <%= movie.title%> </td>
-            <td> <%= movie.description%> </td>
-            <td> <%= movie.age_rating%> </td>
-            <td> <%= movie.is_team_pick?"Yes":"No"%></td>
-            <td> <%= movie.score%> </td>
-            <td> <%= movie.length%></td>
+  <main>
+    <div class="container-3of4-center">
+      <h1>Movie Details</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>Poster</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Age Rating</th>
+            <th>Team Pick</th>
+            <th>Score</th>
+            <th>Length</th>
           </tr>
-      </tbody>
-    </table>
-  </div>
-
+        </thead>
+        <tbody id="movie-body">
+            <tr class=<%=movie.is_team_pick ?"highlight":""%>>
+                        <td>
+                <% if (movie.poster_img) { %>
+                    <img 
+                      src="data:<%= movie.poster_img_type  %>;base64,<%= movie.poster_img %>" 
+                      alt="Poster for <%= movie.title %>" 
+                      style="width: 80px; height: auto; border-radius: 5px;" 
+                    />
+                  <% } else { %>
+                    N/A
+                  <% } %>
+              </td>
+              <td> <%= movie.title%> </td>
+              <td> <%= movie.description%> </td>
+              <td> <%= movie.age_rating%> </td>
+              <td> <%= movie.is_team_pick?"Yes":"No"%></td>
+              <td> <%= movie.score%> </td>
+              <td> <%= movie.length%></td>
+            </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
   <%- include('../partials/footer') %>
 </body>
 </html>

@@ -4,7 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Create movie</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="styles.css">
   <style>
     h1{
       text-align: center
@@ -15,7 +16,7 @@
 
   <header>
     <div class="header-left">
-      <img src="/public/cinephoria-sm.png" alt="Cinephoria logo">
+      <img src="/cinephoria-sm.png" alt="Cinephoria logo">
     </div>
     <div class="header-middle">
           <a href="/home" class="header-icon-link">🏠<span>Admin</span></a>          
@@ -30,8 +31,6 @@
           <a href="" class="header-icon-link">📞<span>Contact</span></a>
     </div>
   </header>
-
-
 
 <main>
   <div class="container-half-center">
@@ -73,7 +72,7 @@
             </div>
         </fieldset>
       <div class="button-wrapper">
-        <button type="submit" class="btn-primary">Submit</button>
+        <button type="submit" class="btn-primary">Add User</button>
       </div>
     </form>
   </div>
@@ -93,7 +92,7 @@
     <h6>&copy; 2025 Cinephoria. All rights reserved.</h6>
   </footer>
 
-  <script>
+<script>
       // const API_URL = "http://13.60.234.94:5000/api/v1";
       const API_URL = "http://127.0.0.1:5000/api/v1";
       document.getElementById("NewUserForm").addEventListener("submit", async (event) => {

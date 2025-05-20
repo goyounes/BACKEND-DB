@@ -46,7 +46,7 @@ header > * {
 .header-middle{
   flex-grow: 1;
 }
-  
+
 .header-icon-link{
   display: flex; 
   flex-direction: column; 
@@ -104,23 +104,17 @@ header > * {
 form{
   text-align: left;
 }
-
 .responsive-grid {
   margin-bottom: 10px;  /* Add margin between fieldsets*/ 
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
 }
-
-
-
-
 .form-group {
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
 }
-
 .form-group input,
 .form-group select {
   box-sizing: border-box;
@@ -150,7 +144,6 @@ form{
       border-collapse: collapse;
       margin-top: 20px;
     }
-
 
 footer {
   background-color: #2c3e50;

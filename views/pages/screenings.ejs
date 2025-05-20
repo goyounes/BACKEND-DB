@@ -24,39 +24,40 @@
 </head>
 <body>
   <%- include('../partials/navbar') %>
-  <div class="container-3of4-center">
-    <div class="screenings-header">
-      <h1>Screenings List</h1>
-      <a class="button-link" href='/screenings/create'>Add Screening</a>
-    </div>
-    <table>
-      <thead>
-        <tr>
-          <th>Screening ID</th>
-          <th>Movie ID</th>
-          <th>Cinema ID</th>
-          <th>Room ID</th>
-          <th>Start Date</th>
-          <th>Start Time</th>
-          <th>End Time</th>
-        </tr>
-      </thead>
-      <tbody id="screenings-body">
-        <% screenings.forEach( screening => {%>
+  <main>
+    <div class="container-3of4-center">
+      <div class="screenings-header">
+        <h1>Screenings List</h1>
+        <a class="button-link" href='/screenings/create'>Add Screening</a>
+      </div>
+      <table>
+        <thead>
           <tr>
-              <td><a href= <%="screenings/"+screening.screening_id%>>  <%= screening.screening_id%>  </a></td>
-              <td><%=screening.movie_id%></td>
-              <td><%=screening.cinema_id%></td>
-              <td><%=screening.room_id%></td>
-              <td><%=new Date(screening.start_date).toLocaleDateString()%></td>
-              <td><%=screening.start_time%></td>
-              <td><%=screening.end_time%></td> 
+            <th>Screening ID</th>
+            <th>Movie ID</th>
+            <th>Cinema ID</th>
+            <th>Room ID</th>
+            <th>Start Date</th>
+            <th>Start Time</th>
+            <th>End Time</th>
           </tr>
-        <%})%>
-      </tbody>
-    </table>
-  </div>
-  
+        </thead>
+        <tbody id="screenings-body">
+          <% screenings.forEach( screening => {%>
+            <tr>
+                <td><a href= <%="screenings/"+screening.screening_id%>>  <%= screening.screening_id%>  </a></td>
+                <td><%=screening.movie_id%></td>
+                <td><%=screening.cinema_id%></td>
+                <td><%=screening.room_id%></td>
+                <td><%=new Date(screening.start_date).toLocaleDateString()%></td>
+                <td><%=screening.start_time%></td>
+                <td><%=screening.end_time%></td> 
+            </tr>
+          <%})%>
+        </tbody>
+      </table>
+    </div>
+  </main>
   <%- include('../partials/footer') %>
 </body>
 </html>

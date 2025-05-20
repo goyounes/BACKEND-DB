@@ -4,72 +4,97 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Add Movie</title>
+  <link rel="stylesheet" href="/styles.css">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      margin: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-width: 500px;
-      height: 100vh;
-    }
-    h1 {
-      text-align: center;
-    }
-    fieldset {
-      margin-bottom: 10px;
-    }
-    input, textarea, select {
-      width: 100%;
-      padding: 8px;
-      box-sizing: border-box;
-    }
-    .container {
-      width: 100%;
-      max-width: 500px;
-    }
+    h1{
+      text-align: center
+    }   
   </style>
 </head>
+
 <body>
 
-  <div class="container">
-    <h1>Add New Movie</h1>
+  <header>
+    <div class="header-left">
+      <img src="/cinephoria-sm.png" alt="Cinephoria logo">
+    </div>
+    <div class="header-middle">
+          <a href="/home" class="header-icon-link">🏠<span>Admin</span></a>          
+          <a href="/movies/recent" class="header-icon-link">🎬<span>Recent</span></a>
+          <a href="/movies" class="header-icon-link">📽️<span>Movies</span></a>
+          <a href="/screenings" class="header-icon-link">🎟️<span>Screenings</span></a>          
+          <a href="/cinemas" class="header-icon-link">🏛️<span>Cinemas</span></a>          
+          <a href="/reservation" class="header-icon-link">📅<span>Reservation</span></a> 
+    </div>
+    <div class="header-Center">
+          <a href="/users" class="header-icon-link">👤<span>Users</span></a>
+          <a href="" class="header-icon-link">📞<span>Contact</span></a>
+    </div>
+  </header>
+
+<main>
+  <div class="container-half-center">
+     <h1>Add New Movie</h1>
 
     <form  id= "NewMovieForm" action="" method="" >
-      <fieldset>
-        <legend>Movie Details</legend>
+      <fieldset  class="responsive-grid">  <legend>Movie Details</legend>
+        <div class="form-group">
+          <label for="title">Title:</label>
+          <input type="text" id="title" name="title" required>
+        </div>
+        <div class="form-group">
+          <label for="poster_img">Poster Image URL:</label>
+          <input type="file" name="poster_img" accept="image/*" />
+          <!-- <input type="url" id="poster_img" name="poster_img" placeholder="https://example.com/image.jpg"> -->
+        </div>
+        <div class="form-group">
+          <label for="description">Description:</label>
+          <textarea id="description" name="description" rows="4"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="length">Length (HH:MM:SS):</label>
+          <input type="time" id="length" name="length" step="1">
+        </div>
+        <div class="form-group">
+          <label for="age_rating">Age Rating:</label>
+          <input type="number" id="age_rating" name="age_rating" min="0" max="21">
+        </div>
+        <div class="form-group">
+          <label for="is_team_pick">Team Pick:</label>
+          <select id="is_team_pick" name="is_team_pick">
+            <option value="0">No</option>
+            <option value="1">Yes</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="score">Score (0.0 - 9.9):</label>
+          <input type="number" id="score" name="score" step="0.1" min="0" max="9.9">
+        </div>
 
-        <label for="title">Title:</label><br>
-        <input type="text" id="title" name="title" required><br><br>
-
-        <label for="poster_img">Poster Image URL:</label><br>
-        <input type="file" name="poster_img" accept="image/*" />
-        <!-- <input type="url" id="poster_img" name="poster_img" placeholder="https://example.com/image.jpg"><br><br> -->
-
-        <label for="description">Description:</label><br>
-        <textarea id="description" name="description" rows="4"></textarea><br><br>
-
-        <label for="age_rating">Age Rating:</label><br>
-        <input type="number" id="age_rating" name="age_rating" min="0" max="21"><br><br>
-
-        <label for="is_team_pick">Team Pick:</label><br>
-        <select id="is_team_pick" name="is_team_pick">
-          <option value="0">No</option>
-          <option value="1">Yes</option>
-        </select><br><br>
-
-        <label for="score">Score (0.0 - 9.9):</label><br>
-        <input type="number" id="score" name="score" step="0.1" min="0" max="9.9"><br><br>
-
-        <label for="length">Length (HH:MM:SS):</label><br>
-        <input type="time" id="length" name="length" step="1"><br><br>
       </fieldset>
 
-      <input type="submit" value="Add Movie">
+      <div class="button-wrapper">
+        <button type="submit" class="btn-primary">Add Movie</button>
+      </div>
     </form>
   </div>
+</main>
+
+  <footer>
+    <h4>Our Cinemas</h4>
+    <div class="footer-grid">
+      <div><strong>Nantes</strong><br>12 Rue de la Loire, 44000 Nantes<br>📞 +33 2 40 12 34 56<br>🕒 10:00–23:00</div>
+      <div><strong>Bordeaux</strong><br>33 Rue du Chai des Farines, 33800 Bordeaux<br>📞 +33 5 56 78 90 12<br>🕒 10:00–23:00</div>
+      <div><strong>Paris</strong><br>42 Rue de Rivoli, 75004 Paris<br>📞 +33 1 45 67 89 01<br>🕒 09:30–00:00</div>
+      <div><strong>Toulouse</strong><br>18 Rue du Languedoc, 31000 Toulouse<br>📞 +33 5 34 56 78 90<br>🕒 10:00–23:00</div>
+      <div><strong>Lille</strong><br>77 Rue Nationale, 59800 Lille<br>📞 +33 3 20 12 34 56<br>🕒 10:00–22:30</div>
+      <div><strong>Charleroi (BE)</strong><br>26 Rue Léon Bernus, 6000 Charleroi<br>📞 +32 71 23 45 67<br>🕒 10:00–22:00</div>
+      <div><strong>Liège (BE)</strong><br>59 Quai de la Batte, 4020 Liège<br>📞 +32 4 78 90 12 34<br>🕒 10:00–23:00</div>
+    </div>
+    <h6>&copy; 2025 Cinephoria. All rights reserved.</h6>
+  </footer>
+
+
 
   <script>
       const MAX_SIZE = 10 * 1024 * 1024; // 10MB in bytes 10 000 000

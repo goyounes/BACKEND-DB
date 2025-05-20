@@ -25,33 +25,34 @@
 </head>
 <body>
   <%- include('../partials/navbar') %>
-  <div class="container-3of4-center">
-      <h1>Users List</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>user id</th>      
-            <th>username</th>
-            <th>email</th>
-            <th>first name</th>
-            <th>last name</th>
-            <th>role_id%</th>
-          </tr>
-        </thead>
-        <% const roles = { 1: "visitor", 2: "user", 3: "employee", 4: "admin" } %>
-        <tbody id="user-body">
+  <main>
+    <div class="container-3of4-center">
+        <h1>Users List</h1>
+        <table>
+          <thead>
             <tr>
-              <td> <%= user.user_id%></td>
-              <td> <%= user.user_name%></td>
-              <td> <%= user.user_email%></td>
-              <td> <%= user.first_name%></td>
-              <td> <%= user.last_name%></td>
-              <td> <%= roles[user.role_id]%></td>
+              <th>user id</th>      
+              <th>username</th>
+              <th>email</th>
+              <th>first name</th>
+              <th>last name</th>
+              <th>role_id%</th>
             </tr>
-        </tbody>
-      </table>
+          </thead>
+          <% const roles = { 1: "visitor", 2: "user", 3: "employee", 4: "admin" } %>
+          <tbody id="user-body">
+              <tr>
+                <td> <%= user.user_id%></td>
+                <td> <%= user.user_name%></td>
+                <td> <%= user.user_email%></td>
+                <td> <%= user.first_name%></td>
+                <td> <%= user.last_name%></td>
+                <td> <%= roles[user.role_id]%></td>
+              </tr>
+          </tbody>
+        </table>
     </div>
-    
+  </main>
   <%- include('../partials/footer') %>
 </body>
 </html>

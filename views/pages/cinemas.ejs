@@ -8,29 +8,30 @@
 </head>
 <body >
   <%- include('../partials/navbar') %>
-  <div class="container-half-center">
-    <div class="cinemas-header">
-      <h1>Cinemas List</h1>
-      <!-- <a class="button-link" href='/cinemas/create'>Add Cinema</a> -->
-    </div>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Location</th>
-        </tr>
-      </thead>
-      <tbody id="cinemas-body">
-        <% cinemas.forEach(cinema => { %>
+  <main>
+    <div class="container-half-center">
+      <div class="cinemas-header">
+        <h1>Cinemas List</h1>
+        <!-- <a class="button-link" href='/cinemas/create'>Add Cinema</a> -->
+      </div>
+      <table>
+        <thead>
           <tr>
-            <td><%= cinema.cinema_name %></td>
-            <td><%= cinema.cinema_location %></td>
+            <th>Name</th>
+            <th>Location</th>
           </tr>
-        <% }) %>
-      </tbody>
-    </table>
-  </div>
-
+        </thead>
+        <tbody id="cinemas-body">
+          <% cinemas.forEach(cinema => { %>
+            <tr>
+              <td><%= cinema.cinema_name %></td>
+              <td><%= cinema.cinema_location %></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </main>
   <%- include('../partials/footer') %>
 </body>
 </html>

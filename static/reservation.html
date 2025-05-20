@@ -3,14 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Select Cinema and Movie</title>
+  <title>Reservation</title>
   <link rel="stylesheet" href="/styles.css">
+  
 <style>
-label, select {
+/* label, select {
   font-size: 1.2em;
-  margin-bottom: 0.95rem; /* 15px */
+  margin-bottom: 0.95rem; 
   display: block;
-}
+} */
 
 #moviesGrid {
   display: grid;
@@ -120,21 +121,20 @@ label, select {
           <a href="" class="header-icon-link">📞<span>Contact</span></a>
     </div>
   </header>
+  <main>
+    <div class="container-3of4-center">
+      <h1>Select a Cinema and Movie</h1>
 
-  <div class="container-3of4-center">
+      <label class="" for="cinemaSelect">Choose a cinema:</label>
+      <select id="cinemaSelect">
+        <option value="">-- Select a cinema --</option>
+      </select>
 
-    <h1>Select a Cinema and Movie</h1>
+      <div id="moviesGrid"></div>
 
-    <label class="" for="cinemaSelect">Choose a cinema:</label>
-    <select id="cinemaSelect">
-      <option value="">-- Select a cinema --</option>
-    </select>
-
-    <div id="moviesGrid"></div>
-
-    <div id="screeningsContainer"></div>
-  </div>
-
+      <div id="screeningsContainer"></div>
+    </div>
+  </main>
   <footer>
     <h4>Our Cinemas</h4>
     <div class="footer-grid">
@@ -326,29 +326,21 @@ label, select {
                 const endSpan = document.createElement("span");
                 endSpan.className = "end-time";
                 endSpan.textContent = screening.end_time;
-
-                a.appendChild(startSpan);
-                a.appendChild(endSpan);
-
+                  a.appendChild(startSpan);
+                  a.appendChild(endSpan);
                 td.appendChild(a);
               }
-
               tr.appendChild(td);
             });
-
             tbody.appendChild(tr);
           }
-
           table.appendChild(tbody);
           container.appendChild(table);
-
         } catch (err) {
           console.error("Error fetching screenings:", err);
           container.innerHTML = "<p>Failed to load screenings.</p>";
         }
       }
-
   </script>
-
 </body>
 </html>

@@ -9,21 +9,22 @@
 </head>
 <body>
   <%- include('../partials/navbar') %>
-  <div class="container-half-center">
+  <main>
+    <div class="container-half-center">
 
-    <h1>Welcome to Cinephoria</h1>
-    <p>Choose what you want to explore:</p>
+      <h1>Welcome to Cinephoria</h1>
+      <p>Choose what you want to explore:</p>
 
-    <div class="button-container">
-      <a href='/movies' class="button-link-main">Movies</a>
-      <a href='/screenings' class="button-link-main">Screenings</a>
-      <a href='/cinemas' class="button-link-main">Cinemas</a>
+      <div class="button-container">
+        <a href='/movies' class="button-link-main">Movies</a>
+        <a href='/screenings' class="button-link-main">Screenings</a>
+        <a href='/cinemas' class="button-link-main">Cinemas</a>
+      </div>
+      <div class="button-container">
+        <a href='/users' class="button-link-main">Users</a>
+      </div>
     </div>
-    <div class="button-container">
-      <a href='/users' class="button-link-main">Users</a>
-    </div>
-  </div>
-
+  </main>
   <%- include('../partials/footer') %>
 </body>
 </html>
