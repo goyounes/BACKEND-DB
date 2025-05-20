@@ -7,9 +7,6 @@
   --cinephoria-text: #000000;
 }
 
-.header-icon-link {
-  color: var(--cinephoria-accent);
-}
 html,body{
   height: 100%;
   margin: 0;
@@ -23,8 +20,12 @@ body {
   align-items: stretch; 
   flex: 1 1 auto;
 }
+main {
+  flex: 1 0 auto;
+}
 header{
-  padding: 0.25rem;
+  width: 100%;
+  padding: 0.5rem;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -44,7 +45,6 @@ header > * {
 }
 .header-middle{
   flex-grow: 1;
-  gap: 0.5rem;
 }
   
 .header-icon-link{
@@ -56,46 +56,80 @@ header > * {
 }
 
 
-
-.page-container {
+.container-half-center {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  background-color: #f9f9f9;
-}
-hr {
-  border: 1px solid #ccc;  /* visible light gray line */
-  margin: 10px 0;
-}
-.main-content {
-  flex: 1;
-  text-align: left;
-  padding: 1rem; /* 20px */
-  font-family: Arial, sans-serif;
-  background-color: #f9f9f9;
-  margin-left: 25%;
-  margin-right: 25%;
-}
-.form-container {
-  display: flex;
-  flex-direction: column;
-  align-items: left;
+  align-items: stretch;
   justify-content: center;
-  padding: 1.25rem; /* 20px */
+
+  padding: 2rem; /* 20px */
   font-family: Arial, sans-serif;
   background-color: #f9f9f9;
   margin-left: 25%;
   margin-right: 25%;
 }
-/* .leftH{
-  margin: 0;
+
+@media (max-width: 1200px) {
+  .container-half-center{
+    margin-left: 12.5%;
+    margin-right:12.5%;
+  }
+}
+@media (max-width: 960px) {
+  .container-half-center{
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+.container-3of4-center {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+
+  padding: 2rem; /* 20px */
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  margin-left: 12.5%;
+  margin-right: 12.5%;
+}
+@media (max-width: 960px) {
+  .container-3of4-center{
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+
+form{
   text-align: left;
 }
-.centerH{
-  margin: 0;
-  text-align: center;
-} */
+
+.responsive-grid {
+  margin-bottom: 10px;  /* Add margin between fieldsets*/ 
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+
+
+
+.form-group {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group input,
+.form-group select {
+  box-sizing: border-box;
+  padding: 0.5rem 0.75rem;
+  height: 2.5rem;         
+  font-size: 1rem;        
+  line-height: 1.5;       
+}
+
     th, td {
       padding: 12px;
       border: 1px solid #ccc;
@@ -121,46 +155,31 @@ hr {
 footer {
   background-color: #2c3e50;
   color: white;
-  padding: 1rem 0.5rem; /* 20px 10px */
+  padding: 0.25rem 0.5rem; /* 20px 10px */
   font-family: Arial, sans-serif;
-  font-size: 1rem;
-  text-align: center;
-  width: 100%;
-}
-footer h4 {
-  margin-top: 0rem;
-  margin-bottom: 1rem;
-}
-
-footer h6 {
-  margin-top: 1rem;
-  margin-bottom: 0rem;
+  /* font-size: 1rem; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
 }
 
 .footer-grid {
   display: flex;
   justify-content: space-around;
-  /* Remove wrapping to keep one row */
   flex-wrap: nowrap;
-  /* Reduce gap if needed */
   gap: 0.5rem; /* slightly smaller gap */
+  width: 100%;
   text-align: left;
-  /* allow horizontal scroll if too wide */
-  overflow-x: auto;
-  /* Optional: prevent scrollbar appearing if you want all visible */
-  /* scrollbar styling could be added */
 }
-
 .footer-grid div {
-  /* allow shrinking */
   flex-shrink: 1;
-  /* reduce min-width or remove it to allow shrink */
   min-width: 5rem; /* smaller than before */
   white-space: normal; /* allow text wrapping inside the element */
   margin-bottom: 0; /* no margin needed since no wrap */
-  /* optionally set a flexible basis */
-  flex-basis: auto;
+  flex: 1 1 auto;
 }
+
 
 
 
@@ -205,39 +224,6 @@ a.button-link:hover {
 }
 
 /* CSS for creation pages */
-form{
-  text-align: left;
-}
-.form-row {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 0.5rem;
-}
-
-.form-group {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.form-group input,
-.form-group select {
-  box-sizing: border-box;
-  padding: 0.5rem;
-  height: 2rem; /* ensures same height */
-  font-size: 0.9rem;
-}
-#role_id {
-  width: auto;          /* shrink width to content */
-  min-width: 6rem;      /* optional: prevent it from getting too narrow */
-  max-width: 12rem;     /* optional max width */
-  padding: 0.5rem;
-  font-size: 0.9rem;
-}
-
-fieldset {
-  margin-bottom: 10px;  /* Add margin between fieldsets*/ 
-}
 
 
 .button-wrapper {

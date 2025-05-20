@@ -102,46 +102,26 @@ label, select {
 </style>
 
 </head>
-<body class="page-container">
+<body >
+  <header>
+    <div class="header-left">
+      <img src="/cinephoria-sm.png" alt="Cinephoria logo">
+    </div>
+    <div class="header-middle">
+          <a href="/home" class="header-icon-link">🏠<span>Admin</span></a>          
+          <a href="/movies/recent" class="header-icon-link">🎬<span>Recent</span></a>
+          <a href="/movies" class="header-icon-link">📽️<span>Movies</span></a>
+          <a href="/screenings" class="header-icon-link">🎟️<span>Screenings</span></a>          
+          <a href="/cinemas" class="header-icon-link">🏛️<span>Cinemas</span></a>          
+          <a href="/reservation" class="header-icon-link">📅<span>Reservation</span></a> 
+    </div>
+    <div class="header-Center">
+          <a href="/users" class="header-icon-link">👤<span>Users</span></a>
+          <a href="" class="header-icon-link">📞<span>Contact</span></a>
+    </div>
+  </header>
 
-
-
-  <div class="main-content">
-    <nav>
-      <ul style="list-style: none; display: flex; gap: 20px; font-size: large; margin: 0; padding: 0; align-items: center;">
-        <li><a href="/home" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; color: inherit;">
-            🏠
-            <span>Admin</span></a></li>
-        <li><a href="/movies/recent" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; color: inherit;">
-            🎬
-            <span>Recent</span></a></li>
-
-        <li style="margin-left: auto;"></li>
-
-        <li><a href="/movies" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; color: inherit;">
-            📽️
-            <span>Movies</span></a></li>
-        <li><a href="/screenings" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; color: inherit;">
-            🎟️
-            <span>Screenings</span></a></li>
-        <li><a href="/cinemas" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; color: inherit;">
-            🏛️
-        <span>Cinemas</span></a></li>
-        <li><a href="/reservation" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; color: inherit;">
-            📅
-            <span>Reservation</span></a></li>
-
-        <li style="margin-left: auto;"></li>
-
-        <li><a href="/users" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; color: inherit;">
-            👤
-            <span>Users</span></a></li>
-        <li><a href="" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; color: inherit;">
-            📞
-            <span>Contact</span></a></li>
-      </ul>
-    </nav>
-    <hr>
+  <div class="container-3of4-center">
 
     <h1>Select a Cinema and Movie</h1>
 
@@ -154,6 +134,7 @@ label, select {
 
     <div id="screeningsContainer"></div>
   </div>
+
   <footer>
     <h4>Our Cinemas</h4>
     <div class="footer-grid">
@@ -174,212 +155,198 @@ label, select {
       // const API_URL = "http://13.60.234.94:5000/api/v1";
       const API_URL = "http://127.0.0.1:5000/api/v1";
 
-async function populateSelectFromAPI(apiUrl, selectId, valueKey, displayKey, placeholderText = "Select an option", emptyMessage = "No data found") {
-  const select = document.getElementById(selectId);
-  select.innerHTML = `<option value="" disabled selected>-- ${placeholderText} --</option>`;
-  select.disabled = true;
+      async function populateSelectFromAPI(apiUrl, selectId, valueKey, displayKey, placeholderText = "Select an option", emptyMessage = "No data found") {
+        const select = document.getElementById(selectId);
+        select.innerHTML = `<option value="" disabled selected>-- ${placeholderText} --</option>`;
+        select.disabled = true;
 
-  try {
-    const response = await fetch(apiUrl);
-    if (!response.ok) throw new Error("Failed to fetch data");
+        try {
+          const response = await fetch(apiUrl);
+          if (!response.ok) throw new Error("Failed to fetch data");
 
-    const data = await response.json();
-    if (!data.length) {
-      select.innerHTML = `<option value="">${emptyMessage}</option>`;
-      return;
-    }
+          const data = await response.json();
+          if (!data.length) {
+            select.innerHTML = `<option value="">${emptyMessage}</option>`;
+            return;
+          }
 
-    data.forEach(item => {
-      const option = document.createElement("option");
-      option.value = item[valueKey];
-      option.textContent = item[displayKey];
-      select.appendChild(option);
-    });
+          data.forEach(item => {
+            const option = document.createElement("option");
+            option.value = item[valueKey];
+            option.textContent = item[displayKey];
+            select.appendChild(option);
+          });
 
-    select.disabled = false;
-  } catch (err) {
-    console.error("Error populating select:", err);
-    select.innerHTML = `<option value="">Error loading data</option>`;
-  }
-}
-
-// Load cinemas
-populateSelectFromAPI(
-  `${API_URL}/cinemas`,
-  "cinemaSelect",
-  "cinema_id",
-  "cinema_name",
-  "Select a cinema"
-);
-
-// When a cinema is selected, fetch its movies
-document.getElementById("cinemaSelect").addEventListener("change", async (event) => {
-  const cinema_id = event.target.value;
-  const moviesGrid = document.getElementById("moviesGrid");
-  const screeningsContainer = document.getElementById("screeningsContainer");
-
-  moviesGrid.innerHTML = "";
-  screeningsContainer.innerHTML = "";
-
-  if (!cinema_id) return;
-
-  try {
-    const res = await fetch(`${API_URL}/cinemas/${cinema_id}/movies`);
-    const movies = await res.json();
-
-    if (!movies.length) {
-      moviesGrid.innerHTML = "<p>No movies available.</p>";
-      return;
-    }
-
-    movies.forEach(movie => {
-      const card = document.createElement("div");
-      card.className = "movie-card";
-
-      const posterImg = movie.poster_img
-        ? `<img src="data:${movie.poster_img_type};base64,${movie.poster_img}" alt="Poster for ${movie.title}" class="movie-poster">`
-        : `<div style="width: 100%; height: 220px; background-color: #ccc; border-radius: 8px; display: flex; align-items: center; justify-content: center;">N/A</div>`;
-
-      card.innerHTML = `
-        ${posterImg}
-        <div class="movie-title">${movie.title}</div>
-      `;
-
-      card.addEventListener("click", () => {
-        loadScreenings(cinema_id, movie.movie_id);
-      });
-
-      moviesGrid.appendChild(card);
-    });
-
-  } catch (err) {
-    console.error("Error loading movies:", err);
-    moviesGrid.innerHTML = "<p>Failed to load movies.</p>";
-  }
-});
-
-// Helper to format a Date object as YYYY-MM-DD string (ISO format)
-function formatDateISO(date) {
-  return date.toISOString().split("T")[0];
-}
-
-// Helper to format date nicely for header (e.g. Tue 05/18)
-function formatDateHeader(date) {
-  const options = { weekday: 'short', month: '2-digit', day: '2-digit' };
-  return date.toLocaleDateString(undefined, options);
-}
-
-// Generate 7 consecutive dates starting from startDate (Date object)
-function generate7Days(startDate) {
-  let dates = [];
-  for (let i = 0; i < 7; i++) {
-    const d = new Date(startDate);
-    d.setDate(startDate.getDate() + i);
-    dates.push(d);
-  }
-  return dates;
-}
-
-async function loadScreenings(cinemaId, movieId) {
-  const container = document.getElementById("screeningsContainer");
-  container.innerHTML = "";
-
-  try {
-    const res = await fetch(`${API_URL}/screenings?cinema_id=${cinemaId}&movie_id=${movieId}`);
-    const data = await res.json();
-
-    if (!data.length) {
-      container.innerHTML = "<p>No screenings available.</p>";
-      return;
-    }
-
-    // Group screenings by ISO date string (YYYY-MM-DD)
-    const grouped = {};
-    data.forEach(x => {
-      // Extract ISO date string from start_date
-      const dateKey = x.start_date.split("T")[0];
-      if (!grouped[dateKey]) grouped[dateKey] = [];
-      grouped[dateKey].push(x);
-    });
-
-    // Find earliest date from the screenings keys
-    const allDates = Object.keys(grouped).sort();
-    const earliestDate = new Date(allDates[0]);
-
-    // Generate exactly 7 consecutive dates from earliest date
-    const weekDates = generate7Days(earliestDate);
-
-    // Create table
-    const table = document.createElement("table");
-    table.className = "screenings-table";
-
-    // Create table header with 7 dates
-    const thead = document.createElement("thead");
-    const headerRow = document.createElement("tr");
-    weekDates.forEach(date => {
-      const th = document.createElement("th");
-      th.textContent = formatDateHeader(date);
-      headerRow.appendChild(th);
-    });
-    thead.appendChild(headerRow);
-    table.appendChild(thead);
-
-    // Find max number of screenings in any date, to define number of rows needed
-    let maxRows = 0;
-    weekDates.forEach(date => {
-      const iso = formatDateISO(date);
-      const count = grouped[iso] ? grouped[iso].length : 0;
-      if (count > maxRows) maxRows = count;
-    });
-
-    const tbody = document.createElement("tbody");
-
-    // For each row (screening index)
-    for (let i = 0; i < maxRows; i++) {
-      const tr = document.createElement("tr");
-
-      // For each date (column)
-      weekDates.forEach(date => {
-        const iso = formatDateISO(date);
-        const screeningsForDay = grouped[iso] || [];
-        const screening = screeningsForDay[i];
-
-        const td = document.createElement("td");
-
-        if (screening) {
-          const a = document.createElement("a");
-          a.className = "screening-time";
-          a.href = `/checkout.html?screening_id=${screening.screening_id}`;
-
-          // Create spans for start and end time
-          const startSpan = document.createElement("span");
-          startSpan.className = "start-time";
-          startSpan.textContent = screening.start_time;
-
-          const endSpan = document.createElement("span");
-          endSpan.className = "end-time";
-          endSpan.textContent = screening.end_time;
-
-          a.appendChild(startSpan);
-          a.appendChild(endSpan);
-
-          td.appendChild(a);
+          select.disabled = false;
+        } catch (err) {
+          console.error("Error populating select:", err);
+          select.innerHTML = `<option value="">Error loading data</option>`;
         }
+      }
 
-        tr.appendChild(td);
+      // Load cinemas
+      populateSelectFromAPI(
+        `${API_URL}/cinemas`,
+        "cinemaSelect",
+        "cinema_id",
+        "cinema_name",
+        "Select a cinema"
+      );
+
+
+
+      // When a cinema is selected, fetch its movies
+      document.getElementById("cinemaSelect").addEventListener("change", async (event) => {
+        const cinema_id = event.target.value;
+        const moviesGrid = document.getElementById("moviesGrid");
+        const screeningsContainer = document.getElementById("screeningsContainer");
+
+        moviesGrid.innerHTML = "";
+        screeningsContainer.innerHTML = "";
+
+        if (!cinema_id) return;
+        try {
+          const res = await fetch(`${API_URL}/cinemas/${cinema_id}/movies`);
+          const movies = await res.json();
+          if (!movies.length) {
+            moviesGrid.innerHTML = "<p>No movies available.</p>";
+            return;
+          }
+          movies.forEach(movie => {
+            const card = document.createElement("div");
+            card.className = "movie-card";
+
+            const posterImg = movie.poster_img
+              ? `<img src="data:${movie.poster_img_type};base64,${movie.poster_img}" alt="Poster for ${movie.title}" class="movie-poster">`
+              : `<div style="width: 100%; height: 220px; background-color: #ccc; border-radius: 8px; display: flex; align-items: center; justify-content: center;">N/A</div>`;
+
+            card.innerHTML = `
+              ${posterImg}
+              <div class="movie-title">${movie.title}</div>
+            `;
+
+            card.addEventListener("click", () => {
+              loadScreenings(cinema_id, movie.movie_id);
+            });
+            moviesGrid.appendChild(card);
+          });
+
+        } catch (err) {
+          console.error("Error loading movies:", err);
+          moviesGrid.innerHTML = "<p>Failed to load movies.</p>";
+        }
       });
 
-      tbody.appendChild(tr);
-    }
+      // Helper to format a Date object as YYYY-MM-DD string (ISO format)
+      function formatDateISO(date) {
+        return date.toISOString().split("T")[0];
+      }
 
-    table.appendChild(tbody);
-    container.appendChild(table);
+      // Helper to format date nicely for header (e.g. Tue 05/18)
+      function formatDateHeader(date) {
+        const options = { weekday: 'short', month: '2-digit', day: '2-digit' };
+        return date.toLocaleDateString(undefined, options);
+      }
 
-  } catch (err) {
-    console.error("Error fetching screenings:", err);
-    container.innerHTML = "<p>Failed to load screenings.</p>";
-  }
-}
+      // Generate 7 consecutive dates starting from startDate (Date object)
+      function generate7Days(startDate) {
+        let dates = [];
+        for (let i = 0; i < 7; i++) {
+          const d = new Date(startDate);
+          d.setDate(startDate.getDate() + i);
+          dates.push(d);
+        }
+        return dates;
+      }
+
+      async function loadScreenings(cinemaId, movieId) {
+        const container = document.getElementById("screeningsContainer");
+        container.innerHTML = "";
+        try {
+          const res = await fetch(`${API_URL}/screenings?cinema_id=${cinemaId}&movie_id=${movieId}`);
+          const data = await res.json();
+          if (!data.length) {
+            container.innerHTML = "<p>No screenings available.</p>";
+            return;
+          }
+          // Group screenings by ISO date string (YYYY-MM-DD)
+          const grouped = {};
+          data.forEach(x => {
+            // Extract ISO date string from start_date
+            const dateKey = x.start_date.split("T")[0];
+            if (!grouped[dateKey]) grouped[dateKey] = [];
+            grouped[dateKey].push(x);
+          });
+          // Find earliest date from the screenings keys
+          const allDates = Object.keys(grouped).sort();
+          const earliestDate = new Date(allDates[0]);
+          // Generate exactly 7 consecutive dates from earliest date
+          const weekDates = generate7Days(earliestDate);
+          // Create table
+          const table = document.createElement("table");
+          table.className = "screenings-table";
+          // Create table header with 7 dates
+          const thead = document.createElement("thead");
+          const headerRow = document.createElement("tr");
+          weekDates.forEach(date => {
+            const th = document.createElement("th");
+            th.textContent = formatDateHeader(date);
+            headerRow.appendChild(th);
+          });
+          thead.appendChild(headerRow);
+          table.appendChild(thead);
+          // Find max number of screenings in any date, to define number of rows needed
+          let maxRows = 0;
+          weekDates.forEach(date => {
+            const iso = formatDateISO(date);
+            const count = grouped[iso] ? grouped[iso].length : 0;
+            if (count > maxRows) maxRows = count;
+          });
+          const tbody = document.createElement("tbody");
+          // For each row (screening index)
+          for (let i = 0; i < maxRows; i++) {
+            const tr = document.createElement("tr");
+            // For each date (column)
+            weekDates.forEach(date => {
+              const iso = formatDateISO(date);
+              const screeningsForDay = grouped[iso] || [];
+              const screening = screeningsForDay[i];
+
+              const td = document.createElement("td");
+
+              if (screening) {
+                const a = document.createElement("a");
+                a.className = "screening-time";
+                a.href = `/checkout.html?screening_id=${screening.screening_id}`;
+                // Create spans for start and end time
+                const startSpan = document.createElement("span");
+                startSpan.className = "start-time";
+                startSpan.textContent = screening.start_time;
+
+                const endSpan = document.createElement("span");
+                endSpan.className = "end-time";
+                endSpan.textContent = screening.end_time;
+
+                a.appendChild(startSpan);
+                a.appendChild(endSpan);
+
+                td.appendChild(a);
+              }
+
+              tr.appendChild(td);
+            });
+
+            tbody.appendChild(tr);
+          }
+
+          table.appendChild(tbody);
+          container.appendChild(table);
+
+        } catch (err) {
+          console.error("Error fetching screenings:", err);
+          container.innerHTML = "<p>Failed to load screenings.</p>";
+        }
+      }
 
   </script>
 

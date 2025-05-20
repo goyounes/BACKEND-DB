@@ -125,7 +125,6 @@ app.get("/cinemas",async (req,res,next) => {
         next(error)
     }
 })
-// app.use(express.static("public"));
 
 app.use((err, req, res, next) => {
   console.log("Server: Middleware logging error stack ...");
