@@ -178,26 +178,25 @@ footer {
 
 
 .button-container {
+  display: flex;
+  justify-content: space-around;
   margin-top: 3rem; /* 50px */
 }
 
-a.button-link-main {
+a.button-link-md {
   display: inline-block;
-  padding: 1rem 2rem; /* 15px 30px */
-  font-size: 1rem; /* 18px */
+  padding: 1rem 2rem; 
+  font-size: 2rem; 
   cursor: pointer;
-  margin: 1.25rem; /* 20px */
+  margin: 0.5rem;
   border: none;
-  border-radius: 0.3125rem; /* 5px */
+  border-radius: 0.5rem; 
   background-color: #4CAF50;
   color: white;
   text-decoration: none;
   transition: background-color 0.3s ease;
 }
 
-a.button-link-main:hover {
-  background-color: #45a049;
-}
 
 a.button-link {
   display: inline-block;
@@ -213,7 +212,7 @@ a.button-link {
   transition: background-color 0.3s ease;
 }
 
-a.button-link:hover {
+a.button-link:hover , a.button-link-main:hover{
   background-color: #45a049;
 }
 
