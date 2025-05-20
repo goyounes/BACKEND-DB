@@ -31,8 +31,8 @@ import * as db from "./database.js";
 //   "end_time": "18:30:00"
 // })
 await db.getRecentMovies()
-await db.getRoomsInCinema(1)
-await db.getAllRoomsInCinemas(1)
+// await db.getRoomsInCinema(1)
+// await db.getAllRoomsInCinemas(1)
 
 
 

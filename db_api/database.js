@@ -22,26 +22,11 @@ const pool = mysql.createPool({
 // testConnection();
 
 const UIET = { //userInsertErrorsTranslation
-    ER_DUP_ENTRY: {
-        message: "The provided username or email is already in use. Please choose another.",
-        status: 409
-    },
-    ER_NO_REFERENCED_ROW_2: {
-        message: "The specified role is invalid. Please check and try again.",
-        status: 400
-    },
-    ER_BAD_NULL_ERROR: {
-        message: "Required fields are missing or invalid. Please check your input.",
-        status: 400
-    },
-    ER_DATA_TOO_LONG: {
-        message: "The data entered is too long for one of the fields. Please shorten your input.",
-        status: 400
-    },
-    ER_UNKNOWN_ERROR: {
-        message: "An unexpected error occurred. Please try again later.",
-        status: 500
-    }
+    ER_DUP_ENTRY:           {message: "The provided username or email is already in use. Please choose another.",         status: 409},
+    ER_NO_REFERENCED_ROW_2: {message: "The specified role is invalid. Please check and try again.",                       status: 400},
+    ER_BAD_NULL_ERROR:      {message: "Required fields are missing or invalid. Please check your input.",                 status: 400},
+    ER_DATA_TOO_LONG:       {message: "The data entered is too long for one of the fields. Please shorten your input.",   status: 400},
+    ER_UNKNOWN_ERROR:       {message: "An unexpected error occurred. Please try again later.",                            status: 500}
 };
 
 async function dbTableLogger(table_name,array){
@@ -69,9 +54,7 @@ export async function getNameForIdColumn(table_name){
 }
 
 // Get Resources
-const allowedTables = [
-"movies","genres","movie_genres",                 "cinemas","rooms","seats",
-"screenings","qualities","screening_qualities",   "roles","users","tickets"]
+const allowedTables = ["movies","genres","movie_genres", "cinemas","rooms","seats", "screenings","qualities","screening_qualities", "roles","users","tickets"]
 
 export async function getTable(table_name){    
     if (!allowedTables.includes(table_name)) throwError("Unauthorized table access.",400);
@@ -259,8 +242,8 @@ export async function getRecentMovies(){
     
     const Offset =  (TodayDayCode - WEDNSDAY_DAY_CODE + 7) % 7;
     lastWednesdayDate.setDate(today.getDate() - Offset)
-    lastWednesdayDate.setHours(5, 0, 0, 0 );
-    
+    lastWednesdayDate.setHours(0, 0, 0, 0 );
+
     const date_in_mysql_format = formatDateToMySQL(lastWednesdayDate)
 
     const [result_rows] = await pool.query(`

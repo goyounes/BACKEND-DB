@@ -61,6 +61,8 @@ app.get("/movies/:id",async (req,res,next) => {
     }
 })
 
+
+// Screenings
 app.get("/screenings",async (req,res,next) => {
     try {
         const result = await fetch(APIpath+"/screenings",{headers:{'X-Requested-By': 'backend-server'}})
