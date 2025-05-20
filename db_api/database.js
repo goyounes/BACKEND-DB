@@ -111,6 +111,24 @@ export async function getScreenings(cinema_id,movie_id){
     await dbTableLogger("screenings",result_rows)
     return result_rows
 }
+export async function getAllScreenings(cinema_id,movie_id){    
+    const [result_rows] = await pool.query(`
+        SELECT screenings.*, cinemas.cinema_name, movies.title
+        FROM screenings
+        JOIN cinemas 
+            ON screenings.cinema_id = cinemas.cinema_id
+        JOIN movies
+            ON screenings.movie_id = movies.movie_id
+        WHERE (
+            ? IS NULL OR screenings.cinema_id = ?
+        ) AND (
+            ? IS NULL OR screenings.movie_id = ?
+        )
+        ORDER BY screenings.start_date, screenings.start_time;`,
+    [cinema_id, cinema_id, movie_id, movie_id])
+    await dbTableLogger("screenings",result_rows)
+    return result_rows
+}
 
 export const getQualities = async () => getTable("qualities");
 export const getScreeningQualities = async () => getTable("screening_qualities");

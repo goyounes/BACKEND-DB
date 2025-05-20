@@ -103,8 +103,6 @@ app.get("/api/v1/screenings",async (req,res,next) => {
     const cinema_id = req.query.cinema_id || null;
     const movie_id = req.query.movie_id || null;
     console.log("Fetching Screenings from the DB...")
-    cinema_id && console.log(cinema_id)
-    movie_id && console.log(movie_id)
     try {
         const screenings = await dbFunc.getScreenings(cinema_id,movie_id)
         res.status(200).json(screenings)
@@ -112,26 +110,32 @@ app.get("/api/v1/screenings",async (req,res,next) => {
         next(error)  // Passes the error to the global error-handling middleware
     }
 })
-app.post("/api/v1/movies",async (req,res,next) => {
-    const movie = req.body
-    if (!movie.title)  throwError("Title is required and must be a string, create operation failed",400)
+app.post("/api/v1/screenings",async (req,res,next) => {
+    const screening = req.body
+    if (!screening.movie_id || !screening.cinema_id || !screening.room_id || !screening.start_date || !screening.start_time || !screening.end_time) throwError("Missing screening data, creation operation failed",400)
     // MORE validation code has to be inserted here eventually, erros have to be returned at the same time.
     // Post should be able to update all the fields, if an NotNULL field is missing, it shouldnt work.
 
-    console.log(`Adding Movie with title: ${movie.title} to the DB...`)
+    console.log(`Adding Screening for the movie with id ${screening.id} to the DB...`)
     try {
-        const MAX_SIZE_BYTES = 10 * 1024 * 1024; // 10MB in bytes 10 000 000
-        [movie.poster_img,movie.poster_img_type] = getImgDataAndImgStype(movie.poster_img,movie.poster_img_type,MAX_SIZE_BYTES)
+        const db_inserted_screening = await dbFunc.addScreening(screening);
+        if (db_inserted_screening === null) return res.sendStatus(204);
+        res.status(201).json(db_inserted_screening);
+    } catch (err) {
+        next(err);
+    }
+})
 
-    // console.log(`Adding Movie with title: ${movie.title} to the DB...`);
-    const db_inserted_movie = await dbFunc.addMovie(movie);
-    if (db_inserted_movie === null) return res.sendStatus(204);
-    db_inserted_movie.poster_img = decodeBinaryToBase64(db_inserted_movie.poster_img)
-    res.status(201).json(db_inserted_movie);
-
-  } catch (err) {
-    next(err);
-  }
+app.get("/api/v1/screenings/all",async (req,res,next) => {
+    const cinema_id = req.query.cinema_id || null;
+    const movie_id = req.query.movie_id || null;
+    console.log("Fetching Screenings from the DB...")
+    try {
+        const screenings = await dbFunc.getAllScreenings(cinema_id,movie_id)
+        res.status(200).json(screenings)
+    } catch (error) {
+        next(error)  // Passes the error to the global error-handling middleware
+    }
 })
 
 app.get("/api/v1/screenings/:id",async (req,res,next) => {

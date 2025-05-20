@@ -75,6 +75,16 @@ app.get('/screenings/create', (req, res) => {
     res.sendFile("/static/create_screening.html",{root:"."})
 });
 
+app.get("/screenings/all",async (req,res,next) => {
+    try {
+        const result = await fetch(APIpath+"/screenings/all",{headers:{'X-Requested-By': 'backend-server'}})
+        const screenings = await result.json()
+        res.status(200).render("pages/screenings.ejs",{screenings})
+    } catch (error) {
+        next(error)
+    }
+})
+
 app.get("/screenings/:id",async (req,res,next) => {
     const id = req.params.id
     console.log("accesing API for screening with screening_id =",id)
