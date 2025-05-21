@@ -124,6 +124,7 @@ form{
   line-height: 1.5;       
 }
 
+
     th, td {
       padding: 12px;
       border: 1px solid #ccc;
@@ -257,3 +258,34 @@ a.button-link:hover , a.button-link-main:hover{
   transform: translateY(0);
   box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.2);
 }
+
+
+/* checkout page */
+
+     input{                   /*these are for the checkout page */
+      width: 100%;
+      padding: 0.5rem;
+      margin-bottom: 1rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+        .checkout-container {
+      max-width: 600px;
+      margin: 2rem auto;
+      padding: 2rem;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      background-color: #f9f9f9;
+    }
+    .checkout-summary {
+      margin-bottom: 2rem;
+    }
+    .checkout-summary p {
+      margin: 0.5rem 0;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+    }

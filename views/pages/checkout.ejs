@@ -9,56 +9,7 @@
     h1 {
       text-align: center;
     }
-
-    .checkout-container {
-      max-width: 600px;
-      margin: 2rem auto;
-      padding: 2rem;
-      border: 2px solid #ccc;
-      border-radius: 10px;
-      background-color: #f9f9f9;
-    }
-
-    .checkout-summary {
-      margin-bottom: 2rem;
-    }
-
-    .checkout-summary p {
-      margin: 0.5rem 0;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: bold;
-    }
-
-    input[type="text"],
-    input[type="email"],
-    input[type="number"] {
-      width: 100%;
-      padding: 0.5rem;
-      margin-bottom: 1rem;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
-
-    button {
-      display: block;
-      width: 100%;
-      padding: 0.75rem;
-      font-size: 1rem;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #45a049;
-    }
-  </style>
+ </style>
 </head>
 
 <body>
@@ -88,13 +39,13 @@
 
       <div class="checkout-summary">
         <h2>Reservation Summary</h2>
-        <p><strong>Movie:</strong> <%= movieTitle %></p>
-        <p><strong>Cinema:</strong> <%= cinemaName %></p>
-        <p><strong>Rooms:</strong> <%= cinemaName %></p>
-        <p><strong>Adresse:</strong> <%= cinemaName %></p>
-        <p><strong>Date & Time:</strong> <%= screeningTime %></p>
-        <p><strong>Tickets:</strong> <%= numberOfTickets %></p>
-        <p><strong>Total Price:</strong> €<%= totalPrice %></p>
+        <p><strong>Movie:</strong> <%= checkoutInfo.title %>
+        <p><strong>Cinema:</strong> <%= checkoutInfo.cinema_name %></p>
+        <p><strong>Room:</strong> <%= checkoutInfo.room_name %></p>
+        <p><strong>Adresse:</strong> <%= checkoutInfo.cinema_adresse %></p>
+        <p><strong>Date & Time:</strong> <%=new Date(checkoutInfo.start_date).toLocaleDateString()%> <%= checkoutInfo.start_time %></p>
+        <p><strong>Tickets:</strong> <%= "19€" %></p>
+        <p><strong>Total Price:</strong> €<%= "19€" %></p>
       </div>
 
       <form action="/checkout/complete" method="POST">
@@ -106,7 +57,7 @@
         <input type="text" name="user_password" id="password" placeholder="Plese provide your account password" required>
 
         <label for="cardNumber">Card Number</label>
-        <input type="text" name="cardNumber" id="cardNumber" maxlength="16" required>
+        <input type="text" name="cardNumber" id="cardNumber" maxlength="16" placeholder="Please enter your card details"required>
 
         <label for="expiry">Expiry Date</label>
         <input type="text" name="expiry" id="expiry" placeholder="MM/YY" required>
@@ -114,7 +65,10 @@
         <label for="cvv">CVV</label>
         <input type="number" name="cvv" id="cvv" maxlength="3" required>
 
-        <button type="submit">Confirm & Pay</button>
+
+        <div class="button-wrapper">
+          <button type="submit" class="btn-primary">Confirm</button>
+        </div>
       </form>
     </div>
   </main>

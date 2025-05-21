@@ -124,6 +124,24 @@ form{
   line-height: 1.5;       
 }
 
+ input, select{
+  box-sizing: border-box;
+  padding: 0.5rem 0.75rem;
+  height: 2.5rem;         
+  font-size: 1rem;        
+  line-height: 1.5;      
+ }
+
+    input{
+      width: 100%;
+      padding: 0.5rem;
+      margin-bottom: 1rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+
+
     th, td {
       padding: 12px;
       border: 1px solid #ccc;

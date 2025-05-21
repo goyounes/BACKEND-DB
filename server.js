@@ -161,12 +161,14 @@ app.get("/messages",async (req,res,next) => {
 
 
 app.get('/checkout', async (req,res,next) => {
-    const screening_id = req.query.screening_id ;
+    const screening_id = req.query.screening_id || null;
     try {
         const url = new URL(APIpath+"/checkout");
         if (screening_id) url.searchParams.append("screening_id", screening_id);
-        const result = await fetch(APIpath+"/checkout",{headers:{'X-Requested-By': 'backend-server'}})
+
+        const result = await fetch(url,{headers:{'X-Requested-By': 'backend-server'}})
         const checkoutInfo = await result.json()
+        console.log("checkoutInfo",checkoutInfo)
         res.render('pages/checkout.ejs', { checkoutInfo });
             // movieTitle: 'The Grand Adventure',
             // cinemaName: 'Cinephoria Paris',
