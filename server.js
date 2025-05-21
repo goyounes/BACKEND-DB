@@ -154,6 +154,17 @@ app.get("/messages",async (req,res,next) => {
 })
 
 
+app.get('/checkout', (req, res) => {
+  // Dummy data for demo — replace with real reservation/cart data
+  res.render('pages/checkout.ejs', {
+    movieTitle: 'The Grand Adventure',
+    cinemaName: 'Cinephoria Paris',
+    screeningTime: '2025-06-15 19:30',
+    numberOfTickets: 2,
+    totalPrice: (2 * 9.5).toFixed(2)
+  });
+});
+
 app.use((err, req, res, next) => {
   console.log("Server: Middleware logging error stack ...");
   console.error(err.stack); // Log the stack trace

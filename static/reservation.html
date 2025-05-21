@@ -328,7 +328,7 @@ select {
               if (screening) {
                 const a = document.createElement("a");
                 a.className = "screening-time";
-                a.href = `/checkout.html?screening_id=${screening.screening_id}`;
+                a.href = `/checkout?screening_id=${screening.screening_id}`;
                 // Create spans for start and end time
                 const startSpan = document.createElement("span");
                 startSpan.className = "start-time";
