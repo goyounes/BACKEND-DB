@@ -1,3 +1,21 @@
+        SELECT screenings.screening_id, screenings.movie_id, movies.title,screenings.start_date, screenings.start_time, 
+        screenings.end_time, screenings.room_id, rooms.room_name, screenings.cinema_id,cinemas.cinema_name, cinemas.cinema_adresse
+        FROM screenings
+        JOIN movies 
+            ON screenings.movie_id = movies.movie_id
+        Join cinemas
+            ON screenings.cinema_id = cinemas.cinema_id
+        JOIN rooms
+            ON screenings.room_id = rooms.room_id
+        WHERE screening_id = 2;
+
+
+
+
+
+
+
+
 SELECT *,screenings.screening_id, movies.title FROM screenings
 JOIN movies ON screenings.movie_id = movies.movie_id;
 

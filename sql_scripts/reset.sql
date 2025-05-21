@@ -14,6 +14,8 @@ DROP TABLE roles;
 DROP TABLE seats;
 DROP TABLE rooms;
 DROP TABLE cinemas;
+
+DROP TABLE messages;
 SHOW TABLES;
 
 

@@ -68,8 +68,14 @@ app.get("/movies/:id",async (req,res,next) => {
 
 // Screenings
 app.get("/screenings",async (req,res,next) => {
+    const cinema_id = req.query.cinema_id || null;
+    const movie_id = req.query.movie_id || null;
     try {
-        const result = await fetch(APIpath+"/screenings",{headers:{'X-Requested-By': 'backend-server'}})
+        const url = new URL(APIpath+"/screenings");
+        if (cinema_id) url.searchParams.append("cinema_id", cinema_id);
+        if (movie_id) url.searchParams.append("movie_id", movie_id);
+
+        const result = await fetch(url,{headers:{'X-Requested-By': 'backend-server'}})
         const screenings = await result.json()
         res.status(200).render("pages/screenings.ejs",{screenings})
     } catch (error) {
@@ -154,15 +160,26 @@ app.get("/messages",async (req,res,next) => {
 })
 
 
-app.get('/checkout', (req, res) => {
+app.get('/checkout', async (req,res,next) => {
+    const screening_id = req.query.screening_id ;
+    try {
+        const url = new URL(APIpath+"/checkout");
+        if (screening_id) url.searchParams.append("screening_id", screening_id);
+        const result = await fetch(APIpath+"/checkout",{headers:{'X-Requested-By': 'backend-server'}})
+        const checkoutInfo = await result.json()
+        res.render('pages/checkout.ejs', { checkoutInfo });
+            // movieTitle: 'The Grand Adventure',
+            // cinemaName: 'Cinephoria Paris',
+            // screeningTime: '2025-06-15 19:30',
+            // numberOfTickets: 2,
+            // totalPrice: (2 * 9.5).toFixed(2)
+    } catch (error) {
+        next(error)
+    }
+    // const cinema_id = req.query.cinema_id || null;
+    // const movie_id = req.query.movie_id || null;
   // Dummy data for demo — replace with real reservation/cart data
-  res.render('pages/checkout.ejs', {
-    movieTitle: 'The Grand Adventure',
-    cinemaName: 'Cinephoria Paris',
-    screeningTime: '2025-06-15 19:30',
-    numberOfTickets: 2,
-    totalPrice: (2 * 9.5).toFixed(2)
-  });
+
 });
 
 app.use((err, req, res, next) => {

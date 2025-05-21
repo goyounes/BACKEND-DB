@@ -73,7 +73,7 @@ export const getCinemas = async () => getTable("cinemas");
 export const getRooms = async () => getTable("rooms");
 export const getSeats = async () => getTable("seats");
 //Screenings section
-export async function getScreenings(cinema_id,movie_id){    
+export async function getScreenings(cinema_id,movie_id){    //How to handle filters query
     const [result_rows] = await pool.query(`
         SELECT screenings.*, cinemas.cinema_name, movies.title
         FROM screenings
@@ -121,6 +121,23 @@ export const getUsers = async () => getTable("users");
 export const getTickets = async () => getTable("tickets");
 export const getMessages = async () => getTable("messages");
 
+export async function getCheckoutInfo(screening_id){
+    const [result_rows] = await pool.query(`
+        SELECT screenings.screening_id, screenings.movie_id, movies.title,screenings.start_date, screenings.start_time, 
+        screenings.end_time, screenings.cinema_id, cinemas.cinema_name, screenings.room_id, rooms.room_name, cinemas.cinema_adresse
+        FROM screenings
+        JOIN movies 
+            ON screenings.movie_id = movies.movie_id
+        Join cinemas
+            ON screenings.cinema_id = cinemas.cinema_id
+        JOIN rooms
+            ON screenings.room_id = rooms.room_id
+        WHERE screening_id = ?;
+    `,[screening_id])
+    console.table(result_rows)
+    if (result_rows.length === 0) throwError("Screening not found",404)
+    return result_rows[0]
+}
 
 
 

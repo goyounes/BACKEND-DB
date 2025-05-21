@@ -63,7 +63,24 @@
 
 <body>
 
-  <%- include('../partials/navbar') %>
+  <header>
+    <div class="header-left">
+      <img src="/cinephoria-sm.png" alt="Cinephoria logo">
+    </div>
+    <div class="header-middle">
+      <a href="/home" class="header-icon-link">🏠<span>Admin</span></a>
+      <a href="/messages" class="header-icon-link">✉️<span>Messages</span></a>
+      <a href="/movies/recent" class="header-icon-link">🎬<span>Recent</span></a>
+      <a href="/movies" class="header-icon-link">📽️<span>Movies</span></a>
+      <a href="/screenings" class="header-icon-link">🎟️<span>Screenings</span></a>
+      <a href="/cinemas" class="header-icon-link">🏛️<span>Cinemas</span></a>
+      <a href="/reservation" class="header-icon-link">📅<span>Reservation</span></a>
+    </div>
+    <div class="header-right">
+      <a href="/users" class="header-icon-link">👤<span>Users</span></a>
+      <a href="/contact" class="header-icon-link">📞<span>Contact</span></a>
+    </div>
+  </header>
 
   <main>
     <div class="checkout-container">
@@ -73,6 +90,7 @@
         <h2>Reservation Summary</h2>
         <p><strong>Movie:</strong> <%= movieTitle %></p>
         <p><strong>Cinema:</strong> <%= cinemaName %></p>
+        <p><strong>Rooms:</strong> <%= cinemaName %></p>
         <p><strong>Adresse:</strong> <%= cinemaName %></p>
         <p><strong>Date & Time:</strong> <%= screeningTime %></p>
         <p><strong>Tickets:</strong> <%= numberOfTickets %></p>

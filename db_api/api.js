@@ -312,8 +312,6 @@ app.get("/api/v1/messages",async (req,res,next) => {
         next(error)  // Passes the error to the global error-handling middleware
     }
 })
-
-
 app.post("/api/v1/messages",async (req,res,next) => {
     const message = req.body
     if (!message.message_subject)  throwError("Subject is required, create operation failed",400)
@@ -330,7 +328,16 @@ app.post("/api/v1/messages",async (req,res,next) => {
 })
 
 
-
+app.get("/api/v1/checkout",async (req,res,next) => {
+    const screening_id = req.query.screening_id || null;
+    console.log("Fetching Checkout information from the DB...")
+    try {
+        const data = await dbFunc.getCheckoutInfo(screening_id)
+        res.status(200).json(data)
+    } catch (error) {
+        next(error)  // Passes the error to the global error-handling middleware
+    }
+})
 
 
 

@@ -96,11 +96,11 @@ SELECT * FROM movie_genres;
 CREATE TABLE cinemas (
     cinema_id INT PRIMARY KEY AUTO_INCREMENT,
     cinema_name VARCHAR(255) NOT NULL,
-    cinema_location VARCHAR(255) NOT NULL,
+    cinema_adresse VARCHAR(255) NOT NULL,
     isDeleted BOOl DEFAULT FALSE
 );
 
-INSERT INTO cinemas(cinema_id,cinema_name,cinema_location)
+INSERT INTO cinemas(cinema_id,cinema_name,cinema_adresse)
 VALUES 
 (1,"Nantes","12 Rue de la Loire, 44000 Nantes"),
 (2,"Bordeaux","33 Rue du Chai des Farines, 33800 Bordeaux"),
@@ -122,18 +122,18 @@ CREATE TABLE rooms (
     FOREIGN KEY (cinema_id) REFERENCES cinemas(cinema_id)
 );
 
-INSERT INTO rooms(room_id,room_capacity,cinema_id)
+INSERT INTO rooms(room_id,room_name,room_capacity,cinema_id)
 VALUES 
-(1,20,2),
-(2,20,3),
-(3,30,5),
-(4,20,6),
-(5,40,1),
-(6,20,7),
-(7,30,5),
-(8,20,6),
-(9,20,7),
-(10,30,7);
+(1,"Salle 1",20,2),
+(2,"Salle 2",20,3),
+(3,"Salle 3",30,5),
+(4,"Salle 4",20,6),
+(5,"Salle 5",40,1),
+(6,"Salle 6",20,7),
+(7,"Salle 7",30,5),
+(8,"Salle 8",20,6),
+(9,"Salle 9",20,7),
+(10,"Salle 10",30,7);
 
 SELECT * FROM rooms;
 -- ---------------------------------------------------------------------------------------------------------------------------

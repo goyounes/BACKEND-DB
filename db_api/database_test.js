@@ -33,7 +33,7 @@ import * as db from "./database.js";
 await db.getRecentMovies()
 // await db.getRoomsInCinema(1)
 // await db.getAllRoomsInCinemas(1)
-
+await db.getCheckoutInfo(5)
 
 
 process.exit(0)
