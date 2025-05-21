@@ -3,24 +3,60 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Messages</title>
+  <title>Checkout</title>
   <link rel="stylesheet" href="/styles.css">
   <style>
     h1 {
       text-align: center;
     }
-    .message-card {
-      border: 2px solid black;
+
+    .checkout-container {
+      max-width: 600px;
+      margin: 2rem auto;
+      padding: 2rem;
+      border: 2px solid #ccc;
       border-radius: 10px;
-      padding: 1rem;
+      background-color: #f9f9f9;
+    }
+
+    .checkout-summary {
+      margin-bottom: 2rem;
+    }
+
+    .checkout-summary p {
+      margin: 0.5rem 0;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="number"] {
+      width: 100%;
+      padding: 0.5rem;
       margin-bottom: 1rem;
-      background: #f9f9f9;
+      border-radius: 5px;
+      border: 1px solid #ccc;
     }
-    .message-card strong {
-      margin-bottom: 0.3rem;
+
+    button {
+      display: block;
+      width: 100%;
+      padding: 0.75rem;
+      font-size: 1rem;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
     }
-    .unread {
-      background-color: #deecff;
+
+    button:hover {
+      background-color: #45a049;
     }
   </style>
 </head>
@@ -47,32 +83,36 @@
   </header>
 
   <main>
-    <div class="container-half-center">
-      <h1>Inbox</h1>
-      <div id="messageList">
-        <% if (messages.length === 0) { %>
-          <p>No messages found.</p>
-        <% } else { %>
-          <% messages.forEach(function(msg) { %>
-            <div class="message-card <%= msg.is_read ? '' : 'unread' %>">
+    <div class="checkout-container">
+      <h1>Checkout</h1>
 
-              <div style="margin-bottom: 0.5rem;">
-                <strong>From:</strong> <span> <%= msg.message_sender_name %></span>
-                &lt;<a href="mailto:<%= msg.message_sender_email %>"><%= msg.message_sender_email %></a>&gt;
-              </div>
-              <div style="margin-bottom: 0.5rem;">
-                <strong>Subject:</strong> <%= msg.message_subject %>
-              </div>
-              <div>
-                <fieldset>  <legend>Message</legend>
-                  <p style="margin-top: 0.3rem; line-height: 1.4;"> <%= msg.message_text %></p>
-                </fieldset>
-              </div>
-
-            </div>
-          <% }) %>
-        <% } %>
+      <div class="checkout-summary">
+        <h2>Reservation Summary</h2>
+        <p><strong>Movie:</strong> <%= movieTitle %></p>
+        <p><strong>Cinema:</strong> <%= cinemaName %></p>
+        <p><strong>Date & Time:</strong> <%= screeningTime %></p>
+        <p><strong>Tickets:</strong> <%= numberOfTickets %></p>
+        <p><strong>Total Price:</strong> €<%= totalPrice %></p>
       </div>
+
+      <form action="/checkout/complete" method="POST">
+        <label for="fullName">Full Name</label>
+        <input type="text" name="fullName" id="fullName" required>
+
+        <label for="email">Email Address</label>
+        <input type="email" name="email" id="email" required>
+
+        <label for="cardNumber">Card Number</label>
+        <input type="text" name="cardNumber" id="cardNumber" maxlength="16" required>
+
+        <label for="expiry">Expiry Date</label>
+        <input type="text" name="expiry" id="expiry" placeholder="MM/YY" required>
+
+        <label for="cvv">CVV</label>
+        <input type="number" name="cvv" id="cvv" maxlength="3" required>
+
+        <button type="submit">Confirm & Pay</button>
+      </form>
     </div>
   </main>
 
@@ -89,8 +129,6 @@
     </div>
     <h6>&copy; 2025 Cinephoria. All rights reserved.</h6>
   </footer>
-
-
 
 </body>
 </html>

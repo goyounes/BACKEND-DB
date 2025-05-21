@@ -648,6 +648,12 @@ CREATE TABLE messages (
     is_handled BOOL DEFAULT FALSE
 );
 
+INSERT INTO messages(message_subject, message_text, message_sender_name, message_sender_email,is_read)
+VALUES 
+("Wierd TOpic", "Hello bla bla bla bla LKJ dklfj kjfklsdjf lkj ","RandomUser","User1@gmail.com",FALSE),
+("more things", "Hklj kjlkj qfkj sdfkf kkljkslqjf moizj mf  kj ","BestUser","User1@compte.com",TRUE),
+("random things", "Not this time i tried to make filler text etc te ","ULTIMATE USER","User3@gmail.com",FALSE);
+
 SELECT * FROM messages;
 
 
