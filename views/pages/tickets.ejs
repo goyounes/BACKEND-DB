@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tickets List</title>
+  <link rel="stylesheet" href="/styles.css">
+
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 12px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+    th {
+      background-color: #f4f4f4;
+    }
+  </style>
+</head>
+<body>
+  <%- include('../partials/navbar') %>
+
+  <main>
+    <div class="container-3of4-center">
+      <div class="screenings-header">
+        <h1>Tickets List 🎟️</h1>
+        <a class="button-link" href='/tickets/create'>Add Ticket</a>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Ticket ID</th>
+            <th>Screening ID</th>
+            <th>User ID</th>
+            <th>Seat ID</th>
+            <th>QR Code</th>
+          </tr>
+        </thead>
+        <tbody id="tickets-body">
+          <% tickets.forEach(ticket => { %>
+            <tr>
+              <td><a href="/tickets/<%= ticket.ticket_id %>"><%= ticket.ticket_id %></a></td>
+              <td><%= ticket.screening_id %></td>
+              <td><%= ticket.user_id %></td>
+              <td><%= ticket.seat_id %></td>
+              <td>
+                <% if (ticket.QR_code) { %>
+                  <img src="data:image/png;base64,<%= ticket.QR_code.toString('base64') %>" alt="QR Code" width="50" />
+                <% } else { %>
+                  <em>No QR</em>
+                <% } %>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <%- include('../partials/footer') %>
+</body>
+</html>

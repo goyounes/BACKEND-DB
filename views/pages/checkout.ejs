@@ -14,41 +14,36 @@
 
 <body>
 
-  <header>
-    <div class="header-left">
-      <img src="/cinephoria-sm.png" alt="Cinephoria logo">
-    </div>
-    <div class="header-middle">
-      <a href="/home" class="header-icon-link">🏠<span>Admin</span></a>
-      <a href="/messages" class="header-icon-link">✉️<span>Messages</span></a>
-      <a href="/movies/recent" class="header-icon-link">🎬<span>Recent</span></a>
-      <a href="/movies" class="header-icon-link">📽️<span>Movies</span></a>
-      <a href="/screenings" class="header-icon-link">🎟️<span>Screenings</span></a>
-      <a href="/cinemas" class="header-icon-link">🏛️<span>Cinemas</span></a>
-      <a href="/reservation" class="header-icon-link">📅<span>Reservation</span></a>
-    </div>
-    <div class="header-right">
-      <a href="/users" class="header-icon-link">👤<span>Users</span></a>
-      <a href="/contact" class="header-icon-link">📞<span>Contact</span></a>
-    </div>
-  </header>
+  <%- include('../partials/navbar') %>
 
   <main>
     <div class="checkout-container">
       <h1>Checkout</h1>
 
-      <div class="checkout-summary">
-        <h2>Reservation Summary</h2>
-        <p><strong>Movie:</strong> <%= checkoutInfo.title %>
-        <p><strong>Cinema:</strong> <%= checkoutInfo.cinema_name %></p>
-        <p><strong>Room:</strong> <%= checkoutInfo.room_name %></p>
-        <p><strong>Adresse:</strong> <%= checkoutInfo.cinema_adresse %></p>
-        <p><strong>Date & Time:</strong> <%=new Date(checkoutInfo.start_date).toLocaleDateString()%> <%= checkoutInfo.start_time %></p>
-        <p><strong>Tickets:</strong> <%= "19€" %></p>
-        <p><strong>Total Price:</strong> €<%= "19€" %></p>
-      </div>
+   <div class="checkout-summary">
+      <h2>Reservation Summary</h2>
+      <p><strong>Movie:</strong> <%= checkoutInfo.title %></p>
+      <p><strong>Cinema:</strong> <%= checkoutInfo.cinema_name %></p>
+      <p><strong>Room:</strong> <%= checkoutInfo.room_name %></p>
+      <p><strong>Adresse:</strong> <%= checkoutInfo.cinema_adresse %></p>
+      <p><strong>Date & Time:</strong> 
+        <%= new Date(checkoutInfo.start_date).toLocaleDateString() %> 
+        <%= checkoutInfo.start_time %>
+      </p>
+
+      <label for="ticketCount"><strong>Tickets:</strong></label>
+      <select id="ticketCount" name="ticketCount" required>
+        <% for(let i = 1; i <= 20; i++) { %>
+          <option value="<%= i %>"><%= i %></option>
+        <% } %>
+      </select>
+
+      <p><strong>Total Price:</strong> €<span id="totalPrice">19</span></p>
+    </div>
 
       <form action="/checkout/complete" method="POST">
+        <input type="hidden" name="ticketCount" id="ticketCountInput" value="1"> <!-- Hidden field to send the screening ID -->
+        <input type="hidden" name="screening_id" value="<%= checkoutInfo.screening_id %>"> <!-- Hidden field to send the screening ID -->
 
         <label for="email">Email Address</label>
         <input type="email" name="user_email" id="email" placeholder="Plese provide your account email" required>
@@ -86,6 +81,20 @@
     </div>
     <h6>&copy; 2025 Cinephoria. All rights reserved.</h6>
   </footer>
+
+  <script>
+    const ticketPrice = 12; // € per ticket // hard coded for now
+    const ticketCountSelect = document.getElementById("ticketCount");
+    const totalPriceSpan = document.getElementById("totalPrice");
+    const ticketCountInput = document.getElementById("ticketCountInput");
+
+    ticketCountSelect.addEventListener("change", () => {
+      const count = parseInt(ticketCountSelect.value, 10);
+      const total = count * ticketPrice;
+      totalPriceSpan.textContent = total;
+      ticketCountInput.value = count; // Update hidden field for server
+    });
+  </script>
 
 </body>
 </html>

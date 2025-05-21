@@ -110,6 +110,8 @@ app.get("/screenings/:id",async (req,res,next) => {
     }
 })
 
+
+
 app.get("/users",async (req,res,next) => {
     try {
         const result = await fetch(APIpath+"/users",{headers:{'X-Requested-By': 'backend-server'}})
@@ -160,6 +162,17 @@ app.get("/messages",async (req,res,next) => {
 })
 
 
+app.get("/tickets",async (req,res,next) => {
+    try {
+        const result = await fetch(APIpath+"/tickets",{headers:{'X-Requested-By': 'backend-server'}})
+        const tickets = await result.json()
+        res.status(200).render("pages/tickets.ejs",{tickets})
+    } catch (error) {
+        next(error)
+    }
+})
+
+
 app.get('/checkout', async (req,res,next) => {
     const screening_id = req.query.screening_id || null;
     try {
@@ -178,9 +191,6 @@ app.get('/checkout', async (req,res,next) => {
     } catch (error) {
         next(error)
     }
-    // const cinema_id = req.query.cinema_id || null;
-    // const movie_id = req.query.movie_id || null;
-  // Dummy data for demo — replace with real reservation/cart data
 
 });
 

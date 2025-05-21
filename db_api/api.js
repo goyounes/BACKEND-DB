@@ -339,6 +339,16 @@ app.get("/api/v1/checkout",async (req,res,next) => {
     }
 })
 
+app.get("/api/v1/tickets",async (req,res,next) => {
+    console.log("Fetching Tickets information from the DB...")
+    try {
+        const tickets = await dbFunc.getTickets()
+        res.status(200).json(tickets)
+    } catch (error) {
+        next(error)  // Passes the error to the global error-handling middleware
+    }
+})
+
 
 
 
