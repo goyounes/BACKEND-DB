@@ -23,6 +23,10 @@ app.get('/reservation', (req, res) => {
     res.sendFile("/static/reservation.html",{root:"."})
 });
 
+app.get('/contact', (req, res) => {
+    res.sendFile("/static/contact.html",{root:"."})
+});
+
 app.get("/movies",async (req,res,next) => {
     try {
         const result = await fetch(APIpath+"/movies",{headers:{'X-Requested-By': 'backend-server'}})
@@ -137,6 +141,18 @@ app.get("/cinemas",async (req,res,next) => {
         next(error)
     }
 })
+
+
+app.get("/messages",async (req,res,next) => {
+    try {
+        const result = await fetch(APIpath+"/messages",{headers:{'X-Requested-By': 'backend-server'}})
+        const messages = await result.json()
+        res.status(200).render("pages/messages.ejs",{messages})
+    } catch (error) {
+        next(error)
+    }
+})
+
 
 app.use((err, req, res, next) => {
   console.log("Server: Middleware logging error stack ...");

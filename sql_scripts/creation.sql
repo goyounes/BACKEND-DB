@@ -635,4 +635,25 @@ VALUES
 (8,15,235);
 
 SELECT * FROM tickets;
+-- -------------------------------------------------------------------------------------------------------------
+
+CREATE TABLE messages (
+    message_id INT PRIMARY KEY AUTO_INCREMENT,
+    message_subject VARCHAR(255) NOT NULL,
+    message_text VARCHAR(255) NOT NULL,
+	message_sender_name VARCHAR(255) NOT NULL,
+	message_sender_email VARCHAR(255) NOT NULL,
+    is_read BOOL DEFAULT FALSE,
+    is_deleted BOOL DEFAULT FALSE,
+    is_handled BOOL DEFAULT FALSE
+);
+
+SELECT * FROM messages;
+
+
+
+
+
+
+
 

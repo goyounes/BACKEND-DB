@@ -300,6 +300,41 @@ app.delete("/api/v1/users/:id",async (req,res,next) => {
 
 
 
+
+
+
+app.get("/api/v1/messages",async (req,res,next) => {
+    console.log("Fetching Messages from the DB...")
+    try {
+        const messages = await dbFunc.getMessages()
+        res.status(200).json(messages)
+    } catch (error) {
+        next(error)  // Passes the error to the global error-handling middleware
+    }
+})
+
+
+app.post("/api/v1/messages",async (req,res,next) => {
+    const message = req.body
+    if (!message.message_subject)  throwError("Subject is required, create operation failed",400)
+    // MORE validation code has to be inserted here eventually, erros have to be returned at the same time.
+    // Post should be able to update all the fields, if an NotNULL field is missing, it shouldnt work.
+    console.log(`Adding message with subject: ${message.message_subject} to the DB...`)
+    try {
+        const db_inserted_message = await dbFunc.addMessage(message);
+        if (db_inserted_message === null) return res.sendStatus(204);
+        res.status(201).json(db_inserted_message);
+    } catch (err) {
+        next(err);
+    }
+})
+
+
+
+
+
+
+
 app.use((err, req, res, next) => {
   console.log("API: Middleware logging error stack ...")
   console.error(err.stack);  // Log the stack trace for debugging

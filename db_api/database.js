@@ -54,7 +54,7 @@ export async function getNameForIdColumn(table_name){
 }
 
 // Get Resources
-const allowedTables = ["movies","genres","movie_genres", "cinemas","rooms","seats", "screenings","qualities","screening_qualities", "roles","users","tickets"]
+const allowedTables = ["movies","genres","movie_genres", "cinemas","rooms","seats", "screenings","qualities","screening_qualities", "roles","users","tickets","messages"]
 
 export async function getTable(table_name){    
     if (!allowedTables.includes(table_name)) throwError("Unauthorized table access.",400);
@@ -119,6 +119,7 @@ export const getScreeningQualities = async () => getTable("screening_qualities")
 export const getRoles = async () => getTable("roles");
 export const getUsers = async () => getTable("users");
 export const getTickets = async () => getTable("tickets");
+export const getMessages = async () => getTable("messages");
 
 
 
@@ -140,6 +141,7 @@ export const getScreening = async(id) => getTableRow("screenings",id)
 export const getCinema = async(id) => getTableRow("cinemas",id)
 export const getUser = async(id) => getTableRow("users",id)
 export const getTicket = async(id) => getTableRow("tickets",id)
+export const getMessage = async(id) => getTableRow("messages",id)
 
 
 // Add Resource
@@ -196,7 +198,15 @@ export async function addUser(user){// this is a super function only admins shou
         }
 }
 
-
+export async function addMessage(message){
+    const   {message_subject, message_text, message_sender_name, message_sender_email} = message
+    const [result] = await pool.query(`
+    INSERT INTO messages(message_subject, message_text, message_sender_name, message_sender_email)
+    VALUES (?,?,?,?);
+    `,[message_subject, message_text, message_sender_name, message_sender_email])
+    if (!result.insertId) return {}//console.log("Alert: no insertId was provided")   #1 How to handle this insert id missing case
+    return await getTableRow('messages',result.insertId)
+}
 
 
 

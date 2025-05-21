@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Movies List</title>
+  <link rel="stylesheet" href="/styles.css">
+
+  <style>
+
+    th, td {
+      padding: 12px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+    th {
+      background-color: #f4f4f4;
+    }
+    .highlight {
+      background-color: #e6ffe6 !important;
+    }
+    h1 {
+      margin: 0; /* Remove margin for h1 */
+      text-align: left;
+    }
+</style>
+</head>
+<body>
+  <%- include('../partials/navbar') %>
+  <main>
+    <div class="container-3of4-center">
+      <div class="messages-header">
+        <h1>Messages List</h1>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Message id</th>
+            <th>Sender name</th>
+            <th>Sender email</th>
+            <th>Subject</th>
+            <th>Message</th>
+            <th>Read ?</th>
+            <th>Deleted ?</th>
+            <th>Handeled ?</th>
+          </tr>
+        </thead>
+        <tbody id="messages-body">
+          <% messages.forEach( message => {%>
+            <tr>
+              <td> <%= message.message_id%></td>
+              <td> <%= message.message_sender_name%></td>
+              <td> <%= message.message_sender_email%></td>
+              <td> <%= message.message_subject%></td>
+              <td> <%= message.message_text%></td>
+              <td> <%= message.is_read?"Yes":"No"%></td>
+              <td> <%= message.is_deleted?"Yes":"No"%></td>
+              <td> <%= message.is_handeled?"Yes":"No"%></td>
+            </tr>
+          <%})%>
+        </tbody>
+      </table>
+    </div>
+  </main>
+  <%- include('../partials/footer') %>
+</body>
+</html>
