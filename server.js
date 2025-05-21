@@ -171,6 +171,31 @@ app.get("/tickets",async (req,res,next) => {
         next(error)
     }
 })
+app.get("/tickets/:id",async (req,res,next) => {
+    const id = req.params.id
+    console.log("accesing API for ticket with ticket_id =",id)
+    try {
+        const result = await fetch(APIpath+ "/tickets/" + id,{headers:{'X-Requested-By': 'backend-server'}})
+        const tickets = await result.json()
+        res.status(200).render("pages/tickets.ejs",{tickets})
+    } catch (error) {
+        next(error)
+    }
+})
+
+app.get("/users/:id",async (req,res,next) => {
+    const id = req.params.id
+    console.log("accesing API for movie with movie_id =",id)
+    try {
+        const result = await fetch(APIpath + "/users/" + id ,{headers:{'X-Requested-By': 'backend-server'}})
+        const user = await result.json() // either a reosurce obj or err obj
+        if ('error' in user) throwError (user.error.message,user.error.status)
+        res.status(200).render("pages/one_user.ejs",{user})
+    } catch (error) {
+        next(error) // network request or re-thrown error
+    }
+})
+
 
 
 app.get('/checkout', async (req,res,next) => {

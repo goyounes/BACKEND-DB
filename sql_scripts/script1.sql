@@ -9,11 +9,14 @@ SELECT * FROM cinemas;
 SELECT * FROM rooms;
 SELECT * FROM seats;
 
+
+
 SELECT * FROM screenings;
 SELECT * FROM qualities;
 SELECT * FROM screening_qualities;
 
 SELECT * FROM users;
+SELECT * FROM users_credentials;
 SELECT * FROM roles;
 SELECT * FROM tickets;
 
@@ -86,9 +89,8 @@ SELECT DISTINCT movies.*
 		SELECT column_name
         FROM information_schema.columns;
 
-		SELECT *
-        FROM information_schema.columns
-                WHERE table_name = "movies" AND DATA_TYPE !='text';
+		SELECT *     FROM information_schema.columns
+                WHERE table_name = "movies" AND DATA_TYPE !='text'
         ORDER BY ordinal_position;
         
         

@@ -1,6 +1,8 @@
 import mysql from "mysql2"
 import dotenv from "dotenv"
 import { throwError , formatDateToMySQL} from "../utils.js";
+import bcrypt from "bcrypt";    
+
 dotenv.config({ path: './db_api/.env' })
 
 const pool = mysql.createPool({
@@ -353,4 +355,29 @@ export async function getMovieScreeningsByCinema(cinema_id,movie_id){
 
     await dbTableLogger('movies',result_rows)
     return result_rows
+}
+
+
+export async function CheckPassword(user_email, password){
+    const [result] = await pool.query(`
+        SELECT user_password_hash 
+        FROM users_credentials
+        WHERE user_id = (
+            SELECT user_id
+            FROM users
+            WHERE user_email = ?
+        );
+    `,[user_email])
+    // console.log(await bcrypt.compare(password, result[0].user_password_hash))
+    return await bcrypt.compare(password, result[0].user_password_hash)
+}
+
+export async function getUserIdByEmail(user_email){
+    const [result] = await pool.query(`
+        SELECT user_id 
+        FROM users
+        WHERE user_email = ?;
+    `,[user_email])
+    if (result.length === 0) throwError("User not found",404)
+    return result[0].user_id
 }

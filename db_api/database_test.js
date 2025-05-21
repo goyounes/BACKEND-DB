@@ -30,10 +30,14 @@ import * as db from "./database.js";
 //   "start_time": "16:30:00",
 //   "end_time": "18:30:00"
 // })
-await db.getRecentMovies()
+// await db.getRecentMovies()
 // await db.getRoomsInCinema(1)
 // await db.getAllRoomsInCinemas(1)
-await db.getCheckoutInfo(5)
+// await db.getCheckoutInfo(5)
 
+// await db.CheckPassword(19,"123456789")
+await db.CheckPassword("Younqfsfqsr.Ing@gmail.com","123456789")
+
+await db.getUserIdByEmail("Younqfsfqsr.Ing@gmail.com")
 
 process.exit(0)

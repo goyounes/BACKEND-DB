@@ -10,6 +10,10 @@
         WHERE screening_id = 2;
 
 
+        SELECT user_password_hash 
+        FROM users_credentials
+        WHERE user_id = 19 ;
+
 
 
 

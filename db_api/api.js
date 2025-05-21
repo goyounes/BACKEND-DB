@@ -301,7 +301,9 @@ app.delete("/api/v1/users/:id",async (req,res,next) => {
 
 
 
-
+// -------------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------
 
 app.get("/api/v1/messages",async (req,res,next) => {
     console.log("Fetching Messages from the DB...")
@@ -346,6 +348,18 @@ app.get("/api/v1/tickets",async (req,res,next) => {
         res.status(200).json(tickets)
     } catch (error) {
         next(error)  // Passes the error to the global error-handling middleware
+    }
+})
+app.get("/api/v1/tickets/:id",async (req,res,next) => {
+    const id = req.params.id
+    if (isNaN(Number(id))) throwError("ID is not a number, get operation failed",400) //Checks if id is a number/string of a number
+    
+    console.log(`Fetching Ticket with id :${id} from the DB...`)
+    try {
+        const ticket = await dbFunc.getTicket(id);
+        res.status(200).json(ticket);
+    } catch (err) {
+        next(err); // Pass error to error-handling middleware
     }
 })
 
