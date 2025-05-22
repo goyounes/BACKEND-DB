@@ -11,6 +11,7 @@ to begin you need to :
 - create cinephoria database by runing the command "CREATE DATABASE cinephoria;"
 - in mysql comand line run "source pathToTheProjectFolder\sql_scripts\creation.sql;" //for simplicity reasons images wont be included,
  use "source pathToTheProjectFolder\sql_scripts\backup.sql;"
+- now the db is set and is filled with mock data.
 
 
 
@@ -32,3 +33,6 @@ to begin you need to :
 
 5000 stands for the port where the API is listening on.
 - run the command "node .\server.js" from the root of the directory 
+
+now open the page "localhost:3000" to acces the website
+to interact with the api use "localhost:5000/api/v1/...."
