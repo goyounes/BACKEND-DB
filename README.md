@@ -5,10 +5,17 @@ this application is a combination of :
 
 to begin you need to : 
 
-1) database and api config
+1) database config
 - download and instal MYSQL on your machine, make sure to remember the password to the "root" user
 - lunch mysql by opening terminal on your machine and typing "mysql -u root -p" and then entering your password
 - create cinephoria database by runing the command "CREATE DATABASE cinephoria;"
+- in mysql comand line run "source pathToTheProjectFolder\sql_scripts\creation.sql;" //for simplicity reasons images wont be included,
+ use "source pathToTheProjectFolder\sql_scripts\backup.sql;"
+
+
+
+
+2) api config
 - create a .env file in the directory /db_api, with the following information :
     MYSQL_HOST = "127.0.0.1"        #localhost
     MYSQL_USER = "root"             #username for mysql database
@@ -19,7 +26,7 @@ to begin you need to :
 - open the terminal and run "npm install" to download all the required dependancies of the project
 - run the command "node .\db_api\api.js" from the root of the directory,  now the API is setup and listening on PORT 5000
 
-2) server config
+3) server config
 - create a .env file in the main folder of this project with the following information :
     DB_API_URL = "http://127.0.0.1:5000/api/v1"
 

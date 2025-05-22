@@ -43,24 +43,24 @@ UPDATE movies
 SET created_at = "2025-04-10 06:00:00"
 WHERE movie_id = 6;
 
-UPDATE movies SET poster_img = LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/poster_img_1.webp'),
-    poster_img_type = 'image/webp'
-WHERE movie_id = 1;
-UPDATE movies SET poster_img = LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/poster_img_2.webp'),
-    poster_img_type = 'image/webp'
-WHERE movie_id = 2;
-UPDATE movies SET poster_img = LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/poster_img_3.webp'),
-    poster_img_type = 'image/webp'
-WHERE movie_id = 3;
-UPDATE movies SET poster_img = LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/poster_img_4.webp'),
-    poster_img_type = 'image/webp'
-WHERE movie_id = 4;
-UPDATE movies SET poster_img = LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/poster_img_5.webp'),
-    poster_img_type = 'image/webp'
-WHERE movie_id = 5;
-UPDATE movies SET poster_img = LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/poster_img_6.webp'),
-    poster_img_type = 'image/webp'
-WHERE movie_id = 6;
+-- UPDATE movies SET poster_img = LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/poster_img_1.webp'),
+--     poster_img_type = 'image/webp'
+-- WHERE movie_id = 1;
+-- UPDATE movies SET poster_img = LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/poster_img_2.webp'),
+--     poster_img_type = 'image/webp'
+-- WHERE movie_id = 2;
+-- UPDATE movies SET poster_img = LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/poster_img_3.webp'),
+--     poster_img_type = 'image/webp'
+-- WHERE movie_id = 3;
+-- UPDATE movies SET poster_img = LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/poster_img_4.webp'),
+--     poster_img_type = 'image/webp'
+-- WHERE movie_id = 4;
+-- UPDATE movies SET poster_img = LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/poster_img_5.webp'),
+--     poster_img_type = 'image/webp'
+-- WHERE movie_id = 5;
+-- UPDATE movies SET poster_img = LOAD_FILE('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/poster_img_6.webp'),
+--     poster_img_type = 'image/webp'
+-- WHERE movie_id = 6;
 
 
 SELECT * FROM movies;
