@@ -570,7 +570,10 @@ VALUES
 ("hvaneschib","hvaneschib@google.co.jp","Heywood","Vaneschi",3),
 ("fdavallc","fdavallc@networksolutions.com","Faye","Davall",1),
 ("lleadstond","lleadstond@ning.com","Lenore","Leadston",3),
-("jfleischmanne","jfleischmanne@globo.com","June","Fleischmann",1);
+("jfleischmanne","jfleischmanne@globo.com","June","Fleischmann",1),
+("admin_admin","admin@admin.com","Rock","Paper",3);
+
+
 
 
 
@@ -596,16 +599,14 @@ VALUES
 (7,"pI5{L8KN>*1`"),
 (8,"gX9}P#%~h3"),
 (9,"mC9,4%R7=0hc"),
-(10,"hX3'qMU_%XKLBg&");
--- (11,"oA4!$NV6bk/>e'K6"),
--- (12,"hN6%+>~LC5XYamg"),
--- (13,"lN8<A$82lbmx0NRc"),
--- (14,"uP5~?@yU`!j"),
--- (15,"pZ1?4d<5+");
-          INSERT INTO users_credentials (user_id,user_password_hash)
-			VALUES (11,"password happy af");
-       --     INSERT INTO users_credentials (user_id,user_password_hash)
-       -- VALUES (8,"gX9}P#%~h3");
+(10,"hX3'qMU_%XKLBg&"),
+(11,"oA4!$NV6bk/>e'K6"),
+(12,"hN6%+>~LC5XYamg"),
+(13,"lN8<A$82lbmx0NRc"),
+(14,"uP5~?@yU`!j"),
+(15,"pZ1?4d<5+"),
+(16,"$2b$10$FFeHs.Um3w90p3HkYjaU4OxoqZJuzZkoeSzUR/t70yT73YMvEAEGu");
+
 
 
 SELECT * FROM users_credentials;
@@ -659,11 +660,11 @@ CREATE TABLE messages (
     isHandled BOOL DEFAULT FALSE
 );
 
-INSERT INTO messages(message_subject, message_text, message_sender_name, message_sender_email,is_read)
+INSERT INTO messages(message_subject, message_text, message_sender_name, message_sender_email,isRead)
 VALUES 
-("Wierd TOpic", "Hello bla bla bla bla LKJ dklfj kjfklsdjf lkj ","RandomUser","User1@gmail.com",FALSE),
-("more things", "Hklj kjlkj qfkj sdfkf kkljkslqjf moizj mf  kj ","BestUser","User1@compte.com",TRUE),
-("random things", "Not this time i tried to make filler text etc te ","ULTIMATE USER","User3@gmail.com",FALSE);
+("Wierd TOpic", "Hello bla bla bla bla LKJ dklfj kjfklsdjf lkj ","RandomUser","User1@gmail.com",TRUE),
+("more things", "Hklj kjlkj qfkj sdfkf kkljkslqjf moizj mf  kj ","BestUser","User1@compte.com",FALSE),
+("random things", "Not this time i tried to make filler text etc te ","ULTIMATE USER","User3@gmail.com",TRUE);
 
 SELECT * FROM messages;
 

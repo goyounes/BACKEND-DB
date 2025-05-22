@@ -378,9 +378,9 @@ export async function getUserIdByEmail(user_email){
     return result[0].user_id
 }
 
-export async function addTicket(screening_id, user_id, seat_id){
+export async function bookTicket(screening_id, user_id, seat_id){
     const [result] = await pool.query(`
-        INSERT INTO tickets(screening_id,user_id,seat_id)
+        INSERT INTO tickets(screening_id, user_id, seat_id)
         VALUES (?,?,?);
     `,[screening_id, user_id, seat_id])
     if (!result.insertId) return {}//console.log("Alert: no insertId was provided")   #1 How to handle this insert id missing case
@@ -404,7 +404,7 @@ export async function getAvailbleSeats(screening_id){
             AND isDeleted = 0
         ORDER BY seat_id;
     `,[screening_id,screening_id])
-    console.log(result_rows)
+    // console.table(result_rows)
 
     return result_rows
 }

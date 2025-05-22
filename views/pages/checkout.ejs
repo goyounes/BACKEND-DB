@@ -53,10 +53,10 @@
         <% } %>
       </select>
 
-      <p><strong>Total Price:</strong> €<span id="totalPrice">19</span></p>
+      <p><strong>Total Price:</strong> €<span id="totalPrice">12</span></p>
     </div>
 
-      <form action="/checkout/complete" method="POST">
+      <form id="CheckoutForm" action="" method="">
         <input type="hidden" name="ticketCount" id="ticketCountInput" value="1"> <!-- Hidden field to send the screening ID -->
         <input type="hidden" name="screening_id" value="<%= checkoutInfo.screening_id %>"> <!-- Hidden field to send the screening ID -->
 
@@ -66,8 +66,8 @@
         <label for="password">Password</label>
         <input type="text" name="user_password" id="password" placeholder="Plese provide your account password" required>
 
-        <label for="cardNumber">Card Number</label>
-        <input type="text" name="cardNumber" id="cardNumber" maxlength="16" placeholder="Please enter your card details"required>
+        <label for="card_number">Card Number</label>
+        <input type="text" name="card_number" id="card_number" maxlength="16" placeholder="Please enter your card details"required>
 
         <label for="expiry">Expiry Date</label>
         <input type="text" name="expiry" id="expiry" placeholder="MM/YY" required>
@@ -98,17 +98,62 @@
   </footer>
 
   <script>
+    // Handle the ticket count change
+    // This is a simple example. In a real application,we should fetch the ticket price from the server.
     const ticketPrice = 12; // € per ticket // hard coded for now
     const ticketCountSelect = document.getElementById("ticketCount");
     const totalPriceSpan = document.getElementById("totalPrice");
     const ticketCountInput = document.getElementById("ticketCountInput");
-
     ticketCountSelect.addEventListener("change", () => {
       const count = parseInt(ticketCountSelect.value, 10);
       const total = count * ticketPrice;
       totalPriceSpan.textContent = total;
       ticketCountInput.value = count; // Update hidden field for server
     });
+
+      
+    // const API_URL = "http://13.60.234.94:5000/api/v1";
+    const API_URL = "http://127.0.0.1:5000/api/v1";
+    document.getElementById("CheckoutForm").addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const form = event.target;
+    try {
+      const ticketData = {
+        user_email: form.user_email.value,
+        user_password: form.user_password.value,
+        screening_id: Number(form.screening_id.value),
+        ticketCount: Number(document.getElementById("ticketCount").value),
+        card_information: {
+          card_number: form.cardNumber.value,
+          expiry: form.expiry.value,
+          cvv: form.cvv.value
+        }
+      };
+
+      const response = await fetch(`${API_URL}/checkout/complete`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(ticketData)
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+
+      const result = await response.json();
+      alert("Reservation successful!");
+      form.reset();
+      window.location.href = "/tickets";  // Redirect to tickets list or confirmation page
+
+    } catch (err) {
+      alert("Checkout failed: " + err.message);
+    }
+  });
+
+
   </script>
 
 </body>
