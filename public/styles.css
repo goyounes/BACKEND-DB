@@ -262,16 +262,7 @@ a.button-link:hover , a.button-link-main:hover{
 
 /* checkout page */
 
-     input,select{                   /*these are for the checkout page */
-      width: 100%;
-      padding: 0.5rem;
-      margin-bottom: 1rem;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
-    select{
-      width: 25%
-    }
+
 
     .checkout-container {
       max-width: 600px;
@@ -286,9 +277,4 @@ a.button-link:hover , a.button-link-main:hover{
     }
     .checkout-summary p {
       margin: 0.5rem 0;
-    }
-    label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: bold;
     }

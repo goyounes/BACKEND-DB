@@ -54,7 +54,7 @@
           <p>No messages found.</p>
         <% } else { %>
           <% messages.forEach(function(msg) { %>
-            <div class="message-card <%= msg.is_read ? '' : 'unread' %>">
+            <div class="message-card <%= msg.isRead ? '' : 'unread' %>">
 
               <div style="margin-bottom: 0.5rem;">
                 <strong>From:</strong> <span> <%= msg.message_sender_name %></span>

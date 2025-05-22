@@ -14,8 +14,31 @@
         FROM users_credentials
         WHERE user_id = 19 ;
 
+        SELECT *
+        FROM seats 
+        WHERE seat_id NOT IN (
+            SELECT seat_id
+            FROM tickets
+            WHERE screening_id = 1
+        );
+        
+		SELECT * -- COUNT(seat_id) as available_seats_count
+        FROM seats 
+        WHERE seat_id NOT IN (
+            SELECT seat_id
+            FROM tickets
+            WHERE screening_id = 8
+        )
+        AND room_id IN (
+            SELECT room_id
+            FROM screenings
+            WHERE screening_id = 8
+        );
 
+        
+            SELECT seat_id FROM rooms
 
+            WHERE screening_id = 3;
 
 
 

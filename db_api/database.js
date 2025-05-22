@@ -358,16 +358,12 @@ export async function getMovieScreeningsByCinema(cinema_id,movie_id){
 }
 
 
-export async function CheckPassword(user_email, password){
+export async function CheckPassword(user_id, password){
     const [result] = await pool.query(`
         SELECT user_password_hash 
         FROM users_credentials
-        WHERE user_id = (
-            SELECT user_id
-            FROM users
-            WHERE user_email = ?
-        );
-    `,[user_email])
+        WHERE user_id = ?;
+    `,[user_id])
     // console.log(await bcrypt.compare(password, result[0].user_password_hash))
     return await bcrypt.compare(password, result[0].user_password_hash)
 }
@@ -380,4 +376,35 @@ export async function getUserIdByEmail(user_email){
     `,[user_email])
     if (result.length === 0) throwError("User not found",404)
     return result[0].user_id
+}
+
+export async function addTicket(screening_id, user_id, seat_id){
+    const [result] = await pool.query(`
+        INSERT INTO tickets(screening_id,user_id,seat_id)
+        VALUES (?,?,?);
+    `,[screening_id, user_id, seat_id])
+    if (!result.insertId) return {}//console.log("Alert: no insertId was provided")   #1 How to handle this insert id missing case
+    return await getTableRow('tickets',result.insertId)
+}
+
+export async function getAvailbleSeats(screening_id){
+    const [result_rows] = await pool.query(`
+		SELECT *
+        FROM seats 
+        WHERE seat_id NOT IN (
+            SELECT seat_id
+            FROM tickets
+            WHERE screening_id = ?
+        )
+        AND room_id IN (
+            SELECT room_id
+            FROM screenings
+            WHERE screening_id = ?
+        )
+            AND isDeleted = 0
+        ORDER BY seat_id;
+    `,[screening_id,screening_id])
+    console.log(result_rows)
+
+    return result_rows
 }

@@ -141,7 +141,6 @@ SELECT * FROM rooms;
 CREATE TABLE seats (
     seat_id INT PRIMARY KEY AUTO_INCREMENT,
     seat_number INT NOT NULL,
-	isReserved BOOL DEFAULT FALSE,
     isAccesible BOOL DEFAULT FALSE,
     isDeleted BOOl DEFAULT FALSE,
     room_id INT,
@@ -628,11 +627,23 @@ VALUES
 (1,2,92),
 (2,6,96),
 (2,7,97),
-(3,15,15),
-(7,10,80),
-(7,13,83),
-(8,14,234),
-(8,15,235);
+(3,15,105),
+(7,10,100),
+(7,13,103),
+(7,14,104),
+(8,14,104),
+(8,15,105),
+(15,1,41),
+(16,2,42),
+(17,6,46),
+(18,7,47),
+(19,15,55),
+(22,10,10),
+(23,13,33),
+(24,14,34),
+(25,5,45),
+(27,15,165);
+
 
 SELECT * FROM tickets;
 -- -------------------------------------------------------------------------------------------------------------
@@ -643,9 +654,9 @@ CREATE TABLE messages (
     message_text VARCHAR(255) NOT NULL,
 	message_sender_name VARCHAR(255) NOT NULL,
 	message_sender_email VARCHAR(255) NOT NULL,
-    is_read BOOL DEFAULT FALSE,
-    is_deleted BOOL DEFAULT FALSE,
-    is_handled BOOL DEFAULT FALSE
+    isRead BOOL DEFAULT FALSE,
+    isDeleted BOOL DEFAULT FALSE,
+    isHandled BOOL DEFAULT FALSE
 );
 
 INSERT INTO messages(message_subject, message_text, message_sender_name, message_sender_email,is_read)

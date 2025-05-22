@@ -331,10 +331,39 @@ app.post("/api/v1/messages",async (req,res,next) => {
 
 
 app.get("/api/v1/checkout",async (req,res,next) => {
-    const screening_id = req.query.screening_id || null;
+    const checkoutInfo = req.query.screening_id || null;
     console.log("Fetching Checkout information from the DB...")
     try {
-        const data = await dbFunc.getCheckoutInfo(screening_id)
+        const data = await dbFunc.getCheckoutInfo(checkoutInfo)
+        res.status(200).json(data)
+    } catch (error) {
+        next(error)  // Passes the error to the global error-handling middleware
+    }
+})
+
+app.post("/api/v1/checkout/complete",async (req,res,next) => {
+    const purchaseInformation = req.body
+    if (!purchaseInformation.user_email || !purchaseInformation.user_password || !purchaseInformation.card_information) throwError("Missing purchase data, creation operation failed",400) 
+    console.log("Processing purchase request...")
+    try {
+        //Extract User id from the email
+        const user_id = await dbFunc.getUserIdByEmail(purchaseInformation.user_email)
+        if (!user_id) throwError("User not found, purchase operation failed",400)
+        //Check password to validate user
+        const password_check = await dbFunc.CheckPassword(user_id,purchaseInformation.user_password)
+        if (!password_check) throwError("Password is incorrect, purchase operation failed",400)
+        //Check if the number of non reserved seats is enough for the purchase
+        const available_seats = await dbFunc.getAvailbleSeats(purchaseInformation.screening_id)
+        if (available_seats.length < purchaseInformation.seat_ids.length) throwError("Not enough available seats, purchase operation failed",400)
+        
+            
+        //process payment
+        const paymentResult = await processPayment(purchaseInformation.card_information);
+        if (paymentResult.status !== 'success') throwError("Payment failed, purchase operation failed",400)
+        //Add tickets to the DB
+
+
+        const data = await dbFunc.getCheckoutInfo(checkoutInfo)
         res.status(200).json(data)
     } catch (error) {
         next(error)  // Passes the error to the global error-handling middleware
@@ -383,3 +412,17 @@ app.use((err, req, res, next) => {
 app.listen(PORT,() => {
     console.log("The server is listening on port ",PORT)
 })
+
+
+async function processPayment(card_information) {// resolved if paid, Err has to be Caught in the calling function to assume paiment failed
+    // Simulate payment processing logic
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            if (true) { // Simulate successful payment
+                resolve({ status: 'success', transactionId: '123456' });
+            } else {
+                reject(new Error('Payment failed'));
+            }
+        }, 1000);
+    });
+}

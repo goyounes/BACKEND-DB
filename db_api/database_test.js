@@ -36,8 +36,10 @@ import * as db from "./database.js";
 // await db.getCheckoutInfo(5)
 
 // await db.CheckPassword(19,"123456789")
-await db.CheckPassword("Younqfsfqsr.Ing@gmail.com","123456789")
+// console.log(
+//     await db.CheckPassword(await db.getUserIdByEmail("Younqfsfqsr.Ing@gmail.com")   ,   "123456789")
+// )
 
-await db.getUserIdByEmail("Younqfsfqsr.Ing@gmail.com")
+await db.getAvailbleSeats(7)
 
 process.exit(0)
