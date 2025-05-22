@@ -10,7 +10,7 @@ to begin you need to :
 - lunch mysql by opening terminal on your machine and typing "mysql -u root -p" and then entering your password
 - create cinephoria database by runing the command "CREATE DATABASE cinephoria;"
 - in mysql comand line run "source pathToTheProjectFolder\sql_scripts\creation.sql;" //for simplicity reasons images wont be included,
- use "source pathToTheProjectFolder\sql_scripts\backup.sql;"
+ use "source pathToTheProjectFolder\sql_scripts\backup.sql;" if you want the images, debug if needed.
 - now the db is set and is filled with mock data.
 
 
