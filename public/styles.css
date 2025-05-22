@@ -271,6 +271,7 @@ a.button-link:hover , a.button-link-main:hover{
 
 
     .checkout-container {
+      min-width: 500px;
       max-width: 600px;
       margin: 2rem auto;
       padding: 2rem;
@@ -279,7 +280,7 @@ a.button-link:hover , a.button-link-main:hover{
       background-color: #f9f9f9;
     }
     .checkout-summary {
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
     }
     .checkout-summary p {
       margin: 0.5rem 0;

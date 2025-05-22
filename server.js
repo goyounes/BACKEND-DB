@@ -12,18 +12,18 @@ app.set("view engine","ejs")
 app.use(cors(), reqIPlogger);
 app.use(express.static('public'));
 
-app.get("/home",(req,res) => {
+app.get("/home",(req,res,next) => {
     res.redirect("/")
 })
-app.get("/",(req,res) => {
+app.get("/",(req,res,next) => {
     res.status(200).render("pages/index.ejs")
 })
 
-app.get('/reservation', (req, res) => {
+app.get('/reservation', (req, res,next) => {
     res.sendFile("/static/reservation.html",{root:"."})
 });
 
-app.get('/contact', (req, res) => {
+app.get('/contact', (req, res,next) => {
     res.sendFile("/static/contact.html",{root:"."})
 });
 
@@ -47,7 +47,7 @@ app.get("/movies/recent",async (req,res,next) => {
     }
 })
 
-app.get('/movies/create', (req, res) => {
+app.get('/movies/create', (req, res,next) => {
     res.sendFile("/static/create_movie.html",{root:"."})
 });
 
@@ -83,7 +83,7 @@ app.get("/screenings",async (req,res,next) => {
     }
 })
 
-app.get('/screenings/create', (req, res) => {
+app.get('/screenings/create', (req, res,next) => {
     res.sendFile("/static/create_screening.html",{root:"."})
 });
 
@@ -122,7 +122,7 @@ app.get("/users",async (req,res,next) => {
     }
 })
 
-app.get('/users/create', (req, res) => {
+app.get('/users/create', (req, res,next) => {
     res.sendFile("/static/create_user.html",{root:"."})
 });
 
@@ -177,6 +177,7 @@ app.get("/tickets/:id",async (req,res,next) => {
     try {
         const result = await fetch(APIpath+ "/tickets/" + id,{headers:{'X-Requested-By': 'backend-server'}})
         const tickets = await result.json()
+        if ('error' in tickets) throwError (tickets.error.message,tickets.error.status)
         res.status(200).render("pages/tickets.ejs",{tickets})
     } catch (error) {
         next(error)
@@ -218,6 +219,7 @@ app.get('/checkout', async (req,res,next) => {
     }
 
 });
+
 
 app.use((err, req, res, next) => {
   console.log("Server: Middleware logging error stack ...");
