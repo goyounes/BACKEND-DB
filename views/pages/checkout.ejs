@@ -120,9 +120,9 @@
     const form = event.target;
     try {
       const ticketData = {
+        screening_id: Number(form.screening_id.value),
         user_email: form.user_email.value,
         user_password: form.user_password.value,
-        screening_id: Number(form.screening_id.value),
         ticketCount: Number(document.getElementById("ticketCount").value),
         card_information: {
           card_number: form.cardNumber.value,

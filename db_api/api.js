@@ -430,9 +430,10 @@ app.listen(PORT,() => {
 
 async function processPayment(card_information) {// resolved if paid, Err has to be Caught in the calling function to assume paiment failed
     // Simulate payment processing logic
+    const { card_number, expiry, cvv } = card_information;
     return new Promise((resolve, reject) => {
         setTimeout(() => {
-            if (true) { // Simulate successful payment
+            if (card_number && expiry && cvv ) { // Simulate successful payment if the fields are not empty
                 resolve({ status: 'success', transactionId: '123456' });
             } else {
                 reject(new Error('Payment failed'));
