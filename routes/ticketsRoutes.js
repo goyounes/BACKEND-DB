@@ -3,7 +3,7 @@ const router = Router();
 import { throwError} from "../utils.js"
 
 
-router.get("/tickets",async (req,res,next) => {
+router.get("/",async (req,res,next) => {
     const DB_API_URL = process.env.DB_API_URL
     try {
         const result = await fetch(DB_API_URL+"/tickets",{headers:{'X-Requested-By': 'backend-server'}})
@@ -13,7 +13,7 @@ router.get("/tickets",async (req,res,next) => {
         next(error)
     }
 })
-router.get("/tickets/:id",async (req,res,next) => {
+router.get("/:id",async (req,res,next) => {
     const DB_API_URL = process.env.DB_API_URL
     const id = req.params.id
     console.log("accesing API for ticket with ticket_id =",id)
