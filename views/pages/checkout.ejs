@@ -110,10 +110,9 @@
       totalPriceSpan.textContent = total;
       ticketCountInput.value = count; // Update hidden field for server
     });
-
       
     const API_URL = "<%= DB_API_URL %>"
-    
+
     document.getElementById("CheckoutForm").addEventListener("submit", async (event) => {
     event.preventDefault();
 
@@ -139,9 +138,15 @@
         },
         body: JSON.stringify(ticketData)
       });
-
       if (!response.ok) {
-        throw new Error(`Error: ${response.statusText}`);
+        const jsonResponse = await response.json();
+        if ('error' in jsonResponse) {
+          const err = new Error(jsonResponse.error.message || "An error occurred during checkout");
+          if (jsonResponse.error.status) err.status = jsonResponse.error.status
+          if (jsonResponse.error.code) err.code = jsonResponse.error.code
+          if (jsonResponse.error.details) err.details = jsonResponse.error.details
+          throw err
+        }
       }
 
       const result = await response.json();
@@ -154,7 +159,13 @@
     }
   });
 
-
+    function throwError(message,status,code,details){
+      const err = new Error(message)
+      if (status) err.status = status
+      if (code) err.code = code
+      if (details) err.details = details
+      throw err
+    }
   </script>
 
 </body>

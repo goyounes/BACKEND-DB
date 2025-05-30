@@ -107,7 +107,14 @@
           });
 
           if (!response.ok) {
-            throw new Error(`Error: ${response.statusText}`);
+            const jsonResponse = await response.json();
+            if ('error' in jsonResponse) {
+              const err = new Error(jsonResponse.error.message || "An error occurred during checkout");
+              if (jsonResponse.error.status) err.status = jsonResponse.error.status
+              if (jsonResponse.error.code) err.code = jsonResponse.error.code
+              if (jsonResponse.error.details) err.details = jsonResponse.error.details
+              throw err
+            }
           }
 
           const result = await response.json();

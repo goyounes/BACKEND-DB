@@ -10,14 +10,6 @@ const pool = mysql.createPool({
     user : process.env.MYSQL_USER,
     password : process.env.MYSQL_PASSWORD,
     database : process.env.MYSQL_DATABASE
-//type cast Canceled to stay consistent, handle data convertion at time of use/display IF NEEDED
-    // typeCast: function (field, next) {// mysql2 driver sends decimal type data as string, converted this to number
-    //     if (field.type == "NEWDECIMAL") {
-    //         var value = field.string();
-    //         return (value === null) ? null : Number(value);
-    //     }
-    //     return next();
-    // }
 }).promise()
 
 // async function testConnection() {    try {        const connection = await pool.getConnection();        console.log("Connected to MySQL!");        connection.release();     } catch (error) {        console.error("Connection failed:", error);    }}
