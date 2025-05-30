@@ -6,7 +6,7 @@ dotenv.config()
 
 const app = express();
 const PORT = 3000;
-const APIpath = process.env.DB_API_URL // change if DB backend is diff
+const DB_API_URL = process.env.DB_API_URL // change if DB backend is diff
 
 app.set("view engine","ejs")
 app.use(cors(), reqIPlogger);
@@ -20,16 +20,18 @@ app.get("/",(req,res,next) => {
 })
 
 app.get('/reservation', (req, res,next) => {
-    res.sendFile("/static/reservation.html",{root:"."})
+    // res.sendFile("/static/reservation.html",{root:"."})
+    res.status(200).render("pages/reservation.ejs",{DB_API_URL});
 });
 
 app.get('/contact', (req, res,next) => {
-    res.sendFile("/static/contact.html",{root:"."})
+    // res.sendFile("/static/contact.html",{root:"."})
+    res.status(200).render("pages/contact.ejs",{DB_API_URL});
 });
 
 app.get("/movies",async (req,res,next) => {
     try {
-        const result = await fetch(APIpath+"/movies",{headers:{'X-Requested-By': 'backend-server'}})
+        const result = await fetch(DB_API_URL+"/movies",{headers:{'X-Requested-By': 'backend-server'}})
         const movies = await result.json()
         res.status(200).render("pages/movies.ejs",{movies})
     } catch (error) {
@@ -39,7 +41,7 @@ app.get("/movies",async (req,res,next) => {
 
 app.get("/movies/recent",async (req,res,next) => {
     try {
-        const result = await fetch(APIpath+"/movies/recent",{headers:{'X-Requested-By': 'backend-server'}})
+        const result = await fetch(DB_API_URL+"/movies/recent",{headers:{'X-Requested-By': 'backend-server'}})
         const movies = await result.json()
         res.status(200).render("pages/movies_recent.ejs",{movies})
     } catch (error) {
@@ -48,7 +50,8 @@ app.get("/movies/recent",async (req,res,next) => {
 })
 
 app.get('/movies/create', (req, res,next) => {
-    res.sendFile("/static/create_movie.html",{root:"."})
+    // res.sendFile("/static/create_movie.html",{root:"."})
+    res.status(200).render("pages/create_movie.ejs",{DB_API_URL});
 });
 
 
@@ -56,7 +59,7 @@ app.get("/movies/:id",async (req,res,next) => {
     const id = req.params.id
     console.log("accesing API for movie with movie_id =",id)
     try {
-        const result = await fetch(APIpath + "/movies/" + id ,{headers:{'X-Requested-By': 'backend-server'}})
+        const result = await fetch(DB_API_URL + "/movies/" + id ,{headers:{'X-Requested-By': 'backend-server'}})
         const movie = await result.json() // either a reosurce obj or err obj
         if ('error' in movie) throwError (movie.error.message,movie.error.status)
         res.status(200).render("pages/one_movie.ejs",{movie})
@@ -71,7 +74,7 @@ app.get("/screenings",async (req,res,next) => {
     const cinema_id = req.query.cinema_id || null;
     const movie_id = req.query.movie_id || null;
     try {
-        const url = new URL(APIpath+"/screenings");
+        const url = new URL(DB_API_URL+"/screenings");
         if (cinema_id) url.searchParams.append("cinema_id", cinema_id);
         if (movie_id) url.searchParams.append("movie_id", movie_id);
 
@@ -84,12 +87,13 @@ app.get("/screenings",async (req,res,next) => {
 })
 
 app.get('/screenings/create', (req, res,next) => {
-    res.sendFile("/static/create_screening.html",{root:"."})
+    // res.sendFile("/static/create_screening.html",{root:"."})
+    res.status(200).render("pages/create_screening.ejs",{DB_API_URL});
 });
 
 app.get("/screenings/all",async (req,res,next) => {
     try {
-        const result = await fetch(APIpath+"/screenings/all",{headers:{'X-Requested-By': 'backend-server'}})
+        const result = await fetch(DB_API_URL+"/screenings/all",{headers:{'X-Requested-By': 'backend-server'}})
         const screenings = await result.json()
         res.status(200).render("pages/screenings.ejs",{screenings})
     } catch (error) {
@@ -101,7 +105,7 @@ app.get("/screenings/:id",async (req,res,next) => {
     const id = req.params.id
     console.log("accesing API for screening with screening_id =",id)
     try {
-        const result = await fetch(APIpath + "/screenings/" + id ,{headers:{'X-Requested-By': 'backend-server'}})
+        const result = await fetch(DB_API_URL + "/screenings/" + id ,{headers:{'X-Requested-By': 'backend-server'}})
         const screening = await result.json() // either a reosurce obj or err obj
         if ('error' in screening) throwError (screening.error.message,screening.error.status)
         res.status(200).render("pages/one_screening.ejs",{screening})
@@ -112,9 +116,11 @@ app.get("/screenings/:id",async (req,res,next) => {
 
 
 
+
+
 app.get("/users",async (req,res,next) => {
     try {
-        const result = await fetch(APIpath+"/users",{headers:{'X-Requested-By': 'backend-server'}})
+        const result = await fetch(DB_API_URL+"/users",{headers:{'X-Requested-By': 'backend-server'}})
         const users = await result.json()
         res.status(200).render("pages/users.ejs",{users})
     } catch (error) {
@@ -123,15 +129,16 @@ app.get("/users",async (req,res,next) => {
 })
 
 app.get('/users/create', (req, res,next) => {
-    res.sendFile("/static/create_user.html",{root:"."})
+    // res.sendFile("/static/create_user.html",{root:"."})
+    res.status(200).render("pages/create_user.ejs",{DB_API_URL});
 });
 
 
 app.get("/users/:id",async (req,res,next) => {
     const id = req.params.id
-    console.log("accesing API for movie with movie_id =",id)
+    console.log("accesing API for user with user_id =",id)
     try {
-        const result = await fetch(APIpath + "/users/" + id ,{headers:{'X-Requested-By': 'backend-server'}})
+        const result = await fetch(DB_API_URL + "/users/" + id ,{headers:{'X-Requested-By': 'backend-server'}})
         const user = await result.json() // either a reosurce obj or err obj
         if ('error' in user) throwError (user.error.message,user.error.status)
         res.status(200).render("pages/one_user.ejs",{user})
@@ -142,7 +149,7 @@ app.get("/users/:id",async (req,res,next) => {
 
 app.get("/cinemas",async (req,res,next) => {
     try {
-        const result = await fetch(APIpath+"/cinemas",{headers:{'X-Requested-By': 'backend-server'}})
+        const result = await fetch(DB_API_URL+"/cinemas",{headers:{'X-Requested-By': 'backend-server'}})
         const cinemas = await result.json()
         res.status(200).render("pages/cinemas.ejs",{cinemas})
     } catch (error) {
@@ -153,7 +160,7 @@ app.get("/cinemas",async (req,res,next) => {
 
 app.get("/messages",async (req,res,next) => {
     try {
-        const result = await fetch(APIpath+"/messages",{headers:{'X-Requested-By': 'backend-server'}})
+        const result = await fetch(DB_API_URL+"/messages",{headers:{'X-Requested-By': 'backend-server'}})
         const messages = await result.json()
         res.status(200).render("pages/messages.ejs",{messages})
     } catch (error) {
@@ -164,7 +171,7 @@ app.get("/messages",async (req,res,next) => {
 
 app.get("/tickets",async (req,res,next) => {
     try {
-        const result = await fetch(APIpath+"/tickets",{headers:{'X-Requested-By': 'backend-server'}})
+        const result = await fetch(DB_API_URL+"/tickets",{headers:{'X-Requested-By': 'backend-server'}})
         const tickets = await result.json()
         res.status(200).render("pages/tickets.ejs",{tickets})
     } catch (error) {
@@ -175,7 +182,7 @@ app.get("/tickets/:id",async (req,res,next) => {
     const id = req.params.id
     console.log("accesing API for ticket with ticket_id =",id)
     try {
-        const result = await fetch(APIpath+ "/tickets/" + id,{headers:{'X-Requested-By': 'backend-server'}})
+        const result = await fetch(DB_API_URL+ "/tickets/" + id,{headers:{'X-Requested-By': 'backend-server'}})
         const tickets = await result.json()
         if ('error' in tickets) throwError (tickets.error.message,tickets.error.status)
         res.status(200).render("pages/tickets.ejs",{tickets})
@@ -184,43 +191,25 @@ app.get("/tickets/:id",async (req,res,next) => {
     }
 })
 
-app.get("/users/:id",async (req,res,next) => {
-    const id = req.params.id
-    console.log("accesing API for movie with movie_id =",id)
-    try {
-        const result = await fetch(APIpath + "/users/" + id ,{headers:{'X-Requested-By': 'backend-server'}})
-        const user = await result.json() // either a reosurce obj or err obj
-        if ('error' in user) throwError (user.error.message,user.error.status)
-        res.status(200).render("pages/one_user.ejs",{user})
-    } catch (error) {
-        next(error) // network request or re-thrown error
-    }
-})
-
 
 
 app.get('/checkout', async (req,res,next) => {
     const screening_id = req.query.screening_id || null;
     try {
-        const url = new URL(APIpath+"/checkout");
+        const url = new URL(DB_API_URL+"/checkout");
         if (screening_id) url.searchParams.append("screening_id", screening_id);
 
         const result = await fetch(url,{headers:{'X-Requested-By': 'backend-server'}})
         const checkoutInfo = await result.json()
         console.log("checkoutInfo",checkoutInfo)
-        res.render('pages/checkout.ejs', { checkoutInfo });
-            // movieTitle: 'The Grand Adventure',
-            // cinemaName: 'Cinephoria Paris',
-            // screeningTime: '2025-06-15 19:30',
-            // numberOfTickets: 2,
-            // totalPrice: (2 * 9.5).toFixed(2)
+        res.render('pages/checkout.ejs', { checkoutInfo, DB_API_URL });
     } catch (error) {
         next(error)
     }
 
 });
 
-
+//Propogate errors to the the user
 app.use((err, req, res, next) => {
   console.log("Server: Middleware logging error stack ...");
   console.error(err.stack); // Log the stack trace

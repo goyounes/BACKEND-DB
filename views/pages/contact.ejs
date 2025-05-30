@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact Us</title>
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    h1 {
+      text-align: center;
+    }
+    textarea {
+      resize: vertical;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="header-left">
+      <img src="/cinephoria-sm.png" alt="Cinephoria logo">
+    </div>
+    <div class="header-middle">
+      <a href="/home" class="header-icon-link">🏠<span>Admin</span></a>
+      <a href="/messages" class="header-icon-link">✉️<span>Messages</span></a>
+      <a href="/movies/recent" class="header-icon-link">🆕<span>Recent</span></a>
+      <a href="/movies" class="header-icon-link">📽️<span>Movies</span></a>
+      <a href="/screenings" class="header-icon-link">🎞️<span>Screenings</span></a>
+      <a href="/cinemas" class="header-icon-link">🏛️<span>Cinemas</span></a>
+      <a href="/reservation" class="header-icon-link">📅<span>Reservation</span></a>
+      <a href="/tickets" class="header-icon-link">🎟️<span>Tickets</span></a>     
+    </div>
+    <div class="header-right">
+      <a href="/users" class="header-icon-link">👤<span>Users</span></a>
+      <a href="/contact" class="header-icon-link">📞<span>Contact</span></a>
+    </div>
+  </header>
+
+  <main>
+    <div class="container-half-center">
+      <h1>Contact Us</h1>
+
+      <form id="ContactForm" action="/api/contact" method="POST">
+        <fieldset class="responsive-grid"><legend>Send a Message</legend>
+          <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="message_sender_name" placeholder="Your name" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="message_sender_email" placeholder="your@email.com" required>
+          </div>
+          <div class="form-group">
+            <label for="subject">Subject:</label>
+            <input type="text" id="subject" name="message_subject" placeholder="Subject" required>
+          </div>
+          <div class="form-group">
+            <label for="message">Message:</label>
+            <textarea id="message" name="message_text" rows="6" placeholder="Your message..." required></textarea>
+          </div>
+        </fieldset>
+
+        <div class="button-wrapper">
+          <button type="submit" class="btn-primary">Send Message</button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <footer>
+    <h4>Our Cinemas</h4>
+    <div class="footer-grid">
+      <div><strong>Nantes</strong><br>12 Rue de la Loire, 44000 Nantes<br>📞 +33 2 40 12 34 56<br>🕒 10:00–23:00</div>
+      <div><strong>Bordeaux</strong><br>33 Rue du Chai des Farines, 33800 Bordeaux<br>📞 +33 5 56 78 90 12<br>🕒 10:00–23:00</div>
+      <div><strong>Paris</strong><br>42 Rue de Rivoli, 75004 Paris<br>📞 +33 1 45 67 89 01<br>🕒 09:30–00:00</div>
+      <div><strong>Toulouse</strong><br>18 Rue du Languedoc, 31000 Toulouse<br>📞 +33 5 34 56 78 90<br>🕒 10:00–23:00</div>
+      <div><strong>Lille</strong><br>77 Rue Nationale, 59800 Lille<br>📞 +33 3 20 12 34 56<br>🕒 10:00–22:30</div>
+      <div><strong>Charleroi (BE)</strong><br>26 Rue Léon Bernus, 6000 Charleroi<br>📞 +32 71 23 45 67<br>🕒 10:00–22:00</div>
+      <div><strong>Liège (BE)</strong><br>59 Quai de la Batte, 4020 Liège<br>📞 +32 4 78 90 12 34<br>🕒 10:00–23:00</div>
+    </div>
+    <h6>&copy; 2025 Cinephoria. All rights reserved.</h6>
+  </footer>
+
+  <script>
+    const API_URL = "<%= DB_API_URL %>"
+    document.getElementById("ContactForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const form = event.target;
+
+      const message = {
+        message_sender_name:  form.message_sender_name.value,
+        message_sender_email: form.message_sender_email.value,
+        message_subject: form.message_subject.value,
+        message_text:    form.message_text.value
+      };
+
+      try {
+        const response = await fetch(`${API_URL}/messages`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(message)
+        });
+
+        if (!response.ok) {
+          throw new Error(`Error: ${response.statusText}`);
+        }
+        const result = await response.json();
+        alert("Message sent successfully!");
+        form.reset();
+      } catch (err) {
+        alert("Failed to send message: " + err.message);
+      }
+    });
+  </script>
+
+</body>
+</html>

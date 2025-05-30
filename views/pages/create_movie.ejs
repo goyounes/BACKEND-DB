@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Add Movie</title>
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    h1{
+      text-align: center
+    }   
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="header-left">
+      <img src="/cinephoria-sm.png" alt="Cinephoria logo">
+    </div>
+    <div class="header-middle">
+      <a href="/home" class="header-icon-link">🏠<span>Admin</span></a>
+      <a href="/messages" class="header-icon-link">✉️<span>Messages</span></a>
+      <a href="/movies/recent" class="header-icon-link">🆕<span>Recent</span></a>
+      <a href="/movies" class="header-icon-link">📽️<span>Movies</span></a>
+      <a href="/screenings" class="header-icon-link">🎞️<span>Screenings</span></a>
+      <a href="/cinemas" class="header-icon-link">🏛️<span>Cinemas</span></a>
+      <a href="/reservation" class="header-icon-link">📅<span>Reservation</span></a>
+      <a href="/tickets" class="header-icon-link">🎟️<span>Tickets</span></a>     
+    </div>
+    <div class="header-right">
+      <a href="/users" class="header-icon-link">👤<span>Users</span></a>
+      <a href="/contact" class="header-icon-link">📞<span>Contact</span></a>
+    </div>
+  </header>
+
+<main>
+  <div class="container-half-center">
+     <h1>Add New Movie</h1>
+
+    <form  id= "NewMovieForm" action="" method="" >
+      <fieldset  class="responsive-grid">  <legend>Movie Details</legend>
+        <div class="form-group">
+          <label for="title">Title:</label>
+          <input type="text" id="title" name="title" placeholder="Movie Title" required>
+        </div>
+        <div class="form-group">
+          <label for="poster_img">Poster Image URL:</label>
+          <input type="file" name="poster_img" accept="image/*" />
+          <!-- <input type="url" id="poster_img" name="poster_img" placeholder="https://example.com/image.jpg"> -->
+        </div>
+        <div class="form-group">
+          <label for="description">Description:</label>
+          <textarea id="description" name="description" rows="5" placeholder="Movie description..."></textarea>
+        </div>
+        <div class="form-group">
+          <label for="length">Length (HH:MM:SS):</label>
+          <input type="time" id="length" name="length" step="1">
+        </div>
+        <div class="form-group">
+          <label for="age_rating">Age Rating:</label>
+          <input type="number" id="age_rating" name="age_rating" min="0" max="21" placeholder="0 ~ 21" required>
+        </div>
+        <div class="form-group">
+          <label for="is_team_pick">Team Pick:</label>
+          <select id="is_team_pick" name="is_team_pick">
+            <option value="0">No</option>
+            <option value="1">Yes</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="score">Score :</label>
+          <input type="number" id="score" name="score" step="0.1" min="0" max="9.9" placeholder="0.0 ~ 9.9">
+        </div>
+
+      </fieldset>
+
+      <div class="button-wrapper">
+        <button type="submit" class="btn-primary">Add Movie</button>
+      </div>
+    </form>
+  </div>
+</main>
+
+  <footer>
+    <h4>Our Cinemas</h4>
+    <div class="footer-grid">
+      <div><strong>Nantes</strong><br>12 Rue de la Loire, 44000 Nantes<br>📞 +33 2 40 12 34 56<br>🕒 10:00–23:00</div>
+      <div><strong>Bordeaux</strong><br>33 Rue du Chai des Farines, 33800 Bordeaux<br>📞 +33 5 56 78 90 12<br>🕒 10:00–23:00</div>
+      <div><strong>Paris</strong><br>42 Rue de Rivoli, 75004 Paris<br>📞 +33 1 45 67 89 01<br>🕒 09:30–00:00</div>
+      <div><strong>Toulouse</strong><br>18 Rue du Languedoc, 31000 Toulouse<br>📞 +33 5 34 56 78 90<br>🕒 10:00–23:00</div>
+      <div><strong>Lille</strong><br>77 Rue Nationale, 59800 Lille<br>📞 +33 3 20 12 34 56<br>🕒 10:00–22:30</div>
+      <div><strong>Charleroi (BE)</strong><br>26 Rue Léon Bernus, 6000 Charleroi<br>📞 +32 71 23 45 67<br>🕒 10:00–22:00</div>
+      <div><strong>Liège (BE)</strong><br>59 Quai de la Batte, 4020 Liège<br>📞 +32 4 78 90 12 34<br>🕒 10:00–23:00</div>
+    </div>
+    <h6>&copy; 2025 Cinephoria. All rights reserved.</h6>
+  </footer>
+
+
+
+  <script>
+      const MAX_SIZE = 10 * 1024 * 1024; // 10MB in bytes 10 000 000
+      const API_URL = "<%= DB_API_URL %>"
+
+        document.getElementById("NewMovieForm").addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const form = event.target;
+        const fileInput = form.poster_img.files[0];
+        if (fileInput && fileInput.size > MAX_SIZE) {
+          alert('File size exceeds 10MB limit.');
+          return; // stop submission
+        }
+
+        try {
+          let base64Poster = null;
+          if (fileInput) {
+            base64Poster = await toBase64(fileInput);
+          }
+
+          const movieData = {
+            title: form.title.value,
+            age_rating: Number(form.age_rating.value),
+            description: form.description.value,
+            is_team_pick: Boolean(form.is_team_pick.value === "1" ? 1 : 0), // example
+            score: Number(form.score.value),    // example
+            length: form.length.value || null,
+            poster_img: base64Poster || null// base64 string or null
+          };
+
+          const response = await fetch(`${API_URL}/movies`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(movieData)
+          });
+
+          if (!response.ok) {
+            throw new Error(`Error: ${response.statusText}`);
+          }
+
+          const result = await response.json();
+          alert("Movie added successfully!");
+          form.reset();
+          window.location.href = "/movies";
+
+        } catch (err) {
+          alert("Failed to add movie: " + err.message);
+        }
+
+    });
+
+  function toBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file); // returns base64 string prefixed with MIME type
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+    });
+  }
+</script>
+
+
+</body>
+</html>

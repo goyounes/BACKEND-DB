@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Add Movie</title>
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    h1{
+      text-align: center
+    }   
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="header-left">
+      <img src="/cinephoria-sm.png" alt="Cinephoria logo">
+    </div>
+    <div class="header-middle">
+      <a href="/home" class="header-icon-link">🏠<span>Admin</span></a>
+      <a href="/messages" class="header-icon-link">✉️<span>Messages</span></a>
+      <a href="/movies/recent" class="header-icon-link">🆕<span>Recent</span></a>
+      <a href="/movies" class="header-icon-link">📽️<span>Movies</span></a>
+      <a href="/screenings" class="header-icon-link">🎞️<span>Screenings</span></a>
+      <a href="/cinemas" class="header-icon-link">🏛️<span>Cinemas</span></a>
+      <a href="/reservation" class="header-icon-link">📅<span>Reservation</span></a>
+      <a href="/tickets" class="header-icon-link">🎟️<span>Tickets</span></a>     
+    </div>
+    <div class="header-right">
+      <a href="/users" class="header-icon-link">👤<span>Users</span></a>
+      <a href="/contact" class="header-icon-link">📞<span>Contact</span></a>
+    </div>
+  </header>
+
+<main>
+    <div class="container-half-center">
+      <h1>Add New Screening</h1>
+      <form id="NewScreeningForm" action="" method="">
+        <fieldset class="responsive-grid">
+          <legend>Screening Details</legend>
+
+          <div class="form-group">
+            <label for="cinema_id">Cinema:</label>
+            <select id="cinema_id" name="cinema_id" required>
+              <option value="">-- Select Cinema --</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="movie_id">Movie:</label>
+            <select id="movie_id" name="movie_id" required>
+              <option value="">-- Select Movie --</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="room_id">Room:</label>
+            <select id="room_id" name="room_id" required></select>
+          </div>
+
+          <div class="form-group">
+            <label for="start_date">Start Date:</label>
+            <input type="date" id="start_date" name="start_date" required>
+          </div>
+
+          <div class="form-group">
+            <label for="start_time">Start Time:</label>
+            <input type="time" id="start_time" name="start_time" required>
+          </div>
+
+          <div class="form-group">
+            <label for="end_time">End Time:</label>
+            <input type="time" id="end_time" name="end_time" required>
+          </div>
+
+        </fieldset>
+
+        <div class="button-wrapper">
+          <button type="submit" class="btn-primary">Add Screening</button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <footer>
+    <h4>Our Cinemas</h4>
+    <div class="footer-grid">
+      <div><strong>Nantes</strong><br>12 Rue de la Loire, 44000 Nantes<br>📞 +33 2 40 12 34 56<br>🕒 10:00–23:00</div>
+      <div><strong>Bordeaux</strong><br>33 Rue du Chai des Farines, 33800 Bordeaux<br>📞 +33 5 56 78 90 12<br>🕒 10:00–23:00</div>
+      <div><strong>Paris</strong><br>42 Rue de Rivoli, 75004 Paris<br>📞 +33 1 45 67 89 01<br>🕒 09:30–00:00</div>
+      <div><strong>Toulouse</strong><br>18 Rue du Languedoc, 31000 Toulouse<br>📞 +33 5 34 56 78 90<br>🕒 10:00–23:00</div>
+      <div><strong>Lille</strong><br>77 Rue Nationale, 59800 Lille<br>📞 +33 3 20 12 34 56<br>🕒 10:00–22:30</div>
+      <div><strong>Charleroi (BE)</strong><br>26 Rue Léon Bernus, 6000 Charleroi<br>📞 +32 71 23 45 67<br>🕒 10:00–22:00</div>
+      <div><strong>Liège (BE)</strong><br>59 Quai de la Batte, 4020 Liège<br>📞 +32 4 78 90 12 34<br>🕒 10:00–23:00</div>
+    </div>
+    <h6>&copy; 2025 Cinephoria. All rights reserved.</h6>
+  </footer>
+
+
+<script>
+  const API_URL = "<%= DB_API_URL %>"
+  let cinemaRoomData = [];
+
+  document.addEventListener("DOMContentLoaded", async () => {
+    try {
+      const response = await fetch(`${API_URL}/cinemas/rooms`);
+      cinemaRoomData = await response.json();
+
+      const uniqueCinemas = Array.from(
+        new Map(
+          cinemaRoomData.map(item => [item.cinema_id, item])
+        ).values()
+      );
+
+      const cinemaSelect = document.getElementById("cinema_id");
+      uniqueCinemas.forEach(cinema => {
+        const option = document.createElement("option");
+        option.value = cinema.cinema_id;
+        option.textContent = cinema.cinema_name;
+        cinemaSelect.appendChild(option);
+      });
+
+      // Load movies separately
+      await populateMovies();
+
+    } catch (err) {
+      alert("Error loading cinema/room data: " + err.message);
+    }
+
+    document.getElementById("cinema_id").addEventListener("change", event => {
+      const selectedCinemaId = parseInt(event.target.value);
+      const roomSelect = document.getElementById("room_id");
+      roomSelect.innerHTML = '<option value="">Select a room</option>';
+
+      const rooms = cinemaRoomData.filter(item => item.cinema_id === selectedCinemaId);
+      rooms.forEach(room => {
+        const option = document.createElement("option");
+        option.value = room.room_id;
+        option.textContent = `Room ${room.room_id} (Capacity: ${room.room_capacity})`;
+        roomSelect.appendChild(option);
+      });
+    });
+  });
+
+  async function populateMovies() {
+    try {
+      const response = await fetch(`${API_URL}/movies`);
+      const data = await response.json();
+      const movieSelect = document.getElementById("movie_id");
+
+      data.forEach(movie => {
+        const option = document.createElement("option");
+        option.value = movie.movie_id;
+        option.textContent = movie.title;
+        movieSelect.appendChild(option);
+      });
+    } catch (err) {
+      alert("Failed to load movies: " + err.message);
+    }
+  }
+
+  document.getElementById("NewScreeningForm").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const form = event.target;
+
+    const screeningData = {
+      movie_id: parseInt(form.movie_id.value),
+      cinema_id: parseInt(form.cinema_id.value),
+      room_id: parseInt(form.room_id.value),
+      start_date: form.start_date.value,
+      start_time: form.start_time.value,
+      end_time: form.end_time.value
+    };
+
+    try {
+      const response = await fetch(`${API_URL}/screenings`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(screeningData)
+      });
+
+      if (!response.ok) throw new Error(await response.text());
+      alert("Screening added successfully!");
+      form.reset();
+      window.location.href = "/screenings";
+    } catch (err) {
+      alert("Failed to add screening: " + err.message);
+    }
+  });
+</script>
+
+
+
+</body>
+</html>
